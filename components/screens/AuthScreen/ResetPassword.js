@@ -15,7 +15,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-class LoginScreen extends React.Component {
+class ResetPassword extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,50 +23,63 @@ class LoginScreen extends React.Component {
     };
   }
 
-  moveToSignup() {
-    this.props.navigation.navigate('RegisterScreen');
+  moveToLoginScreen() {
+    this.props.navigation.navigate('Login');
   }
-  setPasswordVisibale(){
-    this.setState({hidePassword : !this.state.hidePassword})
+  setPasswordVisibale() {
+    this.setState({hidePassword: !this.state.hidePassword});
   }
   render() {
     return (
       <View style={{flex: 1}}>
         <Image
           style={styles.backgroundImage}
-          source={require('../../../assets/bg.png')}
+          source={require('../../../assets/bg1.png')}
         />
         <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={{alignItems: 'center', marginTop: 40}}>
+          <View style={{alignItems: 'center', marginTop: 20}}>
             <Image
-              source={require('../../../assets/Logo.png')}
+              source={require('../../../assets/forgotpassword.png')}
               style={{
-                width: '50%',
-                height: 100,
+                width: 180,
+                height: 180,
+                borderRadius: 100,
                 resizeMode: 'contain',
-                margin: 30,
               }}
             />
+          </View>
+          <View style={styles.forgortPasswordText}>
+            <Text style={{fontSize: 20,fontFamily:'Montserrat-Bold_0', color: '#81b840'}}>
+              Reset Your Password
+            </Text>
+            <Text style={{marginTop: 5, color: '#a1a1a1',fontFamily:'Montserrat-Regular_0'}}>
+              We have sent a four digit code on your
+            </Text>
+            <Text style={{color: '#a1a1a1',fontFamily:'Montserrat-Regular_0'}}>phone/email</Text>
           </View>
           <KeyboardAvoidingView enabled>
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                placeholder="Enter ID"
-                placeholderTextColor="#F6F6F7"
-                keyboardType="email-address"
+                placeholder="Four digit code"
+                placeholderTextColor="#81b840"
                 returnKeyType="next"
               />
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                placeholder="Password"
-                placeholderTextColor="#F6F6F7"
+                placeholder="New Password"
+                placeholderTextColor="#81b840"
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
               />
-              <TouchableOpacity style={styles.touchableButton} activeOpacity={0.8} onPress={()=> {this.setPasswordVisibale()}}>
+              <TouchableOpacity
+                style={styles.touchableButton}
+                activeOpacity={0.8}
+                onPress={() => {
+                  this.setPasswordVisibale();
+                }}>
                 <Image
                   source={
                     this.state.hidePassword
@@ -77,31 +90,38 @@ class LoginScreen extends React.Component {
                 />
               </TouchableOpacity>
             </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                placeholder="Confirm Password"
+                placeholderTextColor="#81b840"
+                secureTextEntry={this.state.hidePassword}
+                returnKeyType="next"
+              />
+              <TouchableOpacity
+                style={styles.touchableButton}
+                activeOpacity={0.8}
+                onPress={() => {
+                  this.setPasswordVisibale();
+                }}>
+                <Image
+                  source={
+                    this.state.hidePassword
+                      ? require('../../../assets/hide.png')
+                      : require('../../../assets/view.png')
+                  }
+                  style={styles.buttonImage}
+                />
+              </TouchableOpacity>
+            </View>
+
             <TouchableOpacity
-              style={styles.forgotPassword}
               onPress={() => {
-                this.props.navigation.navigate('ForgotPassword');
-              }}>
-              <Text style={{color: 'white',fontFamily:'Montserrat-Regular_0'}}>Forgot Password ?</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.buttonStyle, {marginTop: 100}]}
+                this.moveToLoginScreen();
+              }}
+              style={styles.buttonStyle}
               activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.SignUpbuttonStyle]}
-              activeOpacity={0.5}
-              onPress={() => {
-                this.moveToSignup();
-              }}>
-              <Text
-                style={[
-                  styles.buttonTextStyle,
-                  {paddingTop: 25, color: 'white'},
-                ]}>
-                Sign Up
-              </Text>
+              <Text style={styles.buttonTextStyle}>Reset Password</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </ScrollView>
@@ -109,7 +129,7 @@ class LoginScreen extends React.Component {
     );
   }
 }
-export default LoginScreen;
+export default ResetPassword;
 
 const styles = StyleSheet.create({
   backgroundImage: {
@@ -118,6 +138,25 @@ const styles = StyleSheet.create({
     top: 0,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  forgortPasswordText: {
+    marginTop: 15,
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  touchableButton: {
+    position: 'absolute',
+    right: 3,
+    height: 45,
+    width: 35,
+    justifyContent: 'center',
+    padding: 4,
+    alignItems: 'center',
+  },
+  buttonImage: {
+    resizeMode: 'contain',
+    height: '100%',
+    width: '100%',
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -129,24 +168,8 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: 'center',
   },
-  touchableButton: {
-    position: 'absolute',
-    right: 3,
-    height: 45,
-    width: 35,
-    justifyContent:'center',
-    padding: 4,
-    alignItems:'center',
-   
-    
-  },
-  buttonImage: {
-    resizeMode: 'contain',
-    height: '100%',
-    width: '100%',
-  },
   buttonStyle: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#3d900e',
     borderWidth: 0,
     color: 'black',
     borderColor: '#7DE24E',
@@ -158,30 +181,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
     marginBottom: 20,
     alignSelf: 'center',
+    
   },
-  SignUpbuttonStyle: {
-    width: 80,
-    backgroundColor: 'green',
-    // borderWidth: 0,
-    color: 'white',
-    borderColor: '#7DE24E',
-    height: 80,
-    alignSelf: 'center',
-    alignItems: 'center',
-    borderRadius: 100,
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 20,
-    fontFamily:'Montserrat-Regular_0'
-  },
+
   buttonTextStyle: {
-    color: 'green',
+    color: 'white',
     paddingVertical: 10,
     fontSize: 16,
     fontFamily:'Montserrat-Regular_0'
@@ -193,7 +199,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     borderWidth: 1,
     borderRadius: 50,
-    borderColor: 'white',
+    borderColor: '#81b840',
     fontFamily:'Montserrat-Regular_0'
   },
   errorTextStyle: {
@@ -206,12 +212,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     padding: 30,
-  },
-  forgotPassword: {
-    // width: 250,
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 15,
-    alignItems: 'center',
   },
 });

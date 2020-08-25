@@ -9,7 +9,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-
+import GiverUserTabBar from './GiverUserTabBar'
 export default class UserListScreen extends Component {
   constructor(props) {
     super(props);
@@ -27,32 +27,8 @@ export default class UserListScreen extends Component {
   render() {
     return (
       <View style={{flex: 1, alignItems: 'center'}}>
-        <View style={styles.paymentContainer}>
-          <View style={styles.paymentText}>
-            <Text style={{color: '#81b840', fontSize: 20, fontWeight: 'bold'}}>
-              Pay it forward{' '}
-            </Text>
-          </View>
-          <View style={styles.paymentButton}>
-            <Text style={[styles.paymentButtonText, {paddingRight: 30}]}>
-              Giver
-            </Text>
-            <Text
-              style={[
-                styles.paymentButtonText,
-                {
-                  paddingLeft: 30,
-                  paddingRight: 30,
-                  color: 'white',
-                  backgroundColor: 'green',
-                  borderTopRightRadius: 50,
-                  borderBottomRightRadius: 50,
-                },
-              ]}>
-              User List
-            </Text>
-          </View>
-        </View>
+        
+       
         <TouchableOpacity>
         <View style={styles.row}>
           <Image source={{uri: this.state.image}} style={styles.pic} />
@@ -66,8 +42,8 @@ export default class UserListScreen extends Component {
               </Text>
             </View>
             <View style={{alignSelf:'center'}}>
-              <Image style={styles.mblImage} source={require('../../../assets/camera.png')}/>
-              <Text style={styles.mblTxt}>Mobile</Text>
+              <Image style={styles.mblImage} source={require('../../../assets/star.png')}/>
+              <Text style={styles.mblTxt}>2 month Left</Text>
             </View>
           </View>
         </View>
@@ -78,27 +54,7 @@ export default class UserListScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  paymentContainer: {
-    marginTop: 10,
-    height: '20%',
-    width: '100%',
-    alignItems: 'center',
-  },
-  paymentButton: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 50,
-    paddingLeft: 30,
-    marginTop: 20,
-  },
-  paymentButtonText: {
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  paymentText: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
+
   row: {
     width: '95%',
     flexDirection: 'row',
@@ -108,8 +64,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   pic: {
     borderRadius: 30,
@@ -135,7 +91,8 @@ const styles = StyleSheet.create({
     paddingTop:10
   },
   mblImage:{
-      height:50,
-      width:50
+      height:30,
+      width:30,
+      alignSelf:'center'
   }
 });

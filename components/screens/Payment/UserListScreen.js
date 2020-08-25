@@ -105,32 +105,7 @@ export default class UserListScreen extends Component {
   render() {
     return (
       <View style={{flex: 1, alignItems: 'center'}}>
-        <View style={styles.paymentContainer}>
-          <View style={styles.paymentText}>
-            <Text style={{color: '#81b840', fontSize: 20, fontWeight: 'bold'}}>
-              Pay it forward{' '}
-            </Text>
-          </View>
-          <View style={styles.paymentButton}>
-            <Text style={[styles.paymentButtonText, {paddingRight: 30}]}>
-              Giver
-            </Text>
-            <Text
-              style={[
-                styles.paymentButtonText,
-                {
-                  paddingLeft: 30,
-                  paddingRight: 30,
-                  color: 'white',
-                  backgroundColor: 'green',
-                  borderTopRightRadius: 50,
-                  borderBottomRightRadius: 50,
-                },
-              ]}>
-              User List
-            </Text>
-          </View>
-        </View>
+        
         <FlatList
           style={{width: '100%'}}
           extraData={this.state}

@@ -21,15 +21,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const options = {
-  title: 'Select Avatar',
-  customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
-export default class App extends Component {
+
+export default class ChooseImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,16 +111,20 @@ export default class App extends Component {
     this.setState({fileUri : ''})
   }
   moveToPaymentScreen(){
-    this.props.navigation.navigate('PaymentScreen')
+    this.props.navigation.navigate('Drawer')
   }
   render() {
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
+          <Image
+            style={styles.backgroundImage}
+            source={require('../../../assets/bg1.png')}
+          />
           <View style={styles.body}>
             <View style={styles.ImageSections}>
-              <View>{this.renderFileUri()}</View>
+              <View style={styles.profileImage}>{this.renderFileUri()}</View>
             </View>
 
             {!this.state.fileUri ? (
@@ -174,11 +171,18 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    backgroundColor: Colors.white,
+    
     justifyContent: 'center',
     height: '100%',
     width: Dimensions.get('screen').width,
-    backgroundColor: 'white',
+   
+  },
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
   ImageSections: {
     display: 'flex',
@@ -187,10 +191,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: 'center',
   },
-  images: {
+  profileImage :{
     width: 200,
     height: 200,
+    borderWidth:5,
+    borderRadius:100,
+    borderColor:'green'
+  },
+  images: {
+    width: '100%',
+    height: '100%',
     borderRadius: 100,
+    resizeMode:'cover'
   },
   btnParentSection: {
     alignItems: 'center',
@@ -200,7 +212,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '70%',
     height: 50,
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#3d900e',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
@@ -208,9 +220,9 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    color: 'gray',
+    color: 'white',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily:'Montserrat-Bold_0'
   },
   imageIconStyle: {
     padding: 10,

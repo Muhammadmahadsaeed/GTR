@@ -8,11 +8,11 @@ import {
   Platform,
   Text
 } from 'react-native';
-var {height, width} = Dimensions.get('window');
+
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
-// import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 
 
 
@@ -21,6 +21,11 @@ import * as AuthScreens from '../screens/AuthScreen/index';
 
 //import Payment screens
 import * as PaymentScreens from '../screens/Payment/index';
+//import common components back button hamburger
+import * as CommonComponents from '../screens/CommonComponents/index';
+import Screen1 from '../screens/Home';
+
+
 
 //Stack Navigator for the Register
 const Register_StackNavigator = createStackNavigator({
@@ -31,8 +36,20 @@ const Register_StackNavigator = createStackNavigator({
       headerTitleStyle: { 
         textAlign:"center", 
         flex:1,
-        fontSize:14
+        fontSize:14,
+        fontFamily:'Montserrat-Regular_0',
+        color:'white'
     },
+    headerStyle:{
+      backgroundColor:'#3d900e',
+      shadowOffset:{
+        height:0,
+        width:0
+      },
+      shadowOpacity:0,
+      elevation:0
+    },
+    
     },
   },
   Second: {
@@ -41,8 +58,8 @@ const Register_StackNavigator = createStackNavigator({
     navigationOptions: {
      
       headerTransparent: true,
-      headerTintColor: 'black',
-     
+      headerBackImage:() => <CommonComponents.HeaderBackButton />,
+      
       
     },
   },
@@ -50,50 +67,61 @@ const Register_StackNavigator = createStackNavigator({
 });
 
 // Tab Navigation for userlist and giver
-const TabScreen = createMaterialTopTabNavigator(
-  {
+const TabScreen = createMaterialTopTabNavigator({
     Giver: { 
       screen: PaymentScreens.OwnPaymentScreen 
     },
-    UserList: { 
+    'User List': { 
       screen: PaymentScreens.UserListScreen 
     },
   },
   {
-    
-    swipeEnabled: true,
-    animationEnabled: true,
+    tabBarComponent: PaymentScreens.GiverUserTabBar,
     tabBarOptions: {
-      activeTintColor: '#FFFFFF',
-      inactiveTintColor: '#F8F8F8',
-      style: {
-        backgroundColor: '#633689',
-      },
-      labelStyle: {
-        textAlign: 'center',
-      },
-      indicatorStyle: {
-        borderBottomColor: '#87B56A',
-        borderBottomWidth: 2,
-      },
+      activeTintColor: "white",
+      inactiveTintColor: "green",
+     
     },
-  }
+    initialRouteName: "Giver"
+  },
+  
 );
 
 //Stack Navigation for Payment
 const Payment_StackNavigator = createStackNavigator({
   First: {
     screen: PaymentScreens.PaymentScreen,
-    navigationOptions:{
-      
-    },
+    navigationOptions:({ navigation }) => ({
+      headerRight:() => <CommonComponents.HamBurger  navigationProps={navigation} />,
+      headerStyle:{
+        backgroundColor:'transparent',
+        shadowOffset:{
+          height:0,
+          width:0
+        },
+        shadowOpacity:0,
+        elevation:0
+      },
+     
+    }),
   },
   Second: {
     screen: TabScreen,
     title: 'none',
-    navigationOptions: {
-      headerTintColor: 'black',
-    },
+    navigationOptions:  ({ navigation }) => ({
+      headerRight:() => <CommonComponents.HamBurger navigationProps={navigation}/>,
+      headerStyle:{
+        backgroundColor:'transparent',
+        shadowOffset:{
+          height:0,
+          width:0
+        },
+        shadowOpacity:0,
+        elevation:0
+      },
+      headerBackImage:() => <CommonComponents.HeaderBackButton />,
+     
+    }),
   },
  
 });
@@ -106,23 +134,64 @@ const AuthNavigator = createStackNavigator({
       headerShown: false,
     },
   },
+  ForgotPassword: {
+    screen : AuthScreens.ForgotPassword,
+    navigationOptions: {
+      headerStyle:{
+        backgroundColor:'transparent',
+        shadowOffset:{
+          height:0,
+          width:0
+        },
+        shadowOpacity:0,
+        elevation:0
+      },
+      headerBackImage:() => <CommonComponents.HeaderBackButton />,
+    },
+  },
+  
   
 });
 
-
+//Drawer Navigator Which will provide the structure of our App
+const DrawerNavigator = createDrawerNavigator({
+    //Drawer Optons and indexing
+    NavScreen1: {
+      screen: Payment_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 1',
+      },
+    },
+   
+  },
+  {
+    //For the Custom sidebar menu we have to provide our CustomSidebarMenu
+    contentComponent: CommonComponents.CustomSidebarMenu,
+    //Sidebar width
+    drawerWidth: Dimensions.get('window').width - 130,
+    drawerPosition:'right'
+  }
+);
 
 
 
 const RootNavigator = createSwitchNavigator({
-  // SplashScreen: AuthScreens.SplashScreen,
-  // AuthScreen: AuthNavigator,
-  // RegisterScreen: {
-  //   screen : Register_StackNavigator,
-  //   navigationOptions: {
-  //     headerShown: false,
-  //   },
-  // },
-  PaymentScreen : Payment_StackNavigator,
+  SplashScreen: AuthScreens.SplashScreen,
+  AuthScreen: AuthNavigator,
+  ResetPassword: {
+    screen : AuthScreens.ResetPassword,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  RegisterScreen: {
+    screen : Register_StackNavigator,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  
+  Drawer : DrawerNavigator
 });
 
 const MainNavigator = createAppContainer(RootNavigator);

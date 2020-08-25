@@ -150,11 +150,13 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginTop: 20,
     marginBottom: 20,
+    
   },
   buttonTextStyle: {
     color: 'green',
     paddingVertical: 10,
     fontSize: 16,
+    fontFamily:'Montserrat-Regular_0'
   },
   inputStyle: {
     flex: 1,
@@ -164,6 +166,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'white',
+    fontFamily:'Montserrat-Regular_0'
   },
   errorTextStyle: {
     color: 'red',
