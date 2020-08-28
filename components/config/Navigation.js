@@ -87,10 +87,30 @@ const TabScreen = createMaterialTopTabNavigator({
   
 );
 
+// Tab Navigation for Premium and pay it forward
+const PaymentTabScreen = createMaterialTopTabNavigator({
+  Premium: { 
+    screen: PaymentScreens.Premium 
+  },
+  'Pay it forward': { 
+    screen: PaymentScreens.PayItForwardScreen 
+  },
+},
+{
+  tabBarComponent: PaymentScreens.PaymentTabBar,
+  tabBarOptions: {
+    activeTintColor: "white",
+    inactiveTintColor: "green",
+   
+  },
+  initialRouteName: "Premium"
+},
+
+);
 //Stack Navigation for Payment
 const Payment_StackNavigator = createStackNavigator({
   First: {
-    screen: PaymentScreens.PaymentScreen,
+    screen: PaymentTabScreen,
     navigationOptions:({ navigation }) => ({
       headerRight:() => <CommonComponents.HamBurger  navigationProps={navigation} />,
       headerStyle:{
@@ -105,7 +125,26 @@ const Payment_StackNavigator = createStackNavigator({
      
     }),
   },
-  Second: {
+  Second : {
+    screen : PaymentScreens.PaymentForm,
+    title: 'none',
+    navigationOptions:  ({ navigation }) => ({
+      headerRight:() => <CommonComponents.HamBurger navigationProps={navigation}/>,
+      headerStyle:{
+        backgroundColor:'transparent',
+        shadowOffset:{
+          height:0,
+          width:0
+        },
+        shadowOpacity:0,
+        elevation:0
+      },
+      headerBackImage:() => <CommonComponents.HeaderBackButton />,
+     
+    }),
+  
+  },
+  Third: {
     screen: TabScreen,
     title: 'none',
     navigationOptions:  ({ navigation }) => ({

@@ -1,12 +1,18 @@
-import PaymentScreen from './Payment'
+import PayItForwardScreen from './PayItForwardScreen'
 import UserListScreen from './UserListScreen'
 import OwnPaymentScreen from './OwnPaymentScreen'
 import GiverUserTabBar from './GiverUserTabBar'
 import HamBurger from '../CommonComponents/HamBurger'
+import PaymentTabBar from './PaymentTabBar'
+import Premium from './Premium'
+import PaymentForm from './PaymentForm'
 export{
-    PaymentScreen,
+    PayItForwardScreen,
     UserListScreen,
     OwnPaymentScreen,
     GiverUserTabBar,
-    HamBurger
+    HamBurger,
+    Premium,
+    PaymentTabBar,
+    PaymentForm
 }

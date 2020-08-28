@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-export default class PaymentScreen extends Component {
+export default class PayItForwardScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,35 +23,28 @@ export default class PaymentScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.paymentContainer}>
-          <View style={styles.paymentButton}>
-            <Text style={[styles.paymentButtonText, {paddingRight: 20,fontFamily:'Montserrat-Regular_0'}]}>
-              Premium
-            </Text>
-            <Text
-              style={[
-                styles.paymentButtonText,
-                {
-                  paddingLeft: 15,
-                  paddingRight: 30,
-                  color: 'white',
-                  backgroundColor: 'green',
-                  borderTopRightRadius: 50,
-                  borderBottomRightRadius: 50,
-                  fontFamily:'Montserrat-Regular_0'
-                },
-              ]}>
-              Pay it forward
-            </Text>
-          </View>
           <View style={styles.paymentText}>
-            <Text style={{color: '#81b840', fontSize: 20, fontFamily:"Montserrat-Bold_0"}}>
+            <Text
+              style={{
+                color: '#81b840',
+                fontSize: 20,
+                fontFamily: 'Montserrat-Bold_0',
+              }}>
               Pay it forward{' '}
             </Text>
             <View style={{marginTop: 10}}>
-              <Text style={{textAlign: 'center',fontFamily:'Montserrat-Regular_0'}}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: 'Montserrat-Regular_0',
+                }}>
                 Get access to financia estimates
               </Text>
-              <Text style={{textAlign: 'center',fontFamily:'Montserrat-Regular_0'}}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: 'Montserrat-Regular_0',
+                }}>
                 and GTR platform with Premium Subscribtion
               </Text>
             </View>
@@ -62,8 +55,12 @@ export default class PaymentScreen extends Component {
           <View style={{width: '95%', alignSelf: 'center'}}>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Month</Text>
-                <Text style={styles.rupee}>$11.96</Text>
+                <Text style={styles.month}>1 Monthly</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
+
                 <Text style={styles.description}>
                   Pay it forward pays for 4 other gamer
                 </Text>
@@ -78,7 +75,7 @@ export default class PaymentScreen extends Component {
                     style={{height: 15, width: 15}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5}}>
+                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5,fontFamily: 'Montserrat-Regular_0',}}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>
@@ -86,8 +83,11 @@ export default class PaymentScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Month</Text>
-                <Text style={styles.rupee}>$11.96</Text>
+                <Text style={styles.month}>1 Monthly</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
                 <Text style={styles.description}>
                   Pay it forward pays for 4 other gamer
                 </Text>
@@ -102,7 +102,7 @@ export default class PaymentScreen extends Component {
                     style={{height: 15, width: 15}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5}}>
+                  <Text style={{fontFamily: 'Montserrat-Regular_0',fontSize: 15, color: 'white', paddingLeft: 5}}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>
@@ -110,8 +110,11 @@ export default class PaymentScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Month</Text>
-                <Text style={styles.rupee}>$11.96</Text>
+                <Text style={styles.month}>1 Monthly</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
                 <Text style={styles.description}>
                   Pay it forward pays for 4 other gamer
                 </Text>
@@ -126,7 +129,13 @@ export default class PaymentScreen extends Component {
                     style={{height: 15, width: 15}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>
@@ -134,8 +143,11 @@ export default class PaymentScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Month</Text>
-                <Text style={styles.rupee}>$11.96</Text>
+                <Text style={styles.month}>1 Monthly</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
                 <Text style={styles.description}>
                   Pay it forward pays for 4 other gamer
                 </Text>
@@ -150,7 +162,13 @@ export default class PaymentScreen extends Component {
                     style={{height: 15, width: 15}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5,fontFamily:'Montserrat-Regular_0'}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>
@@ -166,11 +184,9 @@ export default class PaymentScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
   paymentContainer: {
-    marginTop: 10,
-    height: '28%',
+    marginBottom: 10,
     width: '100%',
     alignItems: 'center',
   },
@@ -185,7 +201,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   paymentText: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
   },
   notificationBox: {
@@ -200,17 +216,17 @@ const styles = StyleSheet.create({
   },
   month: {
     color: 'gray',
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily: 'Montserrat-Regular_0',
   },
   rupee: {
     color: '#81b840',
     fontSize: 30,
     // fontWeight: 'bold',
-    fontFamily:"Montserrat-Bold_0"
+    fontFamily: 'Montserrat-Bold_0',
   },
   description: {
     color: 'gray',
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily: 'Montserrat-Regular_0',
   },
   buttonView: {
     justifyContent: 'center',
@@ -225,5 +241,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     alignItems: 'center',
+  },
+  monthYear: {
+    color: '#81b840',
+    alignSelf: 'flex-end',
+    fontFamily: 'Montserrat-Regular_0',
+    color: 'gray',
   },
 });
