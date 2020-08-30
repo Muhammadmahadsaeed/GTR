@@ -133,11 +133,14 @@ export default class Premium extends Component {
                 <Text style={styles.termText}>Term of use</Text>
                 <Text style={styles.policyText}>Privacy policy</Text>
               </View>
-              <Text style={styles.para}>
-                If you are starting a new app or learning for the first time you
-                should follow V5 steps to create React Navigation Drawer but if
-                you are still developing the application using React Navigation
-              </Text>
+              <View>
+                <Text style={styles.para}>
+                  If you are starting a new app or learning for the first time you
+                  should follow V5 steps to create React Navigation Drawer but if
+                  you are still developing the application using React Navigation
+                </Text>
+              </View>
+              
             </View>
           </View>
         </ScrollView>

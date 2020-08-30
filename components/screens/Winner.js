@@ -4,12 +4,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 // import all basic components
 
-export default class Home extends Component {
+export default class Winner extends Component {
   //Screen1 Component
   render() {
     return (
       <View style={styles.MainContainer}>
-        <Text style={{ fontSize: 23 }}> Home </Text>
+        <Text style={{ fontSize: 23 }}> Winner </Text>
       </View>
     );
   }

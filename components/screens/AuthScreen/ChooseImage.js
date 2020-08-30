@@ -196,13 +196,15 @@ const styles = StyleSheet.create({
     height: 200,
     borderWidth:5,
     borderRadius:100,
-    borderColor:'green'
+    borderColor:'green',
+    justifyContent:'center'
   },
   images: {
     width: '100%',
     height: '100%',
     borderRadius: 100,
     resizeMode:'cover'
+   
   },
   btnParentSection: {
     alignItems: 'center',
