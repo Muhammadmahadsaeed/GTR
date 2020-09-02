@@ -107,7 +107,7 @@ export default class UserListScreen extends Component {
       <View style={{flex: 1, alignItems: 'center'}}>
         
         <FlatList
-          style={{width: '100%'}}
+          style={{width: '100%',marginBottom:2}}
           extraData={this.state}
           data={this.state.calls}
           keyExtractor={(item) => {

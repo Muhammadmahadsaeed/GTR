@@ -34,16 +34,20 @@ const Home_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
+     
       headerStyle: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#81b840',
         shadowOffset: {
           height: 0,
           width: 0,
         },
         shadowOpacity: 0,
         elevation: 0,
+       
+      
       },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+     
     }),
   },
 });
@@ -55,6 +59,7 @@ const Notification_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -76,6 +81,7 @@ const Winner_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -97,6 +103,7 @@ const Shop_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -113,11 +120,12 @@ const Shop_StackNavigator = createStackNavigator({
 //Stack Navigation for User Screen
 const User_StackNavigator = createStackNavigator({
   First: {
-    screen: PaymentScreens.OwnPaymentScreen,
+    screen: MainScreen.User,
     navigationOptions: ({navigation}) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -161,13 +169,13 @@ const Register_StackNavigator = createStackNavigator({
     navigationOptions: {
       headerTransparent: true,
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
+      headerTitle: '',
     },
   },
 });
 
 //Bottom Tab
-const BottomTabScreen = createBottomTabNavigator(
-  {
+const BottomTabScreen = createBottomTabNavigator({
     User: {
       screen: User_StackNavigator,
     },
@@ -185,21 +193,61 @@ const BottomTabScreen = createBottomTabNavigator(
     },
   },
   {
-    // tabBarComponent: CommonComponents.BottomTabNavigation,
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon : ({focused,horizontal,tintColor}) => {
+        const {routeName} = navigation.state
+       
+        if(routeName == "Home"){
+          return(
+            <Image source={require('../../assets/homeIcon.png')} style={{height:45,width:45}} />
+          )
+        }
+        else if(routeName == "User"){
+          return(
+            <Image source={require('../../assets/userIcon.png')} style={{height:30,width:30}}/>
+          )
+        }
+        else if(routeName == "Winner"){
+          return(
+            <Image source={require('../../assets/cupIcon.png')} style={{height:30,width:30}}/>
+          )
+        }
+        else if(routeName == "Shop"){
+          return(
+            <Image source={require('../../assets/shopIcon.png')} style={{height:30,width:30}}/>
+          )
+        }
+        else if(routeName == "Notification"){
+          return(
+            <Image source={require('../../assets/bellIcon.png')} style={{height:30,width:30}}/>
+          )
+        }
+      }
+    }),
+
     tabBarOptions: {
-      activeTintColor: 'white',
-      inactiveTintColor: 'green',
-      tabBarPosition: 'bottom',
+      showLabel: false,
+      style: {
+        backgroundColor:'#81b840',
+        borderTopWidth: 0,
+        paddingTop: 2,
+        paddingBottom: 2,
+        height: 60,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+        shadowOffset: {width: 0, height: 0},
+      },
     },
-    initialRouteName: 'User',
+
+    initialRouteName: 'Home',
   },
 );
 
 // Tab Navigation for userlist and giver
-const TabScreen = createMaterialTopTabNavigator(
-  {
+const TabScreen = createMaterialTopTabNavigator({
     Giver: {
-      screen: BottomTabScreen,
+      screen: PaymentScreens.OwnPaymentScreen,
     },
     'User List': {
       screen: PaymentScreens.UserListScreen,
@@ -210,14 +258,17 @@ const TabScreen = createMaterialTopTabNavigator(
     tabBarOptions: {
       activeTintColor: 'white',
       inactiveTintColor: 'green',
+      style: {
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
     },
     initialRouteName: 'Giver',
   },
 );
 
 // Tab Navigation for Premium and pay it forward
-const PaymentTabScreen = createMaterialTopTabNavigator(
-  {
+const PaymentTabScreen = createMaterialTopTabNavigator({
     Premium: {
       screen: PaymentScreens.Premium,
     },
@@ -242,6 +293,7 @@ const Payment_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -279,6 +331,7 @@ const Payment_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -319,14 +372,16 @@ const AuthNavigator = createStackNavigator({
 });
 
 //Drawer Navigator Which will provide the structure of our App
-const DrawerNavigator = createDrawerNavigator(
-{
+const DrawerNavigator = createDrawerNavigator({
     //Drawer Optons and indexing
     NavScreen1: {
       screen: Payment_StackNavigator,
       navigationOptions: {
         drawerLabel: 'Demo Screen 1',
       },
+    },
+    NavScreen2: {
+      screen: BottomTabScreen,
     },
   },
   {

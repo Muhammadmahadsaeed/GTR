@@ -29,6 +29,9 @@ class LoginScreen extends React.Component {
   setPasswordVisibale(){
     this.setState({hidePassword : !this.state.hidePassword})
   }
+  moveToHome(){
+    this.props.navigation.navigate('NavScreen2')
+  }
   render() {
     return (
       <View style={{flex: 1}}>
@@ -84,7 +87,7 @@ class LoginScreen extends React.Component {
               }}>
               <Text style={{color: 'white',fontFamily:'Montserrat-Regular_0'}}>Forgot Password ?</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity onPress={()=> {this.moveToHome()}}
               style={[styles.buttonStyle, {marginTop: 100}]}
               activeOpacity={0.5}>
               <Text style={styles.buttonTextStyle}>Login</Text>

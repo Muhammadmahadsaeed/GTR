@@ -25,7 +25,7 @@ const PaymentTabBar = (props) => {
             <TouchableWithoutFeedback 
               onPress={() => navigation.navigate(route.routeName)}
               key={index}>
-              <View>
+              <View >
                 <Text
                   style={[
                     styles.paymentButtonText,
@@ -49,29 +49,26 @@ const PaymentTabBar = (props) => {
 const styles = StyleSheet.create({
   paymentContainer: {
     marginTop: 10,
-    // height: '20%',
     width: '100%',
     alignItems: 'center',
+   
   },
   paymentButton: {
     flexDirection: 'row',
-    backgroundColor: 'white',
     borderRadius: 50,
     borderBottomRightRadius:50,
     borderTopRightRadius:50,
     marginTop: 20,
+
   },
   paymentButtonText: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingRight:20,
     paddingLeft:20,
-    fontFamily:'Montserrat-Regular_0'
-    
+    fontFamily:'Montserrat-Regular_0',
+
   },
-  paymentText: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
+ 
 });
 export default PaymentTabBar;
