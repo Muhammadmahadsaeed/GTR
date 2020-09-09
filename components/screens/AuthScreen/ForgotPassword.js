@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonStyle: {
-    backgroundColor: '#3d900e',
+    backgroundColor: '#81b840',
     borderWidth: 0,
     color: 'black',
     borderColor: '#7DE24E',
@@ -116,23 +116,25 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginBottom: 20,
     alignSelf: 'center',
+    marginTop:10
   },
  
   buttonTextStyle: {
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily:'Montserrat-Bold_0'
   },
   inputStyle: {
     flex: 1,
-    color: 'white',
+    color: '#81b840',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily:'Montserrat-Regular_0',
+    backgroundColor:'#d7e5c3'
   },
   errorTextStyle: {
     color: 'red',

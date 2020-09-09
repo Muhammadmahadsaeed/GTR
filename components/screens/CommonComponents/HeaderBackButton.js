@@ -9,7 +9,7 @@ export default class HeaderBackButton extends Component {
           source={require('../../../assets/back.png')}
           style={styles.backImage}
         />
-        <View
+        {/* <View
           style={{
             height: 50,
             width: 1,
@@ -17,7 +17,7 @@ export default class HeaderBackButton extends Component {
             alignSelf:'center'
           
           }}
-        />
+        /> */}
       </View>
     );
   }

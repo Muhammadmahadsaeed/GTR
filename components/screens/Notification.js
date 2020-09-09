@@ -20,12 +20,12 @@ export default class Notification extends Component {
           image: '../../assets/gtrIcon.png',
           comment: 'Lorem ipsum dolor sit amet, consectetuer ',
         },
-        // {
-        //   id: 2,
-        //   image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-        //   name: 'John DoeLink',
-        //   comment: 'Lorem ipsum dolor sit amet, consectetuer ',
-        // },
+        {
+          id: 2,
+          image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+          name: 'John DoeLink',
+          comment: 'Lorem ipsum dolor sit amet, consectetuer ',
+        },
         // {
         //   id: 3,
         //   image: 'https://bootdey.com/img/Content/avatar/avatar7.png',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   NotificationText: {
     fontFamily: 'Montserrat-Bold_0',
-    color: 'green',
+    color: '#81b840',
     fontSize: 20,
   },
   root: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#fff',
     marginTop: 20,
-    marginBottom: 2,
+    marginBottom: 5,
   },
   container: {
     paddingLeft: 19,

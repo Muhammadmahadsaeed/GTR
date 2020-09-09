@@ -30,7 +30,7 @@ const PaymentTabBar = (props) => {
                   style={[
                     styles.paymentButtonText,
                     {
-                    backgroundColor: `${isRouteActive ? 'green' : 'white'}`,
+                    backgroundColor: `${isRouteActive ? '#81b840' : 'white'}`,
                     color:`${tintColor}`,
                     
                 },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingRight:20,
     paddingLeft:20,
-    fontFamily:'Montserrat-Regular_0',
+    fontFamily:'Montserrat-Bold_0',
 
   },
  

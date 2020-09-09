@@ -10,16 +10,20 @@ export default class CustomSidebarMenu extends Component {
 
       items: [
         {
-          navOptionName: 'First Screen',
-          screenToNavigate: 'NavScreen1',
+          navOptionName: 'Winners',
+          screenToNavigate: 'winners',
         },
         {
-          navOptionName: 'Second Screen',
-          screenToNavigate: 'NavScreen2',
+          navOptionName: 'Pay it forward',
+          screenToNavigate: 'payitforward',
         },
         {
-          navOptionName: 'Third Screen',
-          screenToNavigate: 'NavScreen3',
+          navOptionName: 'Contact us',
+          screenToNavigate: 'contact',
+        },
+        {
+          navOptionName: 'Support',
+          screenToNavigate: 'support',
         },
       ],
     };
@@ -39,12 +43,15 @@ export default class CustomSidebarMenu extends Component {
           <View
             style={{
               flexDirection: 'row',
-
               justifyContent: 'center',
               alignItems: 'center',
+              marginTop:10
             }}>
-            <Text>Maciek </Text>
-            <Text> Szott</Text>
+            <Text  style={{
+              fontFamily: 'Montserrat-Bold_0',
+            
+              fontSize: 22,
+            }}>Maciek Szott</Text>
           </View>
           <View
             style={{
@@ -75,19 +82,20 @@ export default class CustomSidebarMenu extends Component {
           {this.state.items.map((item, key) => (
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingTop: 10,
-                paddingBottom: 10,
+                alignItems: 'flex-start',
+                paddingTop: 5,
+                paddingBottom: 5,
+                marginRight: 20,
+                marginLeft: 30,
               }}
               key={key}>
-              <View style={{marginRight: 10, marginLeft: 20}}>
-                {/* <Icon name={item.navOptionThumb} size={25} color="#808080" /> */}
-              </View>
               <Text
                 style={{
                   fontSize: 15,
-                  color: global.currentScreenIndex === key ? 'red' : 'black',
+                  fontFamily: 'Montserrat-Regular_0',
+
+                  color:
+                    global.currentScreenIndex === key ? '#81b840' : 'black',
                 }}
                 onPress={() => {
                   global.currentScreenIndex = key;
@@ -95,16 +103,26 @@ export default class CustomSidebarMenu extends Component {
                 }}>
                 {item.navOptionName}
               </Text>
-              {/* <View
+              <View
                 style={{
                   width: '100%',
                   height: 1,
-
-                  marginTop: 10,
+                  marginTop: 20,
+                  backgroundColor: '#81b840',
                 }}
-              /> */}
+              />
             </View>
           ))}
+        </View>
+        <View style={{position: 'absolute', bottom: 30}}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Bold_0',
+              color: '#81b840',
+              fontSize: 16,
+            }}>
+            Log Out
+          </Text>
         </View>
       </View>
     );
@@ -124,7 +142,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderWidth: 5,
     borderRadius: 100,
-    borderColor: 'green',
+    borderColor: '#81b840',
     marginTop: 30,
   },
   sideMenuProfileIcon: {

@@ -26,11 +26,11 @@ class LoginScreen extends React.Component {
   moveToSignup() {
     this.props.navigation.navigate('RegisterScreen');
   }
-  setPasswordVisibale(){
-    this.setState({hidePassword : !this.state.hidePassword})
+  setPasswordVisibale() {
+    this.setState({hidePassword: !this.state.hidePassword});
   }
-  moveToHome(){
-    this.props.navigation.navigate('NavScreen2')
+  moveToHome() {
+    this.props.navigation.navigate('HomeScreen');
   }
   render() {
     return (
@@ -69,7 +69,12 @@ class LoginScreen extends React.Component {
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
               />
-              <TouchableOpacity style={styles.touchableButton} activeOpacity={0.8} onPress={()=> {this.setPasswordVisibale()}}>
+              <TouchableOpacity
+                style={styles.touchableButton}
+                activeOpacity={0.8}
+                onPress={() => {
+                  this.setPasswordVisibale();
+                }}>
                 <Image
                   source={
                     this.state.hidePassword
@@ -85,12 +90,26 @@ class LoginScreen extends React.Component {
               onPress={() => {
                 this.props.navigation.navigate('ForgotPassword');
               }}>
-              <Text style={{color: 'white',fontFamily:'Montserrat-Regular_0'}}>Forgot Password ?</Text>
+              <Image
+                source={require('../../../assets/lockIcon.png')}
+                style={{height: 17, width: 13,resizeMode:'cover'}}
+              />
+              <Text
+                style={{
+                  color: 'white',
+                  fontFamily: 'Montserrat-Bold_0',
+                  marginLeft: 5,
+                }}>
+                Forgot Password
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> {this.moveToHome()}}
+            <TouchableOpacity
+              onPress={() => {
+                this.moveToHome();
+              }}
               style={[styles.buttonStyle, {marginTop: 100}]}
               activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Login</Text>
+              <Text style={styles.buttonTextStyle}>Sign in</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.SignUpbuttonStyle]}
@@ -103,7 +122,7 @@ class LoginScreen extends React.Component {
                   styles.buttonTextStyle,
                   {paddingTop: 25, color: 'white'},
                 ]}>
-                Sign Up
+                Sign up
               </Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
@@ -137,16 +156,14 @@ const styles = StyleSheet.create({
     right: 3,
     height: 45,
     width: 35,
-    justifyContent:'center',
+    justifyContent: 'center',
     padding: 4,
-    alignItems:'center',
-   
-    
+    alignItems: 'center',
   },
   buttonImage: {
     resizeMode: 'contain',
-    height: '100%',
-    width: '100%',
+    height: '70%',
+    width: '70%',
   },
   buttonStyle: {
     backgroundColor: '#FFFFFF',
@@ -167,7 +184,7 @@ const styles = StyleSheet.create({
   },
   SignUpbuttonStyle: {
     width: 80,
-    backgroundColor: 'green',
+    // backgroundColor: '#81b840',
     // borderWidth: 0,
     color: 'white',
     borderColor: '#7DE24E',
@@ -181,13 +198,13 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginTop: 20,
     marginBottom: 20,
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily: 'Montserrat-Regular_0',
   },
   buttonTextStyle: {
-    color: 'green',
+    color: '#81b840',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily: 'Montserrat-Bold_0',
   },
   inputStyle: {
     flex: 1,
@@ -197,7 +214,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'white',
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily: 'Montserrat-Regular_0',
+    backgroundColor:'#a1ca70'
   },
   errorTextStyle: {
     color: 'red',
@@ -211,10 +229,11 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   forgotPassword: {
-    // width: 250,
+    // marginTop:10,
+    flexDirection: 'row',
     marginLeft: 35,
     marginRight: 35,
     marginBottom: 15,
-    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

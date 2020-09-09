@@ -72,7 +72,7 @@ export default class PayItForwardScreen extends Component {
                     this.moveToUserList();
                   }}>
                   <Image
-                    style={{height: 15, width: 15}}
+                    style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
                   <Text style={{fontSize: 15, color: 'white', paddingLeft: 5,fontFamily: 'Montserrat-Regular_0',}}>
@@ -99,7 +99,7 @@ export default class PayItForwardScreen extends Component {
                     this.moveToUserList();
                   }}>
                   <Image
-                    style={{height: 15, width: 15}}
+                    style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
                   <Text style={{fontFamily: 'Montserrat-Regular_0',fontSize: 15, color: 'white', paddingLeft: 5}}>
@@ -126,7 +126,7 @@ export default class PayItForwardScreen extends Component {
                     this.moveToUserList();
                   }}>
                   <Image
-                    style={{height: 15, width: 15}}
+                    style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
                   <Text
@@ -159,7 +159,7 @@ export default class PayItForwardScreen extends Component {
                     this.moveToUserList();
                   }}>
                   <Image
-                    style={{height: 15, width: 15}}
+                    style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
                   <Text
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   subscriberButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#81b840',
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 25,

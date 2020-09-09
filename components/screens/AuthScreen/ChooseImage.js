@@ -44,8 +44,7 @@ export default class ChooseImage extends Component {
       },
     };
     ImagePicker.launchCamera(options, (response) => {
-      console.log('Response = ', response);
-
+     
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -55,7 +54,7 @@ export default class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response.uri};
-        console.log('response', JSON.stringify(response));
+      
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -73,7 +72,7 @@ export default class ChooseImage extends Component {
       },
     };
     ImagePicker.launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
+     
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -84,7 +83,7 @@ export default class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response.uri};
-        console.log('response', JSON.stringify(response));
+       
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -114,6 +113,7 @@ export default class ChooseImage extends Component {
     this.props.navigation.navigate('Drawer')
   }
   render() {
+    console.log(this.state.fileUri)
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderWidth:5,
     borderRadius:100,
-    borderColor:'green',
+    borderColor:'#81b840',
     justifyContent:'center'
   },
   images: {
@@ -214,22 +214,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '70%',
     height: 50,
-    backgroundColor: '#3d900e',
+    backgroundColor: '#81b840',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
     marginBottom: 10,
   },
   btnText: {
-    textAlign: 'center',
     color: 'white',
     fontSize: 14,
-    fontFamily:'Montserrat-Bold_0'
+    fontFamily:'Montserrat-Bold_0',
+    marginLeft:10
   },
   imageIconStyle: {
-    padding: 10,
-    margin: 5,
-    height: 30,
-    width: 30,
+    height:30,
+    width:30,
+    resizeMode:'contain'
+    
   },
 });

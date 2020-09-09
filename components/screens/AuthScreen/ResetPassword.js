@@ -37,9 +37,9 @@ class ResetPassword extends React.Component {
           source={require('../../../assets/bg1.png')}
         />
         <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={{alignItems: 'center', marginTop: 20}}>
+          <View style={{alignItems: 'center', marginTop: 60}}>
             <Image
-              source={require('../../../assets/forgotpassword.png')}
+              source={require('../../../assets/resetpassword.png')}
               style={{
                 width: 180,
                 height: 180,
@@ -83,8 +83,8 @@ class ResetPassword extends React.Component {
                 <Image
                   source={
                     this.state.hidePassword
-                      ? require('../../../assets/hide.png')
-                      : require('../../../assets/view.png')
+                      ? require('../../../assets/greenhide.png')
+                      : require('../../../assets/greenview.png')
                   }
                   style={styles.buttonImage}
                 />
@@ -107,8 +107,8 @@ class ResetPassword extends React.Component {
                 <Image
                   source={
                     this.state.hidePassword
-                      ? require('../../../assets/hide.png')
-                      : require('../../../assets/view.png')
+                      ? require('../../../assets/greenhide.png')
+                      : require('../../../assets/greenview.png')
                   }
                   style={styles.buttonImage}
                 />
@@ -155,21 +155,22 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     resizeMode: 'contain',
-    height: '100%',
-    width: '100%',
+    height: '70%',
+    width: '70%',
   },
   SectionStyle: {
     flexDirection: 'row',
     height: 45,
     width: '70%',
-    marginTop: 10,
+    // marginTop: 10,
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
     alignSelf: 'center',
+   
   },
   buttonStyle: {
-    backgroundColor: '#3d900e',
+    backgroundColor: '#81b840',
     borderWidth: 0,
     color: 'black',
     borderColor: '#7DE24E',
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginBottom: 20,
     alignSelf: 'center',
+    marginTop:10
     
   },
 
@@ -190,17 +192,18 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily:'Montserrat-Bold_0'
   },
   inputStyle: {
     flex: 1,
-    color: 'white',
+    color: '#81b840',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily:'Montserrat-Regular_0'
+    fontFamily:'Montserrat-Regular_0',
+    backgroundColor:'#d7e5c3'
   },
   errorTextStyle: {
     color: 'red',

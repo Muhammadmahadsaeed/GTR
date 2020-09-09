@@ -26,6 +26,9 @@ import * as PaymentScreens from '../screens/Payment/index';
 import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 
+
+
+
 //Stack Navigation for Home Screen
 const Home_StackNavigator = createStackNavigator({
   First: {
@@ -48,6 +51,26 @@ const Home_StackNavigator = createStackNavigator({
       
       },
      
+    }),
+  },
+  DailyChallenges: {
+    screen: MainScreen.DailyChallengesScreen,
+    navigationOptions: ({navigation}) => ({
+      headerTransparent:'true',
+      headerTitle: '',
+      tabBarVisible:false,
+      headerStyle: {
+        backgroundColor: '#81b840',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+       
+      
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
 });
@@ -149,7 +172,7 @@ const Register_StackNavigator = createStackNavigator({
         textAlign: 'center',
         flex: 1,
         fontSize: 14,
-        fontFamily: 'Montserrat-Regular_0',
+        fontFamily: 'Montserrat-Bold_0',
         color: 'white',
       },
       headerStyle: {
@@ -204,22 +227,22 @@ const BottomTabScreen = createBottomTabNavigator({
         }
         else if(routeName == "User"){
           return(
-            <Image source={require('../../assets/userIcon.png')} style={{height:30,width:30}}/>
+            <Image source={require('../../assets/userIcon.png')} style={{height:35,width:30}}/>
           )
         }
         else if(routeName == "Winner"){
           return(
-            <Image source={require('../../assets/cupIcon.png')} style={{height:30,width:30}}/>
+            <Image source={require('../../assets/cupIcon.png')} style={{height:35,width:31}}/>
           )
         }
         else if(routeName == "Shop"){
           return(
-            <Image source={require('../../assets/shopIcon.png')} style={{height:30,width:30}}/>
+            <Image source={require('../../assets/shopIcon.png')} style={{height:35,width:35}}/>
           )
         }
         else if(routeName == "Notification"){
           return(
-            <Image source={require('../../assets/bellIcon.png')} style={{height:30,width:30}}/>
+            <Image source={require('../../assets/bellIcon.png')} style={{height:35,width:30}}/>
           )
         }
       }
@@ -257,7 +280,7 @@ const TabScreen = createMaterialTopTabNavigator({
     tabBarComponent: PaymentScreens.GiverUserTabBar,
     tabBarOptions: {
       activeTintColor: 'white',
-      inactiveTintColor: 'green',
+      inactiveTintColor: '#81b840',
       style: {
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -280,7 +303,7 @@ const PaymentTabScreen = createMaterialTopTabNavigator({
     tabBarComponent: PaymentScreens.PaymentTabBar,
     tabBarOptions: {
       activeTintColor: 'white',
-      inactiveTintColor: 'green',
+      inactiveTintColor: '#81b840',
     },
     initialRouteName: 'Premium',
   },
@@ -357,6 +380,7 @@ const AuthNavigator = createStackNavigator({
   ForgotPassword: {
     screen: AuthScreens.ForgotPassword,
     navigationOptions: {
+      headerTitle:'',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -374,13 +398,11 @@ const AuthNavigator = createStackNavigator({
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator({
     //Drawer Optons and indexing
-    NavScreen1: {
+    payitforward: {
       screen: Payment_StackNavigator,
-      navigationOptions: {
-        drawerLabel: 'Demo Screen 1',
-      },
+  
     },
-    NavScreen2: {
+    HomeScreen: {
       screen: BottomTabScreen,
     },
   },
@@ -400,6 +422,7 @@ const RootNavigator = createSwitchNavigator({
     screen: AuthScreens.ResetPassword,
     navigationOptions: {
       headerShown: false,
+
     },
   },
   RegisterScreen: {
