@@ -10,8 +10,8 @@ export default class CustomSidebarMenu extends Component {
 
       items: [
         {
-          navOptionName: 'Winners',
-          screenToNavigate: 'winners',
+          navOptionName: 'Home',
+          screenToNavigate: 'HomeScreen',
         },
         {
           navOptionName: 'Pay it forward',
@@ -30,6 +30,7 @@ export default class CustomSidebarMenu extends Component {
   }
 
   render() {
+    
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
@@ -43,43 +44,44 @@ export default class CustomSidebarMenu extends Component {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop:10
+              marginTop: 10,
             }}>
-            <Text  style={{
-              fontFamily: 'Montserrat-Bold_0',
-            
-              fontSize: 22,
-            }}>Maciek Szott</Text>
+            <Text
+              style={{
+                fontFamily: 'Montserrat-Bold_0',
+                fontSize: 22,
+              }}>
+              Maciek Szott
+            </Text>
+          </View>
+          <View
+            style={{
+              marginTop: 15,
+              flexDirection: 'row',
+              // justifyContent: 'space-around',
+            }}>
+            <Text style={styles.profileInfoText}>Phone No</Text>
+            <Text> : </Text>
+            <Text style={styles.profileInfoTextRegular}>03362474325</Text>
           </View>
           <View
             style={{
               flexDirection: 'row',
-
-              justifyContent: 'center',
-              alignItems: 'center',
+              // justifyContent: 'space-around',
+              // alignItems:'stretch',
+              marginTop: 10,
+              marginBottom: 20,
             }}>
-            <Text>Phone No</Text>
+            <Text style={styles.profileInfoText}>Rate</Text>
             <Text> : </Text>
-            <Text>03362474325</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text>Rate</Text>
-            <Text> : </Text>
-            <Text>05/06</Text>
+            <Text style={styles.profileInfoTextRegular}>05/06</Text>
           </View>
         </View>
 
         {/*Setting up Navigation Options from option array using loop*/}
         <View style={{width: '100%'}}>
           {this.state.items.map((item, key) => (
+           
             <View
               style={{
                 alignItems: 'flex-start',
@@ -107,7 +109,7 @@ export default class CustomSidebarMenu extends Component {
                 style={{
                   width: '100%',
                   height: 1,
-                  marginTop: 20,
+                  marginTop: 5,
                   backgroundColor: '#81b840',
                 }}
               />
@@ -115,7 +117,7 @@ export default class CustomSidebarMenu extends Component {
           ))}
         </View>
         <View style={{position: 'absolute', bottom: 30}}>
-          <Text
+          <Text onPress={()=> {this.props.navigation.navigate('Login')}}
             style={{
               fontFamily: 'Montserrat-Bold_0',
               color: '#81b840',
@@ -138,8 +140,8 @@ const styles = StyleSheet.create({
   },
 
   sideMenuProfile: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderWidth: 5,
     borderRadius: 100,
     borderColor: '#81b840',
@@ -153,5 +155,13 @@ const styles = StyleSheet.create({
   },
   profileInfo: {
     width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInfoText: {
+    fontFamily: 'Montserrat-Bold_0',
+  },
+  profileInfoTextRegular: {
+    fontFamily: 'Montserrat-Regular_0',
   },
 });

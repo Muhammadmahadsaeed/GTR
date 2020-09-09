@@ -20,14 +20,20 @@ class ResetPassword extends React.Component {
     super();
     this.state = {
       hidePassword: true,
+      hideConfirmPassword : true
     };
   }
 
   moveToLoginScreen() {
     this.props.navigation.navigate('Login');
   }
-  setPasswordVisibale() {
-    this.setState({hidePassword: !this.state.hidePassword});
+  setPasswordVisibale(){
+    
+    this.setState({hidePassword : !this.state.hidePassword})
+  }
+  setConfirmPasswordVisibale(){
+    
+    this.setState({hideConfirmPassword : !this.state.hideConfirmPassword})
   }
   render() {
     return (
@@ -95,18 +101,18 @@ class ResetPassword extends React.Component {
                 style={styles.inputStyle}
                 placeholder="Confirm Password"
                 placeholderTextColor="#81b840"
-                secureTextEntry={this.state.hidePassword}
+                secureTextEntry={this.state.hideConfirmPassword}
                 returnKeyType="next"
               />
               <TouchableOpacity
                 style={styles.touchableButton}
                 activeOpacity={0.8}
                 onPress={() => {
-                  this.setPasswordVisibale();
+                  this.setConfirmPasswordVisibale();
                 }}>
                 <Image
                   source={
-                    this.state.hidePassword
+                    this.state.hideConfirmPassword
                       ? require('../../../assets/greenhide.png')
                       : require('../../../assets/greenview.png')
                   }

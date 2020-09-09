@@ -110,7 +110,7 @@ export default class ChooseImage extends Component {
     this.setState({fileUri : ''})
   }
   moveToPaymentScreen(){
-    this.props.navigation.navigate('Drawer')
+    this.props.navigation.navigate('payitforward')
   }
   render() {
     console.log(this.state.fileUri)

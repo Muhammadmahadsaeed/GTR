@@ -398,13 +398,14 @@ const AuthNavigator = createStackNavigator({
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator({
     //Drawer Optons and indexing
+    HomeScreen: {
+      screen: BottomTabScreen,
+    },
     payitforward: {
       screen: Payment_StackNavigator,
   
     },
-    HomeScreen: {
-      screen: BottomTabScreen,
-    },
+   
   },
   {
     //For the Custom sidebar menu we have to provide our CustomSidebarMenu
