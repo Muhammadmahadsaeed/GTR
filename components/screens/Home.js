@@ -21,301 +21,228 @@ const windowheight = Dimensions.get('window').height;
 // import all basic components
 
 export default class Home extends Component {
-  moveToDailyChallengesScreen(){
-
-    this.props.navigation.navigate('DailyChallenges')
+  moveToDailyChallengesScreen() {
+    this.props.navigation.navigate('DailyChallenges');
   }
   //Screen1 Component
   render() {
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.MainContainer}>
-          {/* <KeyboardAvoidingView
-            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-            <View style={styles.header}>
-              <View style={styles.headerBackground}></View>
-              <View style={styles.searchBox}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Search anything..."
-                  placeholderTextColor="gray"
-                />
-                <Image
-                  source={require('../../assets/searchIcon.png')}
-                  style={styles.searchIcon}
-                />
+      <View style={styles.MainContainer}>
+        <ScrollView style={[styles.body, {flex: 1}]}>
+          <View style={styles.challengeView}>
+            <View>
+              <Text style={styles.challengeViewHeading}>DAILY CHALLENGE</Text>
+              <Text style={styles.challengeViewPara}>
+                Lorum ipsum about react
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.moveToDailyChallengesScreen();
+                }}>
+                <Text style={styles.challengeViewTextView}>View</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.boxes}>
+            <View
+              style={[
+                styles.bigBox,
+                {justifyContent: 'center', alignItems: 'center'},
+              ]}>
+              <Text
+                style={{
+                  fontSize: 50,
+                  fontFamily: 'Montserrat-ExtraBold_0',
+                  color: 'white',
+                }}>
+                GTR
+              </Text>
+            </View>
+            <View style={[styles.smallBox, {justifyContent: 'center'}]}>
+              <View style={{marginLeft: 15}}>
+                <Text style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                  Date
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Regular_0',
+                    color: 'white',
+                  }}>
+                  29-07-2020
+                </Text>
+              </View>
+              <View style={{marginTop: 15, marginLeft: 15}}>
+                <Text style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                  Time
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Regular_0',
+                    color: 'white',
+                  }}>
+                  02-34 PM
+                </Text>
               </View>
             </View>
-          </KeyboardAvoidingView> */}
-          <View style={styles.body}>
-            <ScrollView horizontal={false}>
-              <View style={styles.challengeView}>
-                <View>
-                  <Text style={styles.challengeViewHeading}>
-                    DAILY CHALLENGE
-                  </Text>
-                  <Text style={styles.challengeViewPara}>
-                    Lorum ipsum about react
-                  </Text>
-                </View>
+          </View>
+          <View style={styles.challengeView}>
+            <View>
+              <Text style={styles.challengeViewHeading}>
+                WINNERS OF THE DAY
+              </Text>
+              <Text style={styles.challengeViewPara}>
+                Lorum ipsum about react
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <TouchableOpacity>
+                <Text style={styles.challengeViewTextView}>View</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.boxes}>
+            <View
+              style={[
+                styles.smallBox,
+                {justifyContent: 'center', alignItems: 'center'},
+              ]}>
+              <Image
+                source={require('../../assets/cupIcon.png')}
+                style={styles.userIcon}
+              />
+            </View>
+            <View style={[styles.bigBox, {padding: 10}]}>
+              <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
+                    height: 40,
+                    width: 40,
+                    borderRadius: 50,
+                    borderColor: 'white',
+                    borderWidth: 2,
                   }}>
-                  <TouchableOpacity onPress={()=>{this.moveToDailyChallengesScreen()}}>
-                    <Text style={styles.challengeViewTextView}>View</Text>
-                  </TouchableOpacity>
+                  <Image
+                    source={require('../../assets/dummy.png')}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      resizeMode: 'cover',
+                    }}
+                  />
                 </View>
-              </View>
-              <View style={styles.boxes}>
-                <View
-                  style={[
-                    styles.bigBox,
-                    {justifyContent: 'center', alignItems: 'center'},
-                  ]}>
+
+                <View style={{marginLeft: 5, justifyContent: 'center'}}>
                   <Text
                     style={{
-                      fontSize: 50,
-                      fontFamily: 'Montserrat-ExtraBold_0',
+                      fontFamily: 'Montserrat-Bold_0',
                       color: 'white',
                     }}>
-                    GTR
+                    Ertugal Gazi
                   </Text>
-                </View>
-                <View style={[styles.smallBox,{justifyContent:'center'}]}>
-                  <View style={{ marginLeft: 15,}}>
-                    <Text
-                      style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
-                      Date
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Regular_0',
-                        color: 'white',
-                      }}>
-                      29-07-2020
-                    </Text>
-                  </View>
-                  <View style={{marginTop: 15, marginLeft: 15}}>
-                    <Text
-                      style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
-                      Time
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Regular_0',
-                        color: 'white',
-                      }}>
-                      02-34 PM
-                    </Text>
-                  </View>
+                  <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                    lorum about react
+                  </Text>
                 </View>
               </View>
-              <View style={styles.challengeView}>
-                <View>
-                  <Text style={styles.challengeViewHeading}>
-                    WINNERS OF THE DAY
-                  </Text>
-                  <Text style={styles.challengeViewPara}>
-                    Lorum ipsum about react
-                  </Text>
-                </View>
+              <View style={styles.seperator}></View>
+              <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
+                    height: 40,
+                    width: 40,
+                    borderRadius: 50,
+                    borderColor: 'white',
+                    borderWidth: 2,
                   }}>
-                  <TouchableOpacity>
-                    <Text style={styles.challengeViewTextView}>View</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.boxes}>
-                <View
-                  style={[
-                    styles.smallBox,
-                    {justifyContent: 'center', alignItems: 'center'},
-                  ]}>
                   <Image
-                    source={require('../../assets/cupIcon.png')}
-                    style={styles.userIcon}
+                    source={require('../../assets/dummy.png')}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      resizeMode: 'cover',
+                    }}
                   />
                 </View>
-                <View style={[styles.bigBox, {padding: 10}]}>
-                  <View style={{flexDirection: 'row'}}>
-                    <View
-                      style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 50,
-                        borderColor: 'white',
-                        borderWidth: 2,
-                      }}>
-                      <Image
-                        source={require('../../assets/dummy.png')}
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                          resizeMode: 'cover',
-                        }}
-                      />
-                    </View>
 
-                    <View style={{marginLeft: 5, justifyContent: 'center'}}>
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Bold_0',
-                          color: 'white',
-                        }}>
-                        Ertugal Gazi
-                      </Text>
-                      <Text
-                        style={[styles.challengeViewPara, {color: 'white'}]}>
-                        lorum about react
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.seperator}></View>
-                  <View style={{flexDirection: 'row'}}>
-                    <View
-                      style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 50,
-                        borderColor: 'white',
-                        borderWidth: 2,
-                      }}>
-                      <Image
-                        source={require('../../assets/dummy.png')}
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                          resizeMode: 'cover',
-                        }}
-                      />
-                    </View>
-
-                    <View style={{marginLeft: 5, justifyContent: 'center'}}>
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Bold_0',
-                          color: 'white',
-                        }}>
-                        Ertugal Gazi
-                      </Text>
-                      <Text
-                        style={[styles.challengeViewPara, {color: 'white'}]}>
-                        lorum about react
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.challengeView}>
-                <View>
-                  <Text style={styles.challengeViewHeading}>
-                    PAY IT FORWORD
+                <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Bold_0',
+                      color: 'white',
+                    }}>
+                    Ertugal Gazi
                   </Text>
-                  <Text style={styles.challengeViewPara}>
-                    Lorum ipsum about react
+                  <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                    lorum about react
                   </Text>
                 </View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  <TouchableOpacity>
-                    <Text style={styles.challengeViewTextView}>View</Text>
-                  </TouchableOpacity>
-                </View>
               </View>
-              <View style={styles.boxes}>
-                <View
-                  style={[
-                    styles.smallBox,
-                    {justifyContent: 'center', alignItems: 'center'},
-                  ]}>
-                  <Image
-                    source={require('../../assets/shopIcon.png')}
-                    style={styles.shopIcon}
-                  />
-                </View>
-                <View style={[styles.bigBox, {padding: 10}]}>
-                  <View style={styles.notificationBox}>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.month}>1 Monthly</Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text style={styles.rupee}>$11.96</Text>
-                        <Text style={styles.monthYear}> Free</Text>
-                      </View>
-                      {/* <Text style={styles.description}>
-                        Pay it forward pays for 4 other gamer
-                      </Text> */}
-                    </View>
-                    <View style={styles.buttonView}>
-                      <TouchableOpacity
-                        style={styles.subscriberButton}
-                        onPress={() => {
-                          this.moveToUserList();
-                        }}>
-                        <Image
-                          style={{height: 15, width: 18}}
-                          source={require('../../assets/heart.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'Montserrat-Bold_0',
-                            fontSize: 13,
-                            color: '#81b840',
-                            paddingLeft: 5,
-                          }}>
-                          Subscribe
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.seperator}></View>
-                  <View style={styles.notificationBox}>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.month}>1 Monthly</Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text style={styles.rupee}>$11.96</Text>
-                        <Text style={styles.monthYear}> Free</Text>
-                      </View>
-                      {/* <Text style={styles.description}>
-                        Pay it forward pays for 4 other gamer
-                      </Text> */}
-                    </View>
-                    <View style={styles.buttonView}>
-                      <TouchableOpacity
-                        style={styles.subscriberButton}
-                        onPress={() => {
-                          this.moveToUserList();
-                        }}>
-                        <Image
-                          style={{height: 15, width: 18}}
-                          source={require('../../assets/heart.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'Montserrat-Bold_0',
-                            fontSize: 13,
-                            color: '#81b840',
-                            paddingLeft: 5,
-                          }}>
-                          Subscribe
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+          <View style={styles.challengeView}>
+            <View>
+              <Text style={styles.challengeViewHeading}>PAY IT FORWORD</Text>
+              <Text style={styles.challengeViewPara}>
+                Lorum ipsum about react
+              </Text>
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <TouchableOpacity>
+                <Text style={styles.challengeViewTextView}>View</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.boxes}>
+            <View
+              style={[
+                styles.payItSmallBox,
+                {justifyContent: 'center', alignItems: 'center'},
+              ]}>
+              <Image
+                source={require('../../assets/shopIcon.png')}
+                style={styles.shopIcon}
+              />
+            </View>
+            <View style={[styles.payItBigBox, {padding: 10}]}>
+              <View style={styles.notificationBox}>
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <Text style={styles.month}>Active</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.rupee}>$11.96</Text>
+                  </View>
+                  <Text style={styles.description}>Expiry: 28-sep-2020</Text>
+                </View>
+                <View style={styles.buttonView}>
+                  <TouchableOpacity
+                    style={styles.subscriberButton}
+                    onPress={() => {
+                      this.moveToUserList();
+                    }}>
+                    <Image
+                      style={{height: 15, width: 18}}
+                      source={require('../../assets/heart.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -324,36 +251,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
   },
-  // header: {
-  //   height: 80,
-  // },
-  // headerBackground: {
-  //   height: 40,
-  //   backgroundColor: '#81b840',
-  //   position: 'relative',
-  // },
 
-  // searchBox: {
-  //   position: 'absolute',
-  //   marginTop: 10,
-  //   height: 60,
-  //   backgroundColor: 'white',
-  //   padding: 5,
-  //   flexDirection: 'row',
-  //   borderRadius: 8,
-  //   width: '95%',
-  //   alignSelf: 'center',
-  // },
-  // inputStyle: {
-  //   flex: 1,
-  //   fontFamily: 'Montserrat-Regular_0',
-  // },
-  // searchIcon: {
-  //   height: 40,
-  //   width: 40,
-  //   justifyContent: 'flex-end',
-  //   alignSelf: 'flex-end',
-  // },
   body: {
     marginTop: 20,
     width: '96%',
@@ -397,10 +295,23 @@ const styles = StyleSheet.create({
     width: '66%',
     backgroundColor: '#81b840',
     borderRadius: 15,
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   smallBox: {
     height: 150,
+    width: '32%',
+    backgroundColor: '#81b840',
+    borderRadius: 15,
+  },
+  payItBigBox: {
+    // height: 150,
+    width: '66%',
+    backgroundColor: '#81b840',
+    borderRadius: 15,
+    justifyContent: 'center',
+  },
+  payItSmallBox: {
+    height: 100,
     width: '32%',
     backgroundColor: '#81b840',
     borderRadius: 15,
@@ -410,8 +321,8 @@ const styles = StyleSheet.create({
     width: 70,
   },
   shopIcon: {
-    height: 80,
-    width: 85,
+    height: 60,
+    width: 65,
   },
   notificationBox: {
     flex: 1,
@@ -424,7 +335,7 @@ const styles = StyleSheet.create({
   },
   rupee: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 30,
     fontFamily: 'Montserrat-Bold_0',
   },
   description: {
@@ -445,7 +356,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   monthYear: {
-   
     alignSelf: 'flex-end',
     fontFamily: 'Montserrat-Regular_0',
     color: 'white',

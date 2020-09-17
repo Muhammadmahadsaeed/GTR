@@ -9,15 +9,38 @@ import {
   ScrollView,
   Button,
   Dimensions,
+  Modal,
+  WebView,
 } from 'react-native';
 
 export default class PayItForwardScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  state = {
+    showModal: false,
+    status: 'Pending',
+  };
+  handleResponse = (data) => {
+    if (data.title === 'success') {
+      this.setState({showModal: false, status: 'Complete'});
+    } else if (data.title === 'cancel') {
+      this.setState({showModal: false, status: 'Cancelled'});
+    } else {
+      return;
+    }
+  };
   moveToUserList() {
     this.props.navigation.navigate('Second');
+    // this.setState({showModal: true});
+    // return (
+    //   <Modal
+    //     visible={this.state.showModal}
+    //     onRequestClose={() => this.setState({showModal: false})}>
+    //     <WebView
+    //       source={{uri: 'http://app.guessthatreceipt.com/pay'}}
+    //       onNavigationStateChange={(data) => this.handleResponse(data)}
+    //       injectedJavaScript={`document.f1.submit()`}
+    //     />
+    //   </Modal>
+    // );
   }
   render() {
     return (
@@ -75,7 +98,13 @@ export default class PayItForwardScreen extends Component {
                     style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontSize: 15, color: 'white', paddingLeft: 5,fontFamily: 'Montserrat-Regular_0',}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>
@@ -102,7 +131,13 @@ export default class PayItForwardScreen extends Component {
                     style={{height: 15, width: 18}}
                     source={require('../../../assets/heart.png')}
                   />
-                  <Text style={{fontFamily: 'Montserrat-Regular_0',fontSize: 15, color: 'white', paddingLeft: 5}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Regular_0',
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                    }}>
                     Subscribe
                   </Text>
                 </TouchableOpacity>

@@ -280,5 +280,6 @@ const styles = StyleSheet.create({
   para: {
     marginTop: 30,
     fontFamily: 'Montserrat-Regular_0',
+   
   },
 });

@@ -2,6 +2,7 @@ import React from 'react';
 
 import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 
+
 const PaymentTabBar = (props) => {
   const {
     navigationState,
@@ -19,18 +20,22 @@ const PaymentTabBar = (props) => {
         {navigationState.routes.map((route, index) => {
             
           const isRouteActive = index === activeTabIndex;
+          console.log(isRouteActive)
           const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
 
           return (
-            <TouchableWithoutFeedback 
+            <TouchableWithoutFeedback
               onPress={() => navigation.navigate(route.routeName)}
               key={index}>
-              <View >
+              <View style={{}}>
                 <Text
+                
                   style={[
                     styles.paymentButtonText,
                     {
+                    
                     backgroundColor: `${isRouteActive ? '#81b840' : 'white'}`,
+                   
                     color:`${tintColor}`,
                     
                 },
@@ -55,11 +60,9 @@ const styles = StyleSheet.create({
   },
   paymentButton: {
     flexDirection: 'row',
-    borderRadius: 50,
-    borderBottomRightRadius:50,
-    borderTopRightRadius:50,
     marginTop: 20,
-
+    borderRadius:50,
+    backgroundColor:'white',
   },
   paymentButtonText: {
     paddingTop: 10,
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
     paddingRight:20,
     paddingLeft:20,
     fontFamily:'Montserrat-Bold_0',
-
+   
   },
  
 });

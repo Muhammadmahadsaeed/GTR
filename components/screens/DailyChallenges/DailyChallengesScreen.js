@@ -23,8 +23,11 @@ class DailyChallengesScreen extends React.Component {
     };
   }
 
-  moveToHome() {
-    this.props.navigation.navigate('HomeScreen');
+  moveToPlayerScreens() {
+    this.props.navigation.navigate('PlayerScreen');
+  }
+  moveToGameScreen(){
+    this.props.navigation.navigate('GameScreen');
   }
   render() {
     return (
@@ -34,7 +37,7 @@ class DailyChallengesScreen extends React.Component {
           source={require('../../../assets/bg1.png')}
         />
         <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={{alignItems: 'center', marginTop: 40}}>
+          <View style={{alignItems: 'center', }}>
             <Image
               source={require('../../../assets/Logo.png')}
               style={{
@@ -55,7 +58,7 @@ class DailyChallengesScreen extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.moveToHome();
+                this.moveToPlayerScreens();
               }}
               style={[styles.buttonStyle, {marginTop:70}]}
               activeOpacity={0.5}>
@@ -63,7 +66,7 @@ class DailyChallengesScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                this.moveToHome();
+                this.moveToGameScreen();
               }}
               style={[styles.buttonStyle, {}]}
               activeOpacity={0.5}>

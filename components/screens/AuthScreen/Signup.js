@@ -167,8 +167,8 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   backgroundImage: {
     position: 'absolute',
-    left: 0,
-    top: 0,
+    // left: 0,
+    // top: 0,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },

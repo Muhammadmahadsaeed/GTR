@@ -7,6 +7,7 @@ export default class HamBurger extends Component {
     this.props.navigationProps.toggleDrawer();
   };
   render() {
+    console.log("this.props=============",this.props)
     return (
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>

@@ -25,20 +25,17 @@ import * as PaymentScreens from '../screens/Payment/index';
 //import common components back button hamburger
 import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
-
-
-
+import * as PlayerScreens from '../screens/PlayersScreens/index';
 
 //Stack Navigation for Home Screen
 const Home_StackNavigator = createStackNavigator({
-  First: {
+  Home: {
     screen: MainScreen.Home,
     navigationOptions: ({navigation}) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
       headerTitle: '',
-     
       headerStyle: {
         backgroundColor: '#81b840',
         shadowOffset: {
@@ -47,28 +44,63 @@ const Home_StackNavigator = createStackNavigator({
         },
         shadowOpacity: 0,
         elevation: 0,
-       
-      
       },
-     
     }),
   },
   DailyChallenges: {
     screen: MainScreen.DailyChallengesScreen,
     navigationOptions: ({navigation}) => ({
-      headerTransparent:'true',
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
       headerTitle: '',
-      tabBarVisible:false,
+    
       headerStyle: {
-        backgroundColor: '#81b840',
+        backgroundColor: 'none',
         shadowOffset: {
           height: 0,
           width: 0,
         },
         shadowOpacity: 0,
         elevation: 0,
-       
-      
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+  PlayerScreen: {
+    screen: PlayerScreens.SeePlayers,
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+  GameScreen: {
+    screen: PlayerScreens.AnswerScreen,
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
       },
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
@@ -170,7 +202,7 @@ const Register_StackNavigator = createStackNavigator({
       title: 'SIGN UP YOUR ACCOUNT',
       headerTitleStyle: {
         textAlign: 'center',
-        flex: 1,
+        // flex: 1,
         fontSize: 14,
         fontFamily: 'Montserrat-Bold_0',
         color: 'white',
@@ -198,7 +230,8 @@ const Register_StackNavigator = createStackNavigator({
 });
 
 //Bottom Tab
-const BottomTabScreen = createBottomTabNavigator({
+const BottomTabScreen = createBottomTabNavigator(
+  {
     User: {
       screen: User_StackNavigator,
     },
@@ -217,41 +250,52 @@ const BottomTabScreen = createBottomTabNavigator({
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon : ({focused,horizontal,tintColor}) => {
-        const {routeName} = navigation.state
-       
-        if(routeName == "Home"){
-          return(
-            <Image source={require('../../assets/homeIcon.png')} style={{height:45,width:45}} />
-          )
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
+
+        if (routeName == 'Home') {
+          return (
+            <Image
+              source={require('../../assets/homeIcon.png')}
+              style={{height: 45, width: 45}}
+            />
+          );
+        } else if (routeName == 'User') {
+          return (
+            <Image
+              source={require('../../assets/userIcon.png')}
+              style={{height: 35, width: 30}}
+            />
+          );
+        } else if (routeName == 'Winner') {
+          return (
+            <Image
+              source={require('../../assets/cupIcon.png')}
+              style={{height: 35, width: 31}}
+            />
+          );
+        } else if (routeName == 'Shop') {
+          return (
+            <Image
+              source={require('../../assets/shopIcon.png')}
+              style={{height: 35, width: 35}}
+            />
+          );
+        } else if (routeName == 'Notification') {
+          return (
+            <Image
+              source={require('../../assets/bellIcon.png')}
+              style={{height: 35, width: 30}}
+            />
+          );
         }
-        else if(routeName == "User"){
-          return(
-            <Image source={require('../../assets/userIcon.png')} style={{height:35,width:30}}/>
-          )
-        }
-        else if(routeName == "Winner"){
-          return(
-            <Image source={require('../../assets/cupIcon.png')} style={{height:35,width:31}}/>
-          )
-        }
-        else if(routeName == "Shop"){
-          return(
-            <Image source={require('../../assets/shopIcon.png')} style={{height:35,width:35}}/>
-          )
-        }
-        else if(routeName == "Notification"){
-          return(
-            <Image source={require('../../assets/bellIcon.png')} style={{height:35,width:30}}/>
-          )
-        }
-      }
+      },
     }),
 
     tabBarOptions: {
       showLabel: false,
       style: {
-        backgroundColor:'#81b840',
+        backgroundColor: '#81b840',
         borderTopWidth: 0,
         paddingTop: 2,
         paddingBottom: 2,
@@ -268,7 +312,8 @@ const BottomTabScreen = createBottomTabNavigator({
 );
 
 // Tab Navigation for userlist and giver
-const TabScreen = createMaterialTopTabNavigator({
+const TabScreen = createMaterialTopTabNavigator(
+  {
     Giver: {
       screen: PaymentScreens.OwnPaymentScreen,
     },
@@ -291,7 +336,8 @@ const TabScreen = createMaterialTopTabNavigator({
 );
 
 // Tab Navigation for Premium and pay it forward
-const PaymentTabScreen = createMaterialTopTabNavigator({
+const PaymentTabScreen = createMaterialTopTabNavigator(
+  {
     Premium: {
       screen: PaymentScreens.Premium,
     },
@@ -304,6 +350,9 @@ const PaymentTabScreen = createMaterialTopTabNavigator({
     tabBarOptions: {
       activeTintColor: 'white',
       inactiveTintColor: '#81b840',
+      style: {
+        borderRadius: 50,
+      },
     },
     initialRouteName: 'Premium',
   },
@@ -380,7 +429,7 @@ const AuthNavigator = createStackNavigator({
   ForgotPassword: {
     screen: AuthScreens.ForgotPassword,
     navigationOptions: {
-      headerTitle:'',
+      headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
         shadowOffset: {
@@ -396,16 +445,15 @@ const AuthNavigator = createStackNavigator({
 });
 
 //Drawer Navigator Which will provide the structure of our App
-const DrawerNavigator = createDrawerNavigator({
+const DrawerNavigator = createDrawerNavigator(
+  {
     //Drawer Optons and indexing
     HomeScreen: {
       screen: BottomTabScreen,
     },
     payitforward: {
       screen: Payment_StackNavigator,
-  
     },
-   
   },
   {
     //For the Custom sidebar menu we have to provide our CustomSidebarMenu
@@ -423,15 +471,9 @@ const RootNavigator = createSwitchNavigator({
     screen: AuthScreens.ResetPassword,
     navigationOptions: {
       headerShown: false,
-
     },
   },
-  RegisterScreen: {
-    screen: Register_StackNavigator,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
+  RegisterScreen: Register_StackNavigator,
 
   Drawer: DrawerNavigator,
 });
