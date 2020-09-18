@@ -20,7 +20,7 @@ const PaymentTabBar = (props) => {
         {navigationState.routes.map((route, index) => {
             
           const isRouteActive = index === activeTabIndex;
-          console.log(isRouteActive)
+          
           const tintColor = isRouteActive ? activeTintColor : inactiveTintColor;
 
           return (

@@ -14,5 +14,6 @@ export{
     HamBurger,
     Premium,
     PaymentTabBar,
-    PaymentForm
+    PaymentForm,
+
 }

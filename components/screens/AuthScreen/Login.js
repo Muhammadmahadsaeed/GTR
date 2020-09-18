@@ -13,6 +13,7 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
+  ActivityIndicator
 } from 'react-native';
 
 class LoginScreen extends React.Component {
@@ -20,9 +21,28 @@ class LoginScreen extends React.Component {
     super();
     this.state = {
       hidePassword: true,
+      email: '',
+      pwd: '',
+      validate: false,
+      isErorr: false,
+      isloading : false
     };
   }
+  removeErorr() {
+    this.setState({isError: false});
+  }
+  validate = (text) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+    if (reg.test(text) === false) {
+      this.setState({validate: false});
+      return false;
+    } else {
+      this.setState({validate: true});
+      this.setState({email: text});
+      
+    }
+  };
   moveToSignup() {
     this.props.navigation.navigate('RegisterScreen');
   }
@@ -30,7 +50,12 @@ class LoginScreen extends React.Component {
     this.setState({hidePassword: !this.state.hidePassword});
   }
   moveToHome() {
-    this.props.navigation.navigate('HomeScreen');
+    this.setState({isloading : true})
+  
+    // this.props.navigation.navigate('HomeScreen');
+  }
+  handleChange(e){
+    console.log(e.target.value)
   }
   render() {
     return (
@@ -59,7 +84,20 @@ class LoginScreen extends React.Component {
                 placeholderTextColor="#F6F6F7"
                 keyboardType="email-address"
                 returnKeyType="next"
+                onChangeText={(text) => this.validate(text)}
+                onFocus={() => this.removeErorr()}
+              
               />
+              <View style={styles.touchableButton}>
+                <Image
+                  source={
+                    this.state.validate
+                      ? require('../../../assets/correct.png')
+                      : null
+                  }
+                  style={styles.buttonImage}
+                />
+              </View>
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
@@ -68,6 +106,8 @@ class LoginScreen extends React.Component {
                 placeholderTextColor="#F6F6F7"
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
+                onChangeText={(pwd) => this.setState({pwd})}
+                onFocus={() => this.removeErorr()}
               />
               <TouchableOpacity
                 style={styles.touchableButton}
@@ -92,7 +132,7 @@ class LoginScreen extends React.Component {
               }}>
               <Image
                 source={require('../../../assets/lockIcon.png')}
-                style={{height: 17, width: 13,resizeMode:'cover'}}
+                style={{height: 17, width: 13, resizeMode: 'cover'}}
               />
               <Text
                 style={{
@@ -109,7 +149,11 @@ class LoginScreen extends React.Component {
               }}
               style={[styles.buttonStyle, {marginTop: 100}]}
               activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Sign in</Text>
+              {this.state.isloading ? (
+                <ActivityIndicator size="large" color="#81b840" />
+              ) : (
+                <Text style={styles.buttonTextStyle}>Sign in</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.SignUpbuttonStyle]}
@@ -215,7 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: 'white',
     fontFamily: 'Montserrat-Regular_0',
-    backgroundColor:'#a1ca70'
+    backgroundColor: '#a1ca70',
   },
   errorTextStyle: {
     color: 'red',

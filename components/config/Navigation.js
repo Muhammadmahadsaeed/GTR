@@ -377,25 +377,7 @@ const Payment_StackNavigator = createStackNavigator({
       },
     }),
   },
-  // Second : {
-  //   screen : PaymentScreens.PaymentForm,
-  //   title: 'none',
-  //   navigationOptions:  ({ navigation }) => ({
-  //     headerRight:() => <CommonComponents.HamBurger navigationProps={navigation}/>,
-  //     headerStyle:{
-  //       backgroundColor:'transparent',
-  //       shadowOffset:{
-  //         height:0,
-  //         width:0
-  //       },
-  //       shadowOpacity:0,
-  //       elevation:0
-  //     },
-  //     headerBackImage:() => <CommonComponents.HeaderBackButton />,
-
-  //   }),
-
-  // },
+ 
   Second: {
     screen: TabScreen,
     title: 'none',

@@ -31,34 +31,27 @@ export default class AnswerScreen extends Component {
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView enabled>
             <View style={styles.answerView}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'space-around',
-                }}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={styles.heading}>Guess the right receipt</Text>
-                </View>
-                <View style={styles.SectionStyle}>
-                  <TextInput
-                    style={styles.inputStyle}
-                    placeholder="$ 00.00"
-                    placeholderTextColor="#81b840"
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                  />
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.moveToGameScreen();
-                    }}
-                    style={[styles.buttonStyle, {}]}
-                    activeOpacity={0.5}>
-                    <Text style={styles.buttonTextStyle}>Submit</Text>
-                  </TouchableOpacity>
-                </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={styles.heading}>Guess the right receipt</Text>
+              </View>
+              <View style={styles.SectionStyle}>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="$ 00.00"
+                  placeholderTextColor="#81b840"
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                />
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.moveToGameScreen();
+                  }}
+                  style={[styles.buttonStyle, {}]}
+                  activeOpacity={0.5}>
+                  <Text style={styles.buttonTextStyle}>Submit</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -84,8 +77,8 @@ const styles = StyleSheet.create({
   },
   video: {
     width: '100%',
-    height: height - 470,
-    backgroundColor:'blue'
+    height: '45%',
+    backgroundColor: 'blue',
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -114,7 +107,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 8,
     width: '95%',
-    height: height - 380,
+    flex:1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: height - 375
   },
   buttonStyle: {
     backgroundColor: '#81b840',

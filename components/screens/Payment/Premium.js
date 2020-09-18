@@ -13,7 +13,7 @@ import {
 
 export default class Premium extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {};
   }
   moveToUserList() {

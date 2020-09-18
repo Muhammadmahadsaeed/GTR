@@ -8,15 +8,16 @@ import {
   SafeAreaView,
   ScrollView,
   Button,
+  ActivityIndicator,
   Dimensions,
   Modal,
-  WebView,
 } from 'react-native';
-
+import {WebView} from 'react-native-webview';
 export default class PayItForwardScreen extends Component {
   state = {
     showModal: false,
     status: 'Pending',
+    loading: false,
   };
   handleResponse = (data) => {
     if (data.title === 'success') {
@@ -28,23 +29,26 @@ export default class PayItForwardScreen extends Component {
     }
   };
   moveToUserList() {
-    this.props.navigation.navigate('Second');
-    // this.setState({showModal: true});
-    // return (
-    //   <Modal
-    //     visible={this.state.showModal}
-    //     onRequestClose={() => this.setState({showModal: false})}>
-    //     <WebView
-    //       source={{uri: 'http://app.guessthatreceipt.com/pay'}}
-    //       onNavigationStateChange={(data) => this.handleResponse(data)}
-    //       injectedJavaScript={`document.f1.submit()`}
-    //     />
-    //   </Modal>
-    // );
+    this.setState({loading: true});
+    setTimeout(() => {
+      this.stopLoading();
+    }, 3000);
+    // this.props.navigation.navigate('RedirectToPaypalScreen',{showModal: true});
+  }
+  stopLoading() {
+    this.setState({loading: false});
+    this.setState({showModal: true});
   }
   render() {
     return (
       <View style={styles.container}>
+        {this.state.loading && (
+          <ActivityIndicator
+            color="#81b840"
+            size="large"
+            style={styles.ActivityIndicatorStyle}
+          />
+        )}
         <View style={styles.paymentContainer}>
           <View style={styles.paymentText}>
             <Text
@@ -74,7 +78,8 @@ export default class PayItForwardScreen extends Component {
           </View>
         </View>
 
-        <ScrollView style={{flex: 1}}>
+        <ScrollView
+          style={this.state.loading ? styles.stylOld : styles.styleNew}>
           <View style={{width: '95%', alignSelf: 'center'}}>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
@@ -211,6 +216,16 @@ export default class PayItForwardScreen extends Component {
             </View>
           </View>
         </ScrollView>
+
+        <Modal
+          visible={this.state.showModal}
+          onRequestClose={() => this.setState({showModal: false})}>
+          <WebView
+            source={{uri: 'http://app.guessthatreceipt.com/'}}
+            onNavigationStateChange={(data) => this.handleResponse(data)}
+            injectedJavaScript={`document.f1.submit()`}
+          />
+        </Modal>
       </View>
     );
   }
@@ -282,5 +297,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontFamily: 'Montserrat-Regular_0',
     color: 'gray',
+  },
+  stylOld: {
+    opacity: 0.2,
+  },
+  styleNew: {
+    flex: 1,
+  },
+  ActivityIndicatorStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
