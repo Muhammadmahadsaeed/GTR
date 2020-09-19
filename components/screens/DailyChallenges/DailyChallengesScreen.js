@@ -24,7 +24,7 @@ class DailyChallengesScreen extends React.Component {
   }
 
   moveToPlayerScreens() {
-    this.props.navigation.navigate('PlayerScreen');
+    this.props.navigation.navigate('LiveScreen');
   }
   moveToGameScreen(){
     this.props.navigation.navigate('GameScreen');

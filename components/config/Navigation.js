@@ -67,25 +67,7 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
-  PlayerScreen: {
-    screen: PlayerScreens.SeePlayers,
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'none',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
-    }),
-  },
+ 
   GameScreen: {
     screen: PlayerScreens.AnswerScreen,
     navigationOptions: ({navigation}) => ({
@@ -413,7 +395,7 @@ const AuthNavigator = createStackNavigator({
     navigationOptions: {
       headerTitle: '',
       headerStyle: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'none',
         shadowOffset: {
           height: 0,
           width: 0,
@@ -425,6 +407,54 @@ const AuthNavigator = createStackNavigator({
     },
   },
 });
+//Live Streaming
+const LiveStreaming = createStackNavigator({
+  LiveScreen: {
+    screen: PlayerScreens.LiveStreamingScreen,
+    navigationOptions: ({navigation}) => ({
+      animationEnabled:true,
+      gestureEnabled:true,
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+  PlayerScreen: {
+    screen: PlayerScreens.SeePlayers,
+    navigationOptions: ({navigation}) => ({
+      animationEnabled:true,
+      gestureEnabled:true,
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+});
+
 
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator(
@@ -436,6 +466,9 @@ const DrawerNavigator = createDrawerNavigator(
     payitforward: {
       screen: Payment_StackNavigator,
     },
+    LiveScreen : {
+      screen : LiveStreaming
+    }
   },
   {
     //For the Custom sidebar menu we have to provide our CustomSidebarMenu

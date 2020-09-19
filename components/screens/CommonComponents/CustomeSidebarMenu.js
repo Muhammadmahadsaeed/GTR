@@ -18,12 +18,12 @@ export default class CustomSidebarMenu extends Component {
           screenToNavigate: 'payitforward',
         },
         {
-          navOptionName: 'Contact us',
-          screenToNavigate: 'contact',
+          navOptionName: 'Live',
+          screenToNavigate: 'LiveScreen',
         },
         {
-          navOptionName: 'Support',
-          screenToNavigate: 'support',
+          navOptionName: 'Contact us',
+          screenToNavigate: 'Contact us',
         },
       ],
     };

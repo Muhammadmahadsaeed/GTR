@@ -13,7 +13,7 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 class LoginScreen extends React.Component {
@@ -23,24 +23,26 @@ class LoginScreen extends React.Component {
       hidePassword: true,
       email: '',
       pwd: '',
-      validate: false,
+      correct: false,
+      wrong: false,
       isErorr: false,
-      isloading : false
+      isloading: false,
     };
   }
   removeErorr() {
     this.setState({isError: false});
   }
   validate = (text) => {
+    const userEmail = text.nativeEvent.text;
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    if (reg.test(text) === false) {
-      this.setState({validate: false});
-      return false;
+    if (reg.test(userEmail) === false) {
+      this.setState({correct: false});
+      this.setState({wrong: true});
+      this.setState({email: ' '});
     } else {
-      this.setState({validate: true});
-      this.setState({email: text});
-      
+      this.setState({correct: true});
+      this.setState({wrong: false});
+      this.setState({email: userEmail});
     }
   };
   moveToSignup() {
@@ -50,14 +52,13 @@ class LoginScreen extends React.Component {
     this.setState({hidePassword: !this.state.hidePassword});
   }
   moveToHome() {
-    this.setState({isloading : true})
-  
-    // this.props.navigation.navigate('HomeScreen');
+    this.setState({isloading: true});
+
+    this.props.navigation.navigate('HomeScreen');
   }
-  handleChange(e){
-    console.log(e.target.value)
-  }
+
   render() {
+    console.log("wrong============>",this.state.wrong)
     return (
       <View style={{flex: 1}}>
         <Image
@@ -84,19 +85,22 @@ class LoginScreen extends React.Component {
                 placeholderTextColor="#F6F6F7"
                 keyboardType="email-address"
                 returnKeyType="next"
-                onChangeText={(text) => this.validate(text)}
+                onChange={(text) => this.validate(text)}
                 onFocus={() => this.removeErorr()}
-              
               />
               <View style={styles.touchableButton}>
-                <Image
-                  source={
-                    this.state.validate
-                      ? require('../../../assets/correct.png')
-                      : null
-                  }
-                  style={styles.buttonImage}
-                />
+                {this.state.correct ? (
+                  <Image
+                    source={require('../../../assets/correct.png')}
+                    style={styles.buttonImage}
+                  />
+                ) : null}
+                {this.state.wrong ? (
+                  <Image
+                    source={require('../../../assets/wrong.png')}
+                    style={styles.buttonImage}
+                  />
+                ) : null}
               </View>
             </View>
             <View style={styles.SectionStyle}>
