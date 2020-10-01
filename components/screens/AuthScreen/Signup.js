@@ -11,10 +11,9 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
-  ImageBackground,
   Dimensions,
 } from 'react-native';
-
+import { SafeAreaView } from 'react-navigation';
 class SignupScreen extends React.Component {
   constructor() {
     super();
@@ -136,7 +135,7 @@ class SignupScreen extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}} forceInset={{top:'always'}}>
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg.png')}
@@ -364,7 +363,7 @@ class SignupScreen extends React.Component {
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

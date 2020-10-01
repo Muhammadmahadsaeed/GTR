@@ -27,6 +27,100 @@ import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 import * as PlayerScreens from '../screens/PlayersScreens/index';
 
+
+// Tab Navigation for userlist and giver
+const TabScreen = createMaterialTopTabNavigator(
+  {
+    Giver: {
+      screen: PaymentScreens.OwnPaymentScreen,
+    },
+    'User List': {
+      screen: PaymentScreens.UserListScreen,
+    },
+  },
+  {
+    tabBarComponent: PaymentScreens.GiverUserTabBar,
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: '#81b840',
+      style: {
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+    },
+    initialRouteName: 'Giver',
+  },
+);
+
+// Tab Navigation for Premium and pay it forward
+const PaymentTabScreen = createMaterialTopTabNavigator(
+  {
+    Premium: {
+      screen: PaymentScreens.Premium,
+    },
+    'Pay it forward': {
+      screen: PaymentScreens.PayItForwardScreen,
+    },
+  },
+  {
+    tabBarComponent: PaymentScreens.PaymentTabBar,
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: '#81b840',
+      style: {
+        borderRadius: 50,
+      },
+    },
+    initialRouteName: 'Premium',
+  },
+);
+//Stack Navigation for Payment
+const Payment_StackNavigator = createStackNavigator({
+  First: {
+    screen: PaymentTabScreen,
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      safeAreaInsets: {top: 0},
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'transparent',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+    }),
+  },
+
+  Second: {
+    screen: TabScreen,
+    title: 'none',
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'transparent',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+});
+
+
+
+
 //Stack Navigation for Home Screen
 const Home_StackNavigator = createStackNavigator({
   Home: {
@@ -35,6 +129,7 @@ const Home_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: '#81b840',
@@ -54,7 +149,7 @@ const Home_StackNavigator = createStackNavigator({
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
       headerTitle: '',
-    
+
       headerStyle: {
         backgroundColor: 'none',
         shadowOffset: {
@@ -67,7 +162,7 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
- 
+
   GameScreen: {
     screen: PlayerScreens.AnswerScreen,
     navigationOptions: ({navigation}) => ({
@@ -96,6 +191,7 @@ const Notification_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -118,6 +214,7 @@ const Winner_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -135,11 +232,12 @@ const Winner_StackNavigator = createStackNavigator({
 //Stack Navigation for Shop Screen
 const Shop_StackNavigator = createStackNavigator({
   First: {
-    screen: MainScreen.Shop,
+    screen: Payment_StackNavigator,
     navigationOptions: ({navigation}) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -162,6 +260,7 @@ const User_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -180,9 +279,9 @@ const User_StackNavigator = createStackNavigator({
 const Register_StackNavigator = createStackNavigator({
   First: {
     screen: AuthScreens.SignupScreen,
-    
+
     navigationOptions: {
-     
+      safeAreaInsets: {top: 0},
       title: 'SIGN UP YOUR ACCOUNT',
       headerTitleStyle: {
         textAlign: 'center',
@@ -211,7 +310,6 @@ const Register_StackNavigator = createStackNavigator({
       headerTitle: '',
     },
   },
-  
 });
 
 //Bottom Tab
@@ -296,94 +394,6 @@ const BottomTabScreen = createBottomTabNavigator(
   },
 );
 
-// Tab Navigation for userlist and giver
-const TabScreen = createMaterialTopTabNavigator(
-  {
-    Giver: {
-      screen: PaymentScreens.OwnPaymentScreen,
-    },
-    'User List': {
-      screen: PaymentScreens.UserListScreen,
-    },
-  },
-  {
-    tabBarComponent: PaymentScreens.GiverUserTabBar,
-    tabBarOptions: {
-      activeTintColor: 'white',
-      inactiveTintColor: '#81b840',
-      style: {
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-      },
-    },
-    initialRouteName: 'Giver',
-  },
-);
-
-// Tab Navigation for Premium and pay it forward
-const PaymentTabScreen = createMaterialTopTabNavigator(
-  {
-    Premium: {
-      screen: PaymentScreens.Premium,
-    },
-    'Pay it forward': {
-      screen: PaymentScreens.PayItForwardScreen,
-    },
-  },
-  {
-    tabBarComponent: PaymentScreens.PaymentTabBar,
-    tabBarOptions: {
-      activeTintColor: 'white',
-      inactiveTintColor: '#81b840',
-      style: {
-        borderRadius: 50,
-      },
-    },
-    initialRouteName: 'Premium',
-  },
-);
-//Stack Navigation for Payment
-const Payment_StackNavigator = createStackNavigator({
-  First: {
-    screen: PaymentTabScreen,
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'transparent',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-    }),
-  },
- 
-  Second: {
-    screen: TabScreen,
-    title: 'none',
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'transparent',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
-    }),
-  },
-});
 
 //Authentication
 const AuthNavigator = createStackNavigator({
@@ -415,12 +425,12 @@ const LiveStreaming = createStackNavigator({
   LiveScreen: {
     screen: PlayerScreens.LiveStreamingScreen,
     navigationOptions: ({navigation}) => ({
-      animationEnabled:true,
-      gestureEnabled:true,
+      animationEnabled: true,
+      gestureEnabled: true,
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      
+      safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -431,15 +441,15 @@ const LiveStreaming = createStackNavigator({
         shadowOpacity: 0,
         elevation: 0,
       },
-      
+
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
   PlayerScreen: {
     screen: PlayerScreens.SeePlayers,
     navigationOptions: ({navigation}) => ({
-      animationEnabled:true,
-      gestureEnabled:true,
+      animationEnabled: true,
+      gestureEnabled: true,
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
@@ -458,7 +468,6 @@ const LiveStreaming = createStackNavigator({
   },
 });
 
-
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator(
   {
@@ -469,9 +478,9 @@ const DrawerNavigator = createDrawerNavigator(
     payitforward: {
       screen: Payment_StackNavigator,
     },
-    LiveScreen : {
-      screen : LiveStreaming
-    }
+    LiveScreen: {
+      screen: LiveStreaming,
+    },
   },
   {
     //For the Custom sidebar menu we have to provide our CustomSidebarMenu
@@ -491,10 +500,9 @@ const RootNavigator = createSwitchNavigator({
       headerShown: false,
     },
   },
-  RegisterScreen:{
-    screen : Register_StackNavigator,
-    
-  } ,
+  RegisterScreen: {
+    screen: Register_StackNavigator,
+  },
 
   Drawer: DrawerNavigator,
 });

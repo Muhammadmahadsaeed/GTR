@@ -8,8 +8,10 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  ScrollView,SafeAreaView
+  ScrollView,
+  
 } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import {connect} from 'react-redux';
 const screenheight = Dimensions.get('screen').height;
 const windowheight = Dimensions.get('window').height;
@@ -28,221 +30,225 @@ class Home extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.MainContainer}>
-        <ScrollView style={[styles.body, {flex: 1}]}>
-          <View style={styles.challengeView}>
-            <View>
-              <Text style={styles.challengeViewHeading}>DAILY CHALLENGE</Text>
-              <Text style={styles.challengeViewPara}>
-                Lorum ipsum about react
-              </Text>
-            </View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.moveToDailyChallengesScreen();
-                }}>
-                <Text style={styles.challengeViewTextView}>View</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.boxes}>
-            <View
-              style={[
-                styles.bigBox,
-                {justifyContent: 'center', alignItems: 'center'},
-              ]}>
-              <Text
+      <SafeAreaView style={styles.MainContainer} forceInset={{top:'always'}} >
+        <View style={{flex: 1, }}>
+          <ScrollView style={[styles.body, {flex: 1}]}>
+            <View style={styles.challengeView}>
+              <View>
+                <Text style={styles.challengeViewHeading}>DAILY CHALLENGE</Text>
+                <Text style={styles.challengeViewPara}>
+                  Lorum ipsum about react
+                </Text>
+              </View>
+              <View
                 style={{
-                  fontSize: 50,
-                  fontFamily: 'Montserrat-ExtraBold_0',
-                  color: 'white',
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
                 }}>
-                GTR
-              </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.moveToDailyChallengesScreen();
+                  }}>
+                  <Text style={styles.challengeViewTextView}>View</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={[styles.smallBox, {justifyContent: 'center'}]}>
-              <View style={{marginLeft: 15}}>
-                <Text style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
-                  Date
-                </Text>
+            <View style={styles.boxes}>
+              <View
+                style={[
+                  styles.bigBox,
+                  {justifyContent: 'center', alignItems: 'center'},
+                ]}>
                 <Text
                   style={{
-                    fontFamily: 'Montserrat-Regular_0',
+                    fontSize: 50,
+                    fontFamily: 'Montserrat-ExtraBold_0',
                     color: 'white',
                   }}>
-                  {setCurrentDate}
+                  GTR
                 </Text>
               </View>
-              <View style={{marginTop: 15, marginLeft: 15}}>
-                <Text style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
-                  Time
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular_0',
-                    color: 'white',
-                  }}>
-                  {strTime}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.challengeView}>
-            <View>
-              <Text style={styles.challengeViewHeading}>
-                WINNERS OF THE DAY
-              </Text>
-              <Text style={styles.challengeViewPara}>
-                Lorum ipsum about react
-              </Text>
-            </View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <TouchableOpacity>
-                <Text style={styles.challengeViewTextView}>View</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.boxes}>
-            <View
-              style={[
-                styles.smallBox,
-                {justifyContent: 'center', alignItems: 'center'},
-              ]}>
-              <Image
-                source={require('../../assets/cupIcon.png')}
-                style={styles.userIcon}
-              />
-            </View>
-            <View style={[styles.bigBox, {padding: 10}]}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 50,
-                    borderColor: 'white',
-                    borderWidth: 2,
-                  }}>
-                  <Image
-                    source={require('../../assets/dummy.png')}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      resizeMode: 'cover',
-                    }}
-                  />
-                </View>
-
-                <View style={{marginLeft: 5, justifyContent: 'center'}}>
+              <View style={[styles.smallBox, {justifyContent: 'center'}]}>
+                <View style={{marginLeft: 15}}>
+                  <Text
+                    style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                    Date
+                  </Text>
                   <Text
                     style={{
-                      fontFamily: 'Montserrat-Bold_0',
+                      fontFamily: 'Montserrat-Regular_0',
                       color: 'white',
                     }}>
-                    Ertugal Gazi
-                  </Text>
-                  <Text style={[styles.challengeViewPara, {color: 'white'}]}>
-                    lorum about react
+                    {setCurrentDate}
                   </Text>
                 </View>
-              </View>
-              <View style={styles.seperator}></View>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 50,
-                    borderColor: 'white',
-                    borderWidth: 2,
-                  }}>
-                  <Image
-                    source={require('../../assets/dummy.png')}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      resizeMode: 'cover',
-                    }}
-                  />
-                </View>
-
-                <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                <View style={{marginTop: 15, marginLeft: 15}}>
+                  <Text
+                    style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                    Time
+                  </Text>
                   <Text
                     style={{
-                      fontFamily: 'Montserrat-Bold_0',
+                      fontFamily: 'Montserrat-Regular_0',
                       color: 'white',
                     }}>
-                    Ertugal Gazi
-                  </Text>
-                  <Text style={[styles.challengeViewPara, {color: 'white'}]}>
-                    lorum about react
+                    {strTime}
                   </Text>
                 </View>
               </View>
             </View>
-          </View>
-          <View style={styles.challengeView}>
-            <View>
-              <Text style={styles.challengeViewHeading}>PAY IT FORWORD</Text>
-              <Text style={styles.challengeViewPara}>
-                Lorum ipsum about react
-              </Text>
+            <View style={styles.challengeView}>
+              <View>
+                <Text style={styles.challengeViewHeading}>
+                  WINNERS OF THE DAY
+                </Text>
+                <Text style={styles.challengeViewPara}>
+                  Lorum ipsum about react
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
+                }}>
+                <TouchableOpacity>
+                  <Text style={styles.challengeViewTextView}>View</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
-              <TouchableOpacity>
-                <Text style={styles.challengeViewTextView}>View</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.boxes}>
-            <View
-              style={[
-                styles.payItSmallBox,
-                {justifyContent: 'center', alignItems: 'center'},
-              ]}>
-              <Image
-                source={require('../../assets/shopIcon.png')}
-                style={styles.shopIcon}
-              />
-            </View>
-            <View style={[styles.payItBigBox, {padding: 10}]}>
-              <View style={styles.notificationBox}>
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <Text style={styles.month}>Active</Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.rupee}>$11.96</Text>
-                  </View>
-                  <Text style={styles.description}>Expiry: 28-sep-2020</Text>
-                </View>
-                <View style={styles.buttonView}>
-                  <TouchableOpacity
-                    style={styles.subscriberButton}
-                    onPress={() => {
-                      this.moveToUserList();
+            <View style={styles.boxes}>
+              <View
+                style={[
+                  styles.smallBox,
+                  {justifyContent: 'center', alignItems: 'center'},
+                ]}>
+                <Image
+                  source={require('../../assets/cupIcon.png')}
+                  style={styles.userIcon}
+                />
+              </View>
+              <View style={[styles.bigBox, {padding: 10}]}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      height: 40,
+                      width: 40,
+                      borderRadius: 50,
+                      borderColor: 'white',
+                      borderWidth: 2,
                     }}>
                     <Image
-                      style={{height: 15, width: 18}}
-                      source={require('../../assets/heart.png')}
+                      source={require('../../assets/dummy.png')}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        resizeMode: 'cover',
+                      }}
                     />
-                  </TouchableOpacity>
+                  </View>
+
+                  <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Bold_0',
+                        color: 'white',
+                      }}>
+                      Ertugal Gazi
+                    </Text>
+                    <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                      lorum about react
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.seperator}></View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      height: 40,
+                      width: 40,
+                      borderRadius: 50,
+                      borderColor: 'white',
+                      borderWidth: 2,
+                    }}>
+                    <Image
+                      source={require('../../assets/dummy.png')}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        resizeMode: 'cover',
+                      }}
+                    />
+                  </View>
+
+                  <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Bold_0',
+                        color: 'white',
+                      }}>
+                      Ertugal Gazi
+                    </Text>
+                    <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                      lorum about react
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+            <View style={styles.challengeView}>
+              <View>
+                <Text style={styles.challengeViewHeading}>PAY IT FORWORD</Text>
+                <Text style={styles.challengeViewPara}>
+                  Lorum ipsum about react
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
+                }}>
+                <TouchableOpacity>
+                  <Text style={styles.challengeViewTextView}>View</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.boxes}>
+              <View
+                style={[
+                  styles.payItSmallBox,
+                  {justifyContent: 'center', alignItems: 'center'},
+                ]}>
+                <Image
+                  source={require('../../assets/shopIcon.png')}
+                  style={styles.shopIcon}
+                />
+              </View>
+              <View style={[styles.payItBigBox, {padding: 10}]}>
+                <View style={styles.notificationBox}>
+                  <View style={{flex: 1, justifyContent: 'center'}}>
+                    <Text style={styles.month}>Active</Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={styles.rupee}>$11.96</Text>
+                    </View>
+                    <Text style={styles.description}>Expiry: 28-sep-2020</Text>
+                  </View>
+                  <View style={styles.buttonView}>
+                    <TouchableOpacity
+                      style={styles.subscriberButton}
+                      onPress={() => {
+                        this.moveToUserList();
+                      }}>
+                      <Image
+                        style={{height: 15, width: 18}}
+                        source={require('../../assets/heart.png')}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
