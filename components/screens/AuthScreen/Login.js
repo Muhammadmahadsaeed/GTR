@@ -15,6 +15,9 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import {connect} from 'react-redux';
+import {userObject} from '../../Redux/Action/action';
+import {bindActionCreators} from 'redux';
 
 class LoginScreen extends React.Component {
   constructor() {
@@ -23,22 +26,26 @@ class LoginScreen extends React.Component {
       hidePassword: true,
       email: '',
       pwd: '',
-      correct: false,
-      wrong: false,
       isErorr: false,
       isloading: false,
+      wrong: false,
+      showErorrText: false,
+      correct: false,
+      showInvalidErorr: false,
     };
   }
   removeErorr() {
-    this.setState({isError: false});
+    this.setState({isloading: false});
+    this.setState({showErorrText: false});
+    this.setState({showInvalidErorr: false});
   }
   validate = (text) => {
-    const userEmail = text.nativeEvent.text;
+    const userEmail = text;
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(userEmail) === false) {
       this.setState({correct: false});
       this.setState({wrong: true});
-      this.setState({email: ' '});
+      return false;
     } else {
       this.setState({correct: true});
       this.setState({wrong: false});
@@ -53,19 +60,30 @@ class LoginScreen extends React.Component {
   }
   moveToHome() {
     this.setState({isloading: true});
-
-    this.props.navigation.navigate('HomeScreen');
+    const {email, pwd} = this.state;
+    // if (email === '' || pwd === '') {
+    //   this.setState({showErorrText: true});
+    // } else {
+    //   if (email === 'm@g.com' && pwd === '123456') {
+    //     this.props.store_user(email)
+        this.props.navigation.navigate('HomeScreen');
+    //   } else {
+    //     this.setState({showInvalidErorr: true});
+    //   }
+    // }
   }
-
+  erorrRemove() {}
   render() {
-    console.log("wrong============>",this.state.wrong)
     return (
       <View style={{flex: 1}}>
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg.png')}
         />
-        <ScrollView keyboardShouldPersistTaps="handled">
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentInsetAdjustmentBehavior="automatic"
+          style={{flex: 1}}>
           <View style={{alignItems: 'center', marginTop: 40}}>
             <Image
               source={require('../../../assets/Logo.png')}
@@ -85,22 +103,22 @@ class LoginScreen extends React.Component {
                 placeholderTextColor="#F6F6F7"
                 keyboardType="email-address"
                 returnKeyType="next"
-                onChange={(text) => this.validate(text)}
+                onChangeText={(text) => this.validate(text)}
                 onFocus={() => this.removeErorr()}
               />
-              <View style={styles.touchableButton}>
-                {this.state.correct ? (
-                  <Image
-                    source={require('../../../assets/correct.png')}
-                    style={styles.buttonImage}
-                  />
-                ) : null}
-                {this.state.wrong ? (
+              <View style={styles.touchableButton} activeOpacity={0.8}>
+                {this.state.wrong && (
                   <Image
                     source={require('../../../assets/wrong.png')}
                     style={styles.buttonImage}
                   />
-                ) : null}
+                )}
+                {this.state.correct && (
+                  <Image
+                    source={require('../../../assets/correct.png')}
+                    style={styles.buttonImage}
+                  />
+                )}
               </View>
             </View>
             <View style={styles.SectionStyle}>
@@ -110,7 +128,7 @@ class LoginScreen extends React.Component {
                 placeholderTextColor="#F6F6F7"
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
-                onChangeText={(pwd) => this.setState({pwd})}
+                onChangeText={(pwd) => this.setState({pwd: pwd})}
                 onFocus={() => this.removeErorr()}
               />
               <TouchableOpacity
@@ -129,6 +147,28 @@ class LoginScreen extends React.Component {
                 />
               </TouchableOpacity>
             </View>
+            {this.state.showErorrText && (
+              <View style={styles.showErorrText}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontFamily: 'Montserrat-Regular_0',
+                  }}>
+                  Please fill the above fields
+                </Text>
+              </View>
+            )}
+            {this.state.showInvalidErorr && (
+              <View style={styles.showInvalidText}>
+                <Text
+                  style={{
+                    color: 'red',
+                    fontFamily: 'Montserrat-Regular_0',
+                  }}>
+                  Invalid Email and Password
+                </Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.forgotPassword}
               onPress={() => {
@@ -179,7 +219,6 @@ class LoginScreen extends React.Component {
     );
   }
 }
-export default LoginScreen;
 
 const styles = StyleSheet.create({
   backgroundImage: {
@@ -276,6 +315,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 30,
   },
+  showErorrText: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '70%',
+    marginLeft: 20,
+    marginBottom: 15,
+  },
+  showInvalidText: {
+    marginBottom: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   forgotPassword: {
     // marginTop:10,
     flexDirection: 'row',
@@ -285,3 +337,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const mapStateToProps = (state) => {
+  console.log("login state============>",state)
+  return {
+    user: state.user,
+  }
+  
+};
+
+const mapDispatchToProps = (dispatch) => {
+
+  return{
+    store_user: (user) => dispatch(userObject(user)),
+  }
+ 
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

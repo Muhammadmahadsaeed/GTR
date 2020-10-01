@@ -180,7 +180,9 @@ const User_StackNavigator = createStackNavigator({
 const Register_StackNavigator = createStackNavigator({
   First: {
     screen: AuthScreens.SignupScreen,
+    
     navigationOptions: {
+     
       title: 'SIGN UP YOUR ACCOUNT',
       headerTitleStyle: {
         textAlign: 'center',
@@ -209,6 +211,7 @@ const Register_StackNavigator = createStackNavigator({
       headerTitle: '',
     },
   },
+  
 });
 
 //Bottom Tab
@@ -420,7 +423,7 @@ const LiveStreaming = createStackNavigator({
       
       headerTitle: '',
       headerStyle: {
-        backgroundColor: 'none',
+        backgroundColor: 'transparent',
         shadowOffset: {
           height: 0,
           width: 0,
@@ -488,7 +491,10 @@ const RootNavigator = createSwitchNavigator({
       headerShown: false,
     },
   },
-  RegisterScreen: Register_StackNavigator,
+  RegisterScreen:{
+    screen : Register_StackNavigator,
+    
+  } ,
 
   Drawer: DrawerNavigator,
 });

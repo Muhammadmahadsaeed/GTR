@@ -132,7 +132,7 @@ export default class SeePlayers extends Component {
           source={require('../../../assets/bg1.png')}
         />
         <View style={styles.heading}>
-          <Text style={styles.headingText}>Players</Text>
+          <Text style={styles.headingText}>Gamers</Text>
         </View>
         <FlatList
           style={{width: '100%', marginBottom: 20}}

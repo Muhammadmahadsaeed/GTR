@@ -52,8 +52,8 @@ class DailyChallengesScreen extends React.Component {
             <View style={{justifyContent:'center',alignItems:'center'}}>
               <Text style={styles.heading}>Daily</Text>
               <Text style={styles.heading}>Challenge</Text>
-              <Text style={[styles.para,{marginTop:20}]}>answer gtr question</Text>
-              <Text style={styles.para}>to win rewards!</Text>
+              <Text style={[styles.para,{marginTop:20}]}>Guess That Receipt</Text>
+              <Text style={styles.para}> to win the price of the receipt</Text>
             </View>
 
             <TouchableOpacity

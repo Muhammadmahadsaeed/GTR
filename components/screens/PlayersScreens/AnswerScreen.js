@@ -32,7 +32,7 @@ export default class AnswerScreen extends Component {
           <KeyboardAvoidingView enabled>
             <View style={styles.answerView}>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={styles.heading}>Guess the right receipt</Text>
+                <Text style={styles.heading}>Guess that receipt</Text>
               </View>
               <View style={styles.SectionStyle}>
                 <TextInput

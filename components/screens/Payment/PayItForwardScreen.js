@@ -20,6 +20,7 @@ export default class PayItForwardScreen extends Component {
     loading: false,
   };
   handleResponse = (data) => {
+    console.log('data==========', data);
     if (data.title === 'success') {
       this.setState({showModal: false, status: 'Complete'});
     } else if (data.title === 'cancel') {
@@ -29,10 +30,11 @@ export default class PayItForwardScreen extends Component {
     }
   };
   moveToUserList() {
-    this.setState({loading: true});
-    setTimeout(() => {
-      this.stopLoading();
-    }, 3000);
+    this.setState({showModal: true});
+    // this.setState({loading: true});
+    // setTimeout(() => {
+      // this.stopLoading();
+    // }, 3000);
     // this.props.navigation.navigate('RedirectToPaypalScreen',{showModal: true});
   }
   stopLoading() {
@@ -42,13 +44,13 @@ export default class PayItForwardScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.loading && (
+        {/* {this.state.loading && (
           <ActivityIndicator
             color="#81b840"
             size="large"
             style={styles.ActivityIndicatorStyle}
           />
-        )}
+        )} */}
         <View style={styles.paymentContainer}>
           <View style={styles.paymentText}>
             <Text
@@ -117,13 +119,13 @@ export default class PayItForwardScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Monthly</Text>
+                <Text style={styles.month}>2 Monthly</Text>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.rupee}>$23.92</Text>
                   <Text style={styles.monthYear}> Free</Text>
                 </View>
                 <Text style={styles.description}>
-                  Pay it forward pays for 4 other gamer
+                  Pay it forward pays for 8 other gamer
                 </Text>
               </View>
               <View style={styles.buttonView}>
@@ -150,13 +152,13 @@ export default class PayItForwardScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Monthly</Text>
+                <Text style={styles.month}>3 Monthly</Text>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.rupee}>$35.88</Text>
                   <Text style={styles.monthYear}> Free</Text>
                 </View>
                 <Text style={styles.description}>
-                  Pay it forward pays for 4 other gamer
+                  Pay it forward pays for 12 other gamer
                 </Text>
               </View>
               <View style={styles.buttonView}>
@@ -183,13 +185,79 @@ export default class PayItForwardScreen extends Component {
             </View>
             <View style={styles.notificationBox}>
               <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Monthly</Text>
+                <Text style={styles.month}>4 Monthly</Text>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$11.96</Text>
+                  <Text style={styles.rupee}>$47.84</Text>
                   <Text style={styles.monthYear}> Free</Text>
                 </View>
                 <Text style={styles.description}>
-                  Pay it forward pays for 4 other gamer
+                  Pay it forward pays for 16 other gamer
+                </Text>
+              </View>
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.subscriberButton}
+                  onPress={() => {
+                    this.moveToUserList();
+                  }}>
+                  <Image
+                    style={{height: 15, width: 18}}
+                    source={require('../../../assets/heart.png')}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    Subscribe
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.notificationBox}>
+              <View style={{flex: 1}}>
+                <Text style={styles.month}>5 Monthly</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$59.80</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
+                <Text style={styles.description}>
+                  Pay it forward pays for 20 other gamer
+                </Text>
+              </View>
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.subscriberButton}
+                  onPress={() => {
+                    this.moveToUserList();
+                  }}>
+                  <Image
+                    style={{height: 15, width: 18}}
+                    source={require('../../../assets/heart.png')}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      paddingLeft: 5,
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    Subscribe
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.notificationBox}>
+              <View style={{flex: 1}}>
+                <Text style={styles.month}>1 Year</Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.rupee}>$119.60</Text>
+                  <Text style={styles.monthYear}> Free</Text>
+                </View>
+                <Text style={styles.description}>
+                  Pay it forward pays for 40 other gamer
                 </Text>
               </View>
               <View style={styles.buttonView}>
@@ -221,9 +289,13 @@ export default class PayItForwardScreen extends Component {
           visible={this.state.showModal}
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
-            source={{uri: 'http://app.guessthatreceipt.com/'}}
+            source={{uri: 'http://app.guessthatreceipt.com/pay'}}
             onNavigationStateChange={(data) => this.handleResponse(data)}
             injectedJavaScript={`document.f1.submit()`}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            startInLoadingState={true}
+            scalesPageToFit={true}
           />
         </Modal>
       </View>

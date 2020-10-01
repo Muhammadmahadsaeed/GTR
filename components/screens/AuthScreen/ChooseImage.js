@@ -113,7 +113,8 @@ export default class ChooseImage extends Component {
     this.props.navigation.navigate('payitforward')
   }
   render() {
-    console.log(this.state.fileUri)
+    const { state } = this.props.navigation
+    console.log("=============",state.params)
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />

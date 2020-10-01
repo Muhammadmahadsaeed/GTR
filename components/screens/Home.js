@@ -6,28 +6,29 @@ import {
   View,
   Text,
   Dimensions,
-  Animated,
-  TextInput,
   Image,
-  Keyboard,
-  Platform,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
   TouchableOpacity,
-  ScrollView,
+  ScrollView,SafeAreaView
 } from 'react-native';
+import {connect} from 'react-redux';
 const screenheight = Dimensions.get('screen').height;
 const windowheight = Dimensions.get('window').height;
 // import all basic components
+import {strTime, setCurrentDate} from './CommonComponents/DateTime';
 
-export default class Home extends Component {
+class Home extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
   moveToDailyChallengesScreen() {
     this.props.navigation.navigate('DailyChallenges');
   }
-  //Screen1 Component
+  componentDidMount() {}
+
   render() {
     return (
-      <View style={styles.MainContainer}>
+      <SafeAreaView style={styles.MainContainer}>
         <ScrollView style={[styles.body, {flex: 1}]}>
           <View style={styles.challengeView}>
             <View>
@@ -74,7 +75,7 @@ export default class Home extends Component {
                     fontFamily: 'Montserrat-Regular_0',
                     color: 'white',
                   }}>
-                  29-07-2020
+                  {setCurrentDate}
                 </Text>
               </View>
               <View style={{marginTop: 15, marginLeft: 15}}>
@@ -86,7 +87,7 @@ export default class Home extends Component {
                     fontFamily: 'Montserrat-Regular_0',
                     color: 'white',
                   }}>
-                  02-34 PM
+                  {strTime}
                 </Text>
               </View>
             </View>
@@ -242,7 +243,7 @@ export default class Home extends Component {
             </View>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -367,3 +368,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+const mapStateToProps = (state) => {
+  console.log('state============>', state);
+  return {
+    user: state.user,
+  };
+};
+export default connect(mapStateToProps, null)(Home);
