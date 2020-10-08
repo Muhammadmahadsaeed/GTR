@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 //Import all required component
 import {
@@ -29,26 +29,35 @@ class LoginScreen extends React.Component {
       isErorr: false,
       isloading: false,
       wrong: false,
-      showErorrText: false,
       correct: false,
       showInvalidErorr: false,
+      showEmailEmptyErorr: false,
+      showPasswordEmptyErorr: false,
+      erorrFromServer : ''
     };
   }
   removeErorr() {
     this.setState({isloading: false});
-    this.setState({showErorrText: false});
+    this.setState({
+      showEmailEmptyErorr: false,
+      showPasswordEmptyErorr: false,
+    });
     this.setState({showInvalidErorr: false});
   }
   validate = (text) => {
-    const userEmail = text;
+    const userEmail = text.toLowerCase();
+  
+
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(userEmail) === false) {
       this.setState({correct: false});
       this.setState({wrong: true});
+      this.setState({showEmailEmptyErorr: false});
       return false;
     } else {
       this.setState({correct: true});
       this.setState({wrong: false});
+      this.setState({showEmailEmptyErorr: false});
       this.setState({email: userEmail});
     }
   };
@@ -61,18 +70,52 @@ class LoginScreen extends React.Component {
   moveToHome() {
     this.setState({isloading: true});
     const {email, pwd} = this.state;
-    // if (email === '' || pwd === '') {
-    //   this.setState({showErorrText: true});
-    // } else {
-    //   if (email === 'm@g.com' && pwd === '123456') {
-    //     this.props.store_user(email)
-        this.props.navigation.navigate('HomeScreen');
-    //   } else {
-    //     this.setState({showInvalidErorr: true});
-    //   }
-    // }
+
+    if (email === '' && pwd === '') {
+      this.setState({
+        showEmailEmptyErorr: true,
+        showPasswordEmptyErorr: true,
+        correct: false,
+        wrong: false,
+      });
+    } else if (email === '') {
+      this.setState({showEmailEmptyErorr: true, correct: false, wrong: false});
+    } else if (pwd === '') {
+      this.setState({showPasswordEmptyErorr: true});
+    } else {
+     
+      var formdata = new FormData();
+      formdata.append('email',  email);
+      formdata.append('password', pwd);
+      try {
+        fetch('https://app.guessthatreceipt.com/users/getCurrentUser?', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formdata,
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if(result.result){
+              this.props.store_user(result.result)
+              this.props.navigation.navigate('Drawer')
+            }
+            else{
+              this.setState({isloading: false, showInvalidErorr: true})
+            }
+           
+          })
+          .catch((error) =>
+            this.setState({isloading: false, erorrFromServer: error}),
+          );
+      } catch (e) {
+        console.log('eeeeeeeeeeeeeee--------');
+      }
+    }
   }
-  erorrRemove() {}
+ 
   render() {
     return (
       <View style={{flex: 1}}>
@@ -96,7 +139,35 @@ class LoginScreen extends React.Component {
             />
           </View>
           <KeyboardAvoidingView enabled>
-            <View style={styles.SectionStyle}>
+            {this.state.showInvalidErorr && (
+              <View style={styles.showInvalidText}>
+                <Image
+                  style={{height: 40, width: 40}}
+                  source={require('../../../assets/LargeInvalidIcon.png')}
+                />
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    paddingLeft: 20,
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    Your Email and Password has
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    been incorrect
+                  </Text>
+                </View>
+              </View>
+            )}
+            <View style={[styles.SectionStyle, {marginTop: 20}]}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="Enter ID"
@@ -119,6 +190,12 @@ class LoginScreen extends React.Component {
                     style={styles.buttonImage}
                   />
                 )}
+                {this.state.showEmailEmptyErorr && (
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                )}
               </View>
             </View>
             <View style={styles.SectionStyle}>
@@ -131,44 +208,41 @@ class LoginScreen extends React.Component {
                 onChangeText={(pwd) => this.setState({pwd: pwd})}
                 onFocus={() => this.removeErorr()}
               />
-              <TouchableOpacity
-                style={styles.touchableButton}
-                activeOpacity={0.8}
-                onPress={() => {
-                  this.setPasswordVisibale();
-                }}>
-                <Image
-                  source={
-                    this.state.hidePassword
-                      ? require('../../../assets/hide.png')
-                      : require('../../../assets/view.png')
-                  }
-                  style={styles.buttonImage}
-                />
-              </TouchableOpacity>
+
+              <View style={[styles.touchableButton]}>
+                {this.state.showPasswordEmptyErorr ? (
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      right: 3,
+                      height: 45,
+                      width: 35,
+                      justifyContent: 'center',
+                      padding: 4,
+                      alignItems: 'center',
+                    }}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      this.setPasswordVisibale();
+                    }}>
+                    <Image
+                      source={
+                        this.state.hidePassword
+                          ? require('../../../assets/hide.png')
+                          : require('../../../assets/view.png')
+                      }
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
-            {this.state.showErorrText && (
-              <View style={styles.showErorrText}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the above fields
-                </Text>
-              </View>
-            )}
-            {this.state.showInvalidErorr && (
-              <View style={styles.showInvalidText}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Invalid Email and Password
-                </Text>
-              </View>
-            )}
+
             <TouchableOpacity
               style={styles.forgotPassword}
               onPress={() => {
@@ -191,7 +265,7 @@ class LoginScreen extends React.Component {
               onPress={() => {
                 this.moveToHome();
               }}
-              style={[styles.buttonStyle, {marginTop: 100}]}
+              style={[styles.buttonStyle, {marginTop: 50}]}
               activeOpacity={0.5}>
               {this.state.isloading ? (
                 <ActivityIndicator size="large" color="#81b840" />
@@ -232,7 +306,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 45,
     width: '70%',
-    marginTop: 10,
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
@@ -271,8 +344,6 @@ const styles = StyleSheet.create({
   },
   SignUpbuttonStyle: {
     width: 80,
-    // backgroundColor: '#81b840',
-    // borderWidth: 0,
     color: 'white',
     borderColor: '#7DE24E',
     height: 80,
@@ -315,18 +386,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 30,
   },
-  showErorrText: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: '70%',
-    marginLeft: 20,
-    marginBottom: 15,
-  },
+
   showInvalidText: {
-    marginBottom: 15,
+    marginTop: 20,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
+    width: '70%',
   },
   forgotPassword: {
     // marginTop:10,
@@ -339,19 +405,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log("login state============>",state)
   return {
     user: state.user,
-  }
-  
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-
-  return{
+  return {
     store_user: (user) => dispatch(userObject(user)),
-  }
- 
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

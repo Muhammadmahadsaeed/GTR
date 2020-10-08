@@ -7,7 +7,8 @@ const userObject = (user) => {
 
 const removeUser = ()=>{
   return{
-    type : "REMOVE_USER"
+    type : "REMOVE_USER",
+    
   }
 }
 

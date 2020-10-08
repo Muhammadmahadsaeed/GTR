@@ -18,6 +18,7 @@ export default class PayItForwardScreen extends Component {
     showModal: false,
     status: 'Pending',
     loading: false,
+    paymentValue : ''
   };
   handleResponse = (data) => {
     console.log('data==========', data);
@@ -29,28 +30,20 @@ export default class PayItForwardScreen extends Component {
       return;
     }
   };
-  moveToUserList() {
-    this.setState({showModal: true});
-    // this.setState({loading: true});
-    // setTimeout(() => {
-      // this.stopLoading();
-    // }, 3000);
-    // this.props.navigation.navigate('RedirectToPaypalScreen',{showModal: true});
+  moveToUserList(val) {
+    
+    this.setState({paymentValue : val})
+    if(val){
+      this.setState({showModal: true});
+
+    }
+   
   }
-  stopLoading() {
-    this.setState({loading: false});
-    this.setState({showModal: true});
-  }
+ 
   render() {
     return (
       <View style={styles.container}>
-        {/* {this.state.loading && (
-          <ActivityIndicator
-            color="#81b840"
-            size="large"
-            style={styles.ActivityIndicatorStyle}
-          />
-        )} */}
+      
         <View style={styles.paymentContainer}>
           <View style={styles.paymentText}>
             <Text
@@ -99,7 +92,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(11.96);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -132,7 +125,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(23.92);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -165,7 +158,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(35.88);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -198,7 +191,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(47.84);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -231,7 +224,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(59.80);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -264,7 +257,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList();
+                    this.moveToUserList(119.60);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -289,7 +282,16 @@ export default class PayItForwardScreen extends Component {
           visible={this.state.showModal}
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
-            source={{uri: 'http://app.guessthatreceipt.com/pay'}}
+            source={{uri: 'http://app.guessthatreceipt.com/pay/',
+            headers: {
+              'paymentValue': `${this.state.paymentValue}`,
+            },
+          }}
+                    
+            originWhitelist={["*"]}
+            mixedContentMode={'always'}
+            useWebKit={Platform.OS == 'ios'}
+            startInLoadingState={true}
             onNavigationStateChange={(data) => this.handleResponse(data)}
             injectedJavaScript={`document.f1.submit()`}
             javaScriptEnabled={true}

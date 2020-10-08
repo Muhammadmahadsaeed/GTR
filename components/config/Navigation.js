@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import {
-  View,
-  StyleSheet,
   Dimensions,
   Image,
-  TouchableOpacity,
-  Platform,
-  Text,
 } from 'react-native';
 
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
@@ -26,6 +21,8 @@ import * as PaymentScreens from '../screens/Payment/index';
 import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 import * as PlayerScreens from '../screens/PlayersScreens/index';
+
+
 
 
 // Tab Navigation for userlist and giver
@@ -95,7 +92,7 @@ const Payment_StackNavigator = createStackNavigator({
       },
     }),
   },
-
+  
   Second: {
     screen: TabScreen,
     title: 'none',

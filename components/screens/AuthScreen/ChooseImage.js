@@ -1,5 +1,7 @@
 import React, {Fragment, Component} from 'react';
 import ImagePicker from 'react-native-image-picker';
+import {connect} from 'react-redux';
+import {userObject} from '../../Redux/Action/action';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,31 +13,48 @@ import {
   Button,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import {
-  Header,
-  LearnMoreLinks,
   Colors,
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-
-export default class ChooseImage extends Component {
+class ChooseImage extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNo: '',
+      password: '',
+      confirmPassword: '',
+      isLoading: false,
+      showErorr: '',
+      isErorr: false,
       filepath: {
         data: '',
         uri: '',
       },
       fileData: '',
       fileUri: '',
-      
     };
   }
+  componentDidMount() {
+    const {state} = this.props.navigation;
 
+    this.setState({
+      firstName: state.params.firstName,
+      lastName: state.params.lastName,
+      email: state.params.email,
+      phoneNo: state.params.pNum,
+      password: state.params.password,
+      confirmPassword: state.params.confirmPassword,
+    });
+  }
   launchCamera = () => {
     let options = {
       storageOptions: {
@@ -44,7 +63,6 @@ export default class ChooseImage extends Component {
       },
     };
     ImagePicker.launchCamera(options, (response) => {
-     
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -54,7 +72,7 @@ export default class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response.uri};
-      
+
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -72,8 +90,6 @@ export default class ChooseImage extends Component {
       },
     };
     ImagePicker.launchImageLibrary(options, (response) => {
-     
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -83,10 +99,10 @@ export default class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response.uri};
-       
+
         this.setState({
           filePath: response,
-          fileData: response.data,
+          fileData: response,
           fileUri: response.uri,
         });
       }
@@ -95,7 +111,6 @@ export default class ChooseImage extends Component {
 
   renderFileUri() {
     if (this.state.fileUri) {
-     
       return <Image source={{uri: this.state.fileUri}} style={styles.images} />;
     } else {
       return (
@@ -106,15 +121,61 @@ export default class ChooseImage extends Component {
       );
     }
   }
-  resetImage(){
-    this.setState({fileUri : ''})
+  resetImage() {
+    this.setState({fileUri: ''});
   }
-  moveToPaymentScreen(){
-    this.props.navigation.navigate('payitforward')
+  moveToPaymentScreen() {
+    this.setState({isLoading: true});
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNo,
+      password,
+      confirmPassword,
+    } = this.state;
+    var formData = new FormData(this);
+    //text data in key value pair form
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('email', email);
+    formData.append('phoneNo', phoneNo);
+    formData.append('Address', confirmPassword);
+    formData.append('PostalCode', 'firstName');
+    formData.append('password', password);
+    formData.append('imgPath', {
+      name: this.state.fileData.fileName,
+      type: this.state.fileData.type,
+      uri:
+        Platform.OS === 'android'
+          ? this.state.fileUri
+          : this.state.fileData.uri.replace('file://', ''),
+    });
+    fetch('https://app.guessthatreceipt.com/users/register?', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.message == 'Registration successful') {
+          this.setState({isLoading: false});
+          this.props.store_user(result.message);
+          this.props.navigation.navigate('payitforward');
+        } else {
+          this.setState({isLoading: false});
+          this.setState({isErorr: true});
+          this.setState({showErorr: result.message});
+        }
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   }
   render() {
-    const { state } = this.props.navigation
-    console.log("=============",state.params)
     return (
       <Fragment>
         <StatusBar barStyle="dark-content" />
@@ -124,9 +185,31 @@ export default class ChooseImage extends Component {
             source={require('../../../assets/bg1.png')}
           />
           <View style={styles.body}>
+          {this.state.isErorr && (
+              <View style={styles.showInvalidText}>
+                <Image
+                  style={{height: 40, width: 40}}
+                  source={require('../../../assets/LargeInvalidIcon.png')}
+                />
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    paddingLeft: 10,
+                  }}>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    {this.state.showErorr}
+                  </Text>
+                </View>
+              </View>
+            )}
             <View style={styles.ImageSections}>
               <View style={styles.profileImage}>{this.renderFileUri()}</View>
             </View>
+     
 
             {!this.state.fileUri ? (
               <View style={styles.btnParentSection}>
@@ -151,10 +234,20 @@ export default class ChooseImage extends Component {
               </View>
             ) : (
               <View style={styles.btnParentSection}>
-                <TouchableOpacity style={styles.btnSection} onPress={()=>{this.moveToPaymentScreen()}}>
-                  <Text style={styles.btnText}>Confirm</Text>
+                <TouchableOpacity
+                  style={styles.btnSection}
+                  onPress={() => {
+                    this.moveToPaymentScreen();
+                  }}>
+                  {this.state.isLoading ? (
+                    <ActivityIndicator size="large" color="white" />
+                  ) : (
+                    <Text style={styles.btnText}>Confirm</Text>
+                  )}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnSection} onPress={()=> this.resetImage()}>
+                <TouchableOpacity
+                  style={styles.btnSection}
+                  onPress={() => this.resetImage()}>
                   <Text style={styles.btnText}>Back</Text>
                 </TouchableOpacity>
               </View>
@@ -172,11 +265,9 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    
     justifyContent: 'center',
     height: '100%',
     width: Dimensions.get('screen').width,
-   
   },
   backgroundImage: {
     position: 'absolute',
@@ -192,20 +283,19 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     justifyContent: 'center',
   },
-  profileImage :{
+  profileImage: {
     width: 200,
     height: 200,
-    borderWidth:5,
-    borderRadius:100,
-    borderColor:'#81b840',
-    justifyContent:'center'
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: '#81b840',
+    justifyContent: 'center',
   },
   images: {
     width: '100%',
     height: '100%',
     borderRadius: 100,
-    resizeMode:'cover'
-   
+    resizeMode: 'cover',
   },
   btnParentSection: {
     alignItems: 'center',
@@ -224,13 +314,33 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'white',
     fontSize: 14,
-    fontFamily:'Montserrat-Bold_0',
-    marginLeft:10
+    fontFamily: 'Montserrat-Bold_0',
+    marginLeft: 10,
   },
   imageIconStyle: {
-    height:30,
-    width:30,
-    resizeMode:'contain'
-    
+    height: 30,
+    width: 30,
+    resizeMode: 'contain',
+  },
+  showInvalidText: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '70%',
   },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    store_user: (user) => dispatch(userObject(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseImage);

@@ -1,8 +1,9 @@
 //This is an example code for Navigation Drawer with Custom Side bar//
 import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
+import {connect} from 'react-redux';
 
-export default class CustomSidebarMenu extends Component {
+class CustomSidebarMenu extends Component {
   constructor() {
     super();
     this.state = {
@@ -28,15 +29,17 @@ export default class CustomSidebarMenu extends Component {
       ],
     };
   }
-
+  logOut(){
+    this.props.navigation.navigate('Login')
+  }
   render() {
-    
+    console.log(this.props.user.user.imgPath)
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
         <View style={styles.sideMenuProfile}>
           <Image
-            source={require('../../../assets/admin.png')}
+            source={{uri : `https://app.guessthatreceipt.com/uploads/${this.props.user.user.imgPath}`}}
             style={styles.sideMenuProfileIcon}
           />
         </View>
@@ -51,7 +54,7 @@ export default class CustomSidebarMenu extends Component {
                 fontFamily: 'Montserrat-Bold_0',
                 fontSize: 22,
               }}>
-              Maciek Szott
+              {this.props.user.user.firstName} {this.props.user.user.lastName}
             </Text>
           </View>
           <View
@@ -62,7 +65,7 @@ export default class CustomSidebarMenu extends Component {
             }}>
             <Text style={styles.profileInfoText}>Phone No</Text>
             <Text> : </Text>
-            <Text style={styles.profileInfoTextRegular}>03362474325</Text>
+            <Text style={styles.profileInfoTextRegular}>{this.props.user.user.phoneNo}</Text>
           </View>
           <View
             style={{
@@ -117,7 +120,7 @@ export default class CustomSidebarMenu extends Component {
           ))}
         </View>
         <View style={{position: 'absolute', bottom: 30}}>
-          <Text onPress={()=> {this.props.navigation.navigate('Login')}}
+          <Text onPress={()=> {this.logOut()}}
             style={{
               fontFamily: 'Montserrat-Bold_0',
               color: '#81b840',
@@ -165,3 +168,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular_0',
   },
 });
+const mapStateToProps = (state) => {
+ 
+  return {
+    user: state.user,
+  };
+
+};
+export default connect(mapStateToProps, null)(CustomSidebarMenu);

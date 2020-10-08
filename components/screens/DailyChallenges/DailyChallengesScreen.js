@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import {connect} from 'react-redux';
 //Import all required component
 import {
   StyleSheet,
@@ -26,10 +26,11 @@ class DailyChallengesScreen extends React.Component {
   moveToPlayerScreens() {
     this.props.navigation.navigate('LiveScreen');
   }
-  moveToGameScreen(){
+  moveToGameScreen() {
     this.props.navigation.navigate('GameScreen');
   }
   render() {
+    console.log(this.props.user);
     return (
       <View style={{flex: 1}}>
         <Image
@@ -37,7 +38,7 @@ class DailyChallengesScreen extends React.Component {
           source={require('../../../assets/bg1.png')}
         />
         <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={{alignItems: 'center', }}>
+          <View style={{alignItems: 'center'}}>
             <Image
               source={require('../../../assets/Logo.png')}
               style={{
@@ -49,36 +50,39 @@ class DailyChallengesScreen extends React.Component {
             />
           </View>
           <KeyboardAvoidingView enabled>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <Text style={styles.heading}>Daily</Text>
               <Text style={styles.heading}>Challenge</Text>
-              <Text style={[styles.para,{marginTop:20}]}>Guess That Receipt</Text>
+              <Text style={[styles.para, {marginTop: 20}]}>
+                Guess That Receipt
+              </Text>
               <Text style={styles.para}> to win the price of the receipt</Text>
             </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                this.moveToPlayerScreens();
-              }}
-              style={[styles.buttonStyle, {marginTop:70}]}
-              activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Live</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                this.moveToGameScreen();
-              }}
-              style={[styles.buttonStyle, {}]}
-              activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Play</Text>
-            </TouchableOpacity>
+            {this.props.user.user.isAdmin == 1 ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.moveToPlayerScreens();
+                }}
+                style={[styles.buttonStyle, {marginTop: 70}]}
+                activeOpacity={0.5}>
+                <Text style={styles.buttonTextStyle}>Live</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  this.moveToGameScreen();
+                }}
+                style={[styles.buttonStyle, {marginTop: 70}]}
+                activeOpacity={0.5}>
+                <Text style={styles.buttonTextStyle}>Play</Text>
+              </TouchableOpacity>
+            )}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
     );
   }
 }
-export default DailyChallengesScreen;
 
 const styles = StyleSheet.create({
   backgroundImage: {
@@ -113,14 +117,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Montserrat-Bold_0',
   },
-  heading:{
+  heading: {
     fontFamily: 'Montserrat-Bold_0',
-    color:'#81b840',
-    fontSize:35,
+    color: '#81b840',
+    fontSize: 35,
   },
-  para:{
+  para: {
     fontFamily: 'Montserrat-Regular_0',
-    color:'#81b840',
-    fontSize:16
-  }
+    color: '#81b840',
+    fontSize: 16,
+  },
 });
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+export default connect(mapStateToProps, null)(DailyChallengesScreen);

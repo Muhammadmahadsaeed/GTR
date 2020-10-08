@@ -13,7 +13,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import {SafeAreaView} from 'react-navigation';
 class SignupScreen extends React.Component {
   constructor() {
     super();
@@ -41,16 +41,18 @@ class SignupScreen extends React.Component {
     };
   }
   validate = (text) => {
-    const userEmail = text;
+    const userEmail = text.toLowerCase();
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     if (reg.test(userEmail) === false) {
       this.setState({correct: false});
       this.setState({wrong: true});
-
+      this.setState({emailErorr: false});
       return false;
     } else {
       this.setState({correct: true});
       this.setState({wrong: false});
+      this.setState({emailErorr: false});
       this.setState({email: userEmail});
     }
   };
@@ -88,6 +90,8 @@ class SignupScreen extends React.Component {
       });
       this.setState({
         emailErorr: true,
+        wrong: false,
+        correct: false,
       });
       this.setState({
         pNumErorr: true,
@@ -103,7 +107,7 @@ class SignupScreen extends React.Component {
     } else if (lastName == '') {
       this.setState({lastNameErorr: true});
     } else if (email == '') {
-      this.setState({emailErorr: true});
+      this.setState({emailErorr: true, wrong: false, correct: false});
     } else if (pNum == '') {
       this.setState({pNumErorr: true});
     } else if (password == '') {
@@ -135,7 +139,7 @@ class SignupScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}} forceInset={{top:'always'}}>
+      <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg.png')}
@@ -152,18 +156,16 @@ class SignupScreen extends React.Component {
                 onChangeText={(text) => this.setState({firstName: text})}
                 onFocus={() => this.setState({firstNameErorr: false})}
               />
+              {this.state.firstNameErorr && (
+                <View style={styles.touchableButton}>
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                </View>
+              )}
             </View>
-            {this.state.firstNameErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
-              </View>
-            )}
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -174,18 +176,16 @@ class SignupScreen extends React.Component {
                 onChangeText={(text) => this.setState({lastName: text})}
                 onFocus={() => this.setState({lastNameErorr: false})}
               />
+              {this.state.lastNameErorr && (
+                <View style={styles.touchableButton}>
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                </View>
+              )}
             </View>
-            {this.state.lastNameErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
-              </View>
-            )}
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -209,19 +209,15 @@ class SignupScreen extends React.Component {
                     style={styles.buttonImage}
                   />
                 )}
+                {this.state.emailErorr && (
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                )}
               </View>
             </View>
-            {this.state.emailErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
-              </View>
-            )}
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -231,18 +227,16 @@ class SignupScreen extends React.Component {
                 onChangeText={(text) => this.setState({pNum: text})}
                 onFocus={() => this.setState({pNumErorr: false})}
               />
+              {this.state.pNumErorr && (
+                <View style={styles.touchableButton}>
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                </View>
+              )}
             </View>
-            {this.state.pNumErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
-              </View>
-            )}
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -253,33 +247,40 @@ class SignupScreen extends React.Component {
                 onChangeText={(e) => this.setState({password: e})}
                 onFocus={() => this.setState({pwdErorr: false})}
               />
-              <TouchableOpacity
-                style={styles.touchableButton}
-                activeOpacity={0.8}
-                onPress={() => {
-                  this.setPasswordVisibale();
-                }}>
-                <Image
-                  source={
-                    this.state.hidePassword
-                      ? require('../../../assets/hide.png')
-                      : require('../../../assets/view.png')
-                  }
-                  style={styles.buttonImage}
-                />
-              </TouchableOpacity>
-            </View>
-            {this.state.pwdErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
+              <View style={[styles.touchableButton]}>
+                {this.state.pwdErorr ? (
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      right: 3,
+                      height: 45,
+                      width: 35,
+                      justifyContent: 'center',
+                      padding: 4,
+                      alignItems: 'center',
+                    }}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      this.setPasswordVisibale();
+                    }}>
+                    <Image
+                      source={
+                        this.state.hidePassword
+                          ? require('../../../assets/hide.png')
+                          : require('../../../assets/view.png')
+                      }
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
-            )}
+            </View>
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -290,38 +291,45 @@ class SignupScreen extends React.Component {
                 onChangeText={(e) => this.checkPassword(e)}
                 onFocus={() => this.setState({cPwdErorr: false})}
               />
-              <TouchableOpacity
-                style={styles.touchableButton}
-                activeOpacity={0.8}
-                onPress={() => {
-                  this.setConfirmPasswordVisibale();
-                }}>
-                <Image
-                  source={
-                    this.state.hideConfirmPassword
-                      ? require('../../../assets/hide.png')
-                      : require('../../../assets/view.png')
-                  }
-                  style={styles.buttonImage}
-                />
-              </TouchableOpacity>
-            </View>
-            {this.state.cPwdErorr && (
-              <View style={styles.showPasswordNotMatch}>
-                <Text
-                  style={{
-                    color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
-                  }}>
-                  Please fill the field
-                </Text>
+              <View style={[styles.touchableButton]}>
+                {this.state.cPwdErorr ? (
+                  <Image
+                    style={{height: 25, width: 25}}
+                    source={require('../../../assets/invalidIcon.png')}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      right: 3,
+                      height: 45,
+                      width: 35,
+                      justifyContent: 'center',
+                      padding: 4,
+                      alignItems: 'center',
+                    }}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      this.setConfirmPasswordVisibale();
+                    }}>
+                    <Image
+                      source={
+                        this.state.hideConfirmPassword
+                          ? require('../../../assets/hide.png')
+                          : require('../../../assets/view.png')
+                      }
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
-            )}
+            </View>
+
             {this.state.passwordConfirmed && (
               <View style={styles.showPasswordNotMatch}>
                 <Text
                   style={{
-                    color: 'green',
+                    color: 'white',
                     fontFamily: 'Montserrat-Regular_0',
                   }}>
                   Password match

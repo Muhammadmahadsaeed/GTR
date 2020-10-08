@@ -29,6 +29,7 @@ class Home extends Component {
   componentDidMount() {}
 
   render() {
+   
     return (
       <SafeAreaView style={styles.MainContainer} forceInset={{top:'always'}} >
         <View style={{flex: 1, }}>
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = (state) => {
-  console.log('state============>', state);
+ 
   return {
     user: state.user,
   };

@@ -16,7 +16,7 @@ export default class RedirectToPaypal extends React.Component {
     }
   };
   componentDidMount(){
-      const {showModal} = this.props.navigation.state.params.showModal
+      
       this.setState({showModal : this.props.navigation.state.params.showModal})
   }
   render() {
@@ -27,7 +27,7 @@ export default class RedirectToPaypal extends React.Component {
           visible={this.state.showModal}
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
-            source={{uri: 'http://app.guessthatreceipt.com/'}}
+            source={{uri: 'http://app.guessthatreceipt.com/pay'}}
             onNavigationStateChange={(data) => this.handleResponse(data)}
             injectedJavaScript={`document.f1.submit()`}
           />
