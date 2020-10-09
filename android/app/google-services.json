@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "446551454199",
+    "firebase_url": "https://gtre-18605.firebaseio.com",
+    "project_id": "gtre-18605",
+    "storage_bucket": "gtre-18605.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446551454199:android:d0917b8635212907d97ef2",
+        "android_client_info": {
+          "package_name": "com.gtr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446551454199-gu1a66fdi3hcg76vco3alhar4m02jd6l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp-Bi8RpjtL3svdaer87al8-mbKW6FdyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446551454199-gu1a66fdi3hcg76vco3alhar4m02jd6l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
