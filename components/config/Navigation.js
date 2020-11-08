@@ -489,19 +489,14 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 const RootNavigator = createSwitchNavigator({
-  SplashScreen: AuthScreens.SplashScreen,
-  AuthScreen: AuthNavigator,
-  ResetPassword: {
-    screen: AuthScreens.ResetPassword,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
-  RegisterScreen: {
-    screen: Register_StackNavigator,
-  },
-
-  Drawer: DrawerNavigator,
+  // SplashScreen: AuthScreens.SplashScreen,
+  // AuthScreen: AuthNavigator,
+ 
+  // RegisterScreen: {
+  //   screen: Register_StackNavigator,
+  // },
+  Payment_StackNavigator
+  // Drawer: DrawerNavigator,
 });
 
 const MainNavigator = createAppContainer(RootNavigator);

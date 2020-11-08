@@ -33,7 +33,7 @@ class LoginScreen extends React.Component {
       showInvalidErorr: false,
       showEmailEmptyErorr: false,
       showPasswordEmptyErorr: false,
-      erorrFromServer : ''
+      erorrFromServer: '',
     };
   }
   removeErorr() {
@@ -46,7 +46,6 @@ class LoginScreen extends React.Component {
   }
   validate = (text) => {
     const userEmail = text.toLowerCase();
-  
 
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(userEmail) === false) {
@@ -83,39 +82,25 @@ class LoginScreen extends React.Component {
     } else if (pwd === '') {
       this.setState({showPasswordEmptyErorr: true});
     } else {
-     
-      var formdata = new FormData();
-      formdata.append('email',  email);
-      formdata.append('password', pwd);
-      try {
-        fetch('https://app.guessthatreceipt.com/users/getCurrentUser?', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formdata,
-        })
-          .then((response) => response.json())
-          .then((result) => {
-            if(result.result){
-              this.props.store_user(result.result)
-              this.props.navigation.navigate('Drawer')
-            }
-            else{
-              this.setState({isloading: false, showInvalidErorr: true})
-            }
-           
-          })
-          .catch((error) =>
-            this.setState({isloading: false, erorrFromServer: error}),
-          );
-      } catch (e) {
-        console.log('eeeeeeeeeeeeeee--------');
-      }
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({username: email, password: pwd});
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch('https://gameshowapp.herokuapp.com/v1/auth/user', requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log('error', error));
     }
   }
- 
+
   render() {
     return (
       <View style={{flex: 1}}>

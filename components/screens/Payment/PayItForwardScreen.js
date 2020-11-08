@@ -13,13 +13,36 @@ import {
   Modal,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
+import axios from 'axios';
+const qs = require('query-string');
 export default class PayItForwardScreen extends Component {
   state = {
     showModal: false,
     status: 'Pending',
     loading: false,
-    paymentValue : ''
+    paymentValue: '',
+    accessToken: null,
+    approvalUrl: null,
+    paymentId: null,
   };
+
+  componentDidMount() {
+    const token = 'QVo2LWh4OE5zRWZiWnFPV3FEcGVUUGpiaXJ6NEJQcjA0TER0R0h5U2x0bGFUQkFWeGZkaWJMVGlLM2RnQ1l3TzJwX2ZPcUE2OG5oWVpWWVU6RUpKTFNIVEIzZzEzUExfcGtsMDNCaDcyaFRPZzNwUWZQdi1Dc2ZlN2tPZTZUdjFMXzB3YzBTbVZUeXlFQ054TzR3OS1qOUdNeG9RZE1fMEo='
+    axios.post('https://api.sandbox.paypal.com/v1/oauth2/token', { grant_type: 'client_credentials' },
+    {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': ` Basic ${token}` // your Authorization value you get from postman api hit
+        }
+    }
+)
+    .then(response => {
+        console.log(response.data.access_token)
+    }).catch(err => {
+        console.log(err)
+    })
+  }
+
   handleResponse = (data) => {
     console.log('data==========', data);
     if (data.title === 'success') {
@@ -31,19 +54,15 @@ export default class PayItForwardScreen extends Component {
     }
   };
   moveToUserList(val) {
-    
-    this.setState({paymentValue : val})
-    if(val){
+    this.setState({paymentValue: val});
+    if (val) {
       this.setState({showModal: true});
-
     }
-   
   }
- 
+
   render() {
     return (
       <View style={styles.container}>
-      
         <View style={styles.paymentContainer}>
           <View style={styles.paymentText}>
             <Text
@@ -224,7 +243,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList(59.80);
+                    this.moveToUserList(59.8);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -257,7 +276,7 @@ export default class PayItForwardScreen extends Component {
                 <TouchableOpacity
                   style={styles.subscriberButton}
                   onPress={() => {
-                    this.moveToUserList(119.60);
+                    this.moveToUserList(119.6);
                   }}>
                   <Image
                     style={{height: 15, width: 18}}
@@ -282,13 +301,13 @@ export default class PayItForwardScreen extends Component {
           visible={this.state.showModal}
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
-            source={{uri: 'http://app.guessthatreceipt.com/pay/',
-            headers: {
-              'paymentValue': `${this.state.paymentValue}`,
-            },
-          }}
-                    
-            originWhitelist={["*"]}
+            source={{
+              uri: 'http://app.guessthatreceipt.com/pay/',
+              headers: {
+                paymentValue: `${this.state.paymentValue}`,
+              },
+            }}
+            originWhitelist={['*']}
             mixedContentMode={'always'}
             useWebKit={Platform.OS == 'ios'}
             startInLoadingState={true}

@@ -134,46 +134,40 @@ class ChooseImage extends Component {
       password,
       confirmPassword,
     } = this.state;
-    var formData = new FormData(this);
-    //text data in key value pair form
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('email', email);
-    formData.append('phoneNo', phoneNo);
-    formData.append('Address', confirmPassword);
-    formData.append('PostalCode', 'firstName');
-    formData.append('password', password);
-    formData.append('imgPath', {
-      name: this.state.fileData.fileName,
-      type: this.state.fileData.type,
-      uri:
-        Platform.OS === 'android'
-          ? this.state.fileUri
-          : this.state.fileData.uri.replace('file://', ''),
+    const uri =
+      Platform.OS === 'android'
+        ? this.state.fileUri
+        : this.state.fileData.uri.replace('file://', '');
+
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password,
+      phone_num: phoneNo,
+      address: 'lOLLL',
+      img_path: uri,
+      postal_code: '122222',
+      username: email,
     });
-    fetch('https://app.guessthatreceipt.com/users/register?', {
+
+    var requestOptions = {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.message == 'Registration successful') {
-          this.setState({isLoading: false});
-          this.props.store_user(result.message);
-          this.props.navigation.navigate('payitforward');
-        } else {
-          this.setState({isLoading: false});
-          this.setState({isErorr: true});
-          this.setState({showErorr: result.message});
-        }
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://gameshowapp.herokuapp.com/v1/backend/users/create',
+      requestOptions,
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
   }
   render() {
     return (
@@ -185,7 +179,7 @@ class ChooseImage extends Component {
             source={require('../../../assets/bg1.png')}
           />
           <View style={styles.body}>
-          {this.state.isErorr && (
+            {this.state.isErorr && (
               <View style={styles.showInvalidText}>
                 <Image
                   style={{height: 40, width: 40}}
@@ -209,7 +203,6 @@ class ChooseImage extends Component {
             <View style={styles.ImageSections}>
               <View style={styles.profileImage}>{this.renderFileUri()}</View>
             </View>
-     
 
             {!this.state.fileUri ? (
               <View style={styles.btnParentSection}>

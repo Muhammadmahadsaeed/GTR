@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from 'react-native';
+
 const height = Dimensions.get('window').height;
 export default class AnswerScreen extends Component {
   constructor() {
@@ -18,6 +19,7 @@ export default class AnswerScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+       
         <View
           style={{
             justifyContent: 'center',

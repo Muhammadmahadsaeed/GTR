@@ -18,10 +18,37 @@ import {
 class ForgotPassword extends React.Component {
   constructor() {
     super();
+    this.state = {
+     
+      email: '',
+    }
   }
 
   moveToResetPassword() {
-    this.props.navigation.navigate('ResetPassword');
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({email: this.state.email});
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://gameshowapp.herokuapp.com/v1/backend/send/email',
+      requestOptions,
+    )
+      .then((response) => response.json())
+      .then((result) => {
+       if(result.data.send){
+        this.props.navigation.navigate('ResetPassword')
+       }
+      })
+      .catch((error) => console.log('error', error));
+    
   }
 
   render() {
@@ -40,18 +67,36 @@ class ForgotPassword extends React.Component {
                 height: 180,
                 borderRadius: 100,
                 resizeMode: 'contain',
-               
               }}
             />
           </View>
           <View style={styles.forgortPasswordText}>
-                <Text style={{fontSize:20, color:'#81b840',fontFamily:'Montserrat-Bold_0'}}>Forgot Your Password?</Text>
-                <Text style={{marginTop:5,color:'#a1a1a1',fontFamily:'Montserrat-Regular_0'}}>To recover your password, you need to enter</Text>
-                <Text style={{color:'#a1a1a1',fontFamily:'Montserrat-Regular_0'}}>your registered email address, We will sent the</Text>
-                <Text style={{color:'#a1a1a1',fontFamily:'Montserrat-Regular_0'}}>recovery code to your email</Text>
-            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#81b840',
+                fontFamily: 'Montserrat-Bold_0',
+              }}>
+              Forgot Your Password?
+            </Text>
+            <Text
+              style={{
+                marginTop: 5,
+                color: '#a1a1a1',
+                fontFamily: 'Montserrat-Regular_0',
+              }}>
+              To recover your password, you need to enter
+            </Text>
+            <Text
+              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular_0'}}>
+              your registered email address, We will sent the
+            </Text>
+            <Text
+              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular_0'}}>
+              recovery code to your email
+            </Text>
+          </View>
           <KeyboardAvoidingView enabled>
-           
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -59,16 +104,18 @@ class ForgotPassword extends React.Component {
                 placeholderTextColor="#81b840"
                 keyboardType="email-address"
                 returnKeyType="next"
+                onChangeText={(email) => this.setState({email: email})}
               />
             </View>
-           
-          
-            <TouchableOpacity onPress={()=>{this.moveToResetPassword()}}
+
+            <TouchableOpacity
+              onPress={() => {
+                this.moveToResetPassword();
+              }}
               style={styles.buttonStyle}
               activeOpacity={0.5}>
               <Text style={styles.buttonTextStyle}>Send</Text>
             </TouchableOpacity>
-          
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
@@ -85,11 +132,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  forgortPasswordText:{
-      marginTop:15,
-      marginBottom:15,
-      alignItems:'center',
-     
+  forgortPasswordText: {
+    marginTop: 15,
+    marginBottom: 15,
+    alignItems: 'center',
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -116,14 +162,14 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginBottom: 20,
     alignSelf: 'center',
-    marginTop:10
+    marginTop: 10,
   },
- 
+
   buttonTextStyle: {
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily:'Montserrat-Bold_0'
+    fontFamily: 'Montserrat-Bold_0',
   },
   inputStyle: {
     flex: 1,
@@ -133,8 +179,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily:'Montserrat-Regular_0',
-    backgroundColor:'#d7e5c3'
+    fontFamily: 'Montserrat-Regular_0',
+    backgroundColor: '#d7e5c3',
   },
   errorTextStyle: {
     color: 'red',
@@ -147,5 +193,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 30,
   },
- 
 });
