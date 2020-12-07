@@ -68,34 +68,34 @@ class SignupScreen extends React.Component {
   moveToChooseImage() {
     const {
       firstName,
-      lastName,
+      // lastName,
       email,
-      pNum,
+      // pNum,
       password,
       confirmPassword,
     } = this.state;
     if (
       firstName === '' &&
-      lastName === '' &&
+      // lastName === '' &&
       email === '' &&
-      pNum === '' &&
+      // pNum === '' &&
       password === '' &&
       confirmPassword === ''
     ) {
       this.setState({
         firstNameErorr: true,
       });
-      this.setState({
-        lastNameErorr: true,
-      });
+      // this.setState({
+      //   lastNameErorr: true,
+      // });
       this.setState({
         emailErorr: true,
         wrong: false,
         correct: false,
       });
-      this.setState({
-        pNumErorr: true,
-      });
+      // this.setState({
+      //   pNumErorr: true,
+      // });
       this.setState({
         pwdErorr: true,
       });
@@ -104,25 +104,47 @@ class SignupScreen extends React.Component {
       });
     } else if (firstName == '') {
       this.setState({firstNameErorr: true});
-    } else if (lastName == '') {
-      this.setState({lastNameErorr: true});
-    } else if (email == '') {
+    }
+    //  else if (lastName == '') {
+    //   this.setState({lastNameErorr: true});
+    // }
+    else if (email == '') {
       this.setState({emailErorr: true, wrong: false, correct: false});
-    } else if (pNum == '') {
-      this.setState({pNumErorr: true});
-    } else if (password == '') {
+    }
+    //  else if (pNum == '') {
+    //   this.setState({pNumErorr: true});
+    // }
+    else if (password == '') {
       this.setState({pwdErorr: true});
     } else if (confirmPassword == '') {
       this.setState({cPwdErorr: true});
     } else {
-      this.props.navigation.navigate('Second', {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        pNum: pNum,
-        password: password,
-        confirmPassword: confirmPassword,
-      });
+      let formdata = new FormData();
+      formdata.append('name', firstName.toLowerCase());
+      formdata.append('email', email.toLowerCase());
+      formdata.append('password', password);
+      formdata.append('password_confirmation', confirmPassword);
+      fetch('https://app.guessthatreceipt.com/api/user-register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formdata,
+      })
+        .then((response) => response.json())
+
+        .then((data) => {
+          console.log(data)
+          // if (data.status_code == 422) {
+          //   this.setState({isloading: false, showInvalidErorr: true});
+          // } else {
+          //   this.props.store_user(data.data.user_details);
+          //   this.props.navigation.navigate('Drawer');
+          // }
+        })
+        .catch((error) => {
+          // this.setState({isloading: false, showInvalidErorr: true});
+        });
     }
   }
   checkPassword(e) {
@@ -166,7 +188,7 @@ class SignupScreen extends React.Component {
               )}
             </View>
 
-            <View style={styles.SectionStyle}>
+            {/* <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="Last Name"
@@ -184,7 +206,7 @@ class SignupScreen extends React.Component {
                   />
                 </View>
               )}
-            </View>
+            </View> */}
 
             <View style={styles.SectionStyle}>
               <TextInput
@@ -218,7 +240,7 @@ class SignupScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.SectionStyle}>
+            {/* <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="Phone Number"
@@ -235,7 +257,7 @@ class SignupScreen extends React.Component {
                   />
                 </View>
               )}
-            </View>
+            </View> */}
 
             <View style={styles.SectionStyle}>
               <TextInput

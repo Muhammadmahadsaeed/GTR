@@ -11,40 +11,41 @@ import {
   ActivityIndicator,
   Dimensions,
   Modal,
+  FlatList,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
-import axios from 'axios';
-const qs = require('query-string');
+
+import ModalView from './Modal';
+
 export default class PayItForwardScreen extends Component {
+  constructor() {
+    super();
+    this.modalRef = React.createRef();
+  }
   state = {
     showModal: false,
     status: 'Pending',
     loading: false,
-    paymentValue: '',
-    accessToken: null,
-    approvalUrl: null,
-    paymentId: null,
+    getPremium: '',
+    amount: 1000,
+    isVisible: false,
   };
 
-  componentDidMount() {
-    const token = 'QVo2LWh4OE5zRWZiWnFPV3FEcGVUUGpiaXJ6NEJQcjA0TER0R0h5U2x0bGFUQkFWeGZkaWJMVGlLM2RnQ1l3TzJwX2ZPcUE2OG5oWVpWWVU6RUpKTFNIVEIzZzEzUExfcGtsMDNCaDcyaFRPZzNwUWZQdi1Dc2ZlN2tPZTZUdjFMXzB3YzBTbVZUeXlFQ054TzR3OS1qOUdNeG9RZE1fMEo='
-    axios.post('https://api.sandbox.paypal.com/v1/oauth2/token', { grant_type: 'client_credentials' },
-    {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': ` Basic ${token}` // your Authorization value you get from postman api hit
-        }
-    }
-)
-    .then(response => {
-        console.log(response.data.access_token)
-    }).catch(err => {
-        console.log(err)
-    })
+  async componentDidMount() {
+    await fetch(
+      'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
+      {
+        method: 'GET',
+      },
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState({getPremium: result.data});
+      })
+      .catch((error) => console.log('error', error));
   }
 
   handleResponse = (data) => {
-    console.log('data==========', data);
     if (data.title === 'success') {
       this.setState({showModal: false, status: 'Complete'});
     } else if (data.title === 'cancel') {
@@ -53,13 +54,20 @@ export default class PayItForwardScreen extends Component {
       return;
     }
   };
-  moveToUserList(val) {
-    this.setState({paymentValue: val});
-    if (val) {
-      this.setState({showModal: true});
-    }
+  moveToUserList() {
+    this.setState({showModal: true});
+  }
+  setModalVisible() {
+    this.modalRef.show();
+  }
+  showSpinner() {
+   
+    this.setState({isVisible: true});
   }
 
+  hideSpinner() {
+    this.setState({isVisible: false});
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -92,232 +100,80 @@ export default class PayItForwardScreen extends Component {
           </View>
         </View>
 
-        <ScrollView
-          style={this.state.loading ? styles.stylOld : styles.styleNew}>
-          <View style={{width: '95%', alignSelf: 'center'}}>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Monthly</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$11.96</Text>
-                  <Text style={styles.monthYear}> Free</Text>
-                </View>
+        <View style={{width: '95%', alignSelf: 'center', flex: 1}}>
+          {!this.state.getPremium ? (
+            <View style={styles.ActivityIndicatorStyle}>
+              <ActivityIndicator color="#009688" size="large" />
+            </View>
+          ) : (
+            <FlatList
+              data={this.state.getPremium}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <View style={styles.notificationBox}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.month}>
+                      {item.period_type.charAt(0).toUpperCase() +
+                        item.period_type.slice(1)}
+                    </Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={styles.rupee}>${item.price}</Text>
+                      <Text style={styles.monthYear}> Free</Text>
+                    </View>
 
-                <Text style={styles.description}>
-                  Pay it forward pays for 4 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(11.96);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>2 Monthly</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$23.92</Text>
-                  <Text style={styles.monthYear}> Free</Text>
+                    <Text style={styles.description}>
+                      Pay it forward pays for 4 other gamer
+                    </Text>
+                  </View>
+                  <View style={styles.buttonView}>
+                    <TouchableOpacity
+                      style={styles.subscriberButton}
+                      onPress={() => this.moveToUserList()}>
+                      <Image
+                        style={{height: 15, width: 18}}
+                        source={require('../../../assets/heart.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: 'white',
+                          paddingLeft: 5,
+                          fontFamily: 'Montserrat-Regular_0',
+                        }}>
+                        Subscribe
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <Text style={styles.description}>
-                  Pay it forward pays for 8 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(23.92);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular_0',
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>3 Monthly</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$35.88</Text>
-                  <Text style={styles.monthYear}> Free</Text>
-                </View>
-                <Text style={styles.description}>
-                  Pay it forward pays for 12 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(35.88);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>4 Monthly</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$47.84</Text>
-                  <Text style={styles.monthYear}> Free</Text>
-                </View>
-                <Text style={styles.description}>
-                  Pay it forward pays for 16 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(47.84);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>5 Monthly</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$59.80</Text>
-                  <Text style={styles.monthYear}> Free</Text>
-                </View>
-                <Text style={styles.description}>
-                  Pay it forward pays for 20 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(59.8);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>1 Year</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.rupee}>$119.60</Text>
-                  <Text style={styles.monthYear}> Free</Text>
-                </View>
-                <Text style={styles.description}>
-                  Pay it forward pays for 40 other gamer
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList(119.6);
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/heart.png')}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+              )}
+            />
+          )}
+        </View>
 
+        <ModalView ref={(target) => (this.modalRef = target)} />
         <Modal
+          animationType="slide"
           visible={this.state.showModal}
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
-            source={{
-              uri: 'http://app.guessthatreceipt.com/pay/',
-              headers: {
-                paymentValue: `${this.state.paymentValue}`,
-              },
-            }}
+            style={{flex: 1}}
+            source={{uri: 'http://pombopayapl.guessthatreceipt.com/'}}
             originWhitelist={['*']}
-            mixedContentMode={'always'}
-            useWebKit={Platform.OS == 'ios'}
-            startInLoadingState={true}
             onNavigationStateChange={(data) => this.handleResponse(data)}
-            injectedJavaScript={`document.f1.submit()`}
+            injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={true}
             scalesPageToFit={true}
+            onLoadProgress={() => this.showSpinner()}
+            onLoadEnd={() => this.hideSpinner()}
+            decelerationRate="normal"
           />
+          {this.state.isVisible ? (
+            <View style={styles.ActivityIndicatorStyle}>
+              <ActivityIndicator color="#009688" size="large" />
+            </View>
+          ) : null}
         </Modal>
       </View>
     );
@@ -391,18 +247,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular_0',
     color: 'gray',
   },
-  stylOld: {
-    opacity: 0.2,
-  },
-  styleNew: {
-    flex: 1,
-  },
+
   ActivityIndicatorStyle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },

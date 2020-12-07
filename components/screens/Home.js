@@ -26,7 +26,9 @@ class Home extends Component {
   moveToDailyChallengesScreen() {
     this.props.navigation.navigate('DailyChallenges');
   }
-  componentDidMount() {}
+  componentDidMount() {
+   
+  }
 
   render() {
    

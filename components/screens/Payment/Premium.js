@@ -9,15 +9,46 @@ import {
   ScrollView,
   Button,
   Dimensions,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
-
+import RNPaypal from 'react-native-paypal-lib';
 export default class Premium extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {getPremium: ''};
   }
-  moveToUserList() {
-    this.props.navigation.navigate('Second');
+  async componentDidMount() {
+    await fetch(
+      'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
+      {
+        method: 'GET',
+      },
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState({getPremium: result.data});
+      })
+      .catch((error) => console.log('error', error));
+  }
+
+  moveToUserList(val, month) {
+    RNPaypal.paymentRequest({
+      clientId:
+        'AekbL8qYWEn-d3_lYH13EyyZonOrBSM_E94YzIUmMfZm-hsiC4KPzt3-wLjDRlnqVblzUqBG6Xjv0RJp',
+      environment: RNPaypal.ENVIRONMENT.NO_NETWORK,
+      intent: RNPaypal.INTENT.SALE,
+      price: val,
+      currency: 'USD',
+      description: month,
+      acceptCreditCards: true,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
   render() {
     return (
@@ -51,131 +82,53 @@ export default class Premium extends Component {
           </View>
         </View>
 
-        <ScrollView style={{flex: 1}}>
-          <View style={{width: '95%', alignSelf: 'center'}}>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>Month</Text>
+        <View style={{width: '95%', alignSelf: 'center', flex: 1}}>
+          {!this.state.getPremium ? (
+            <View style={styles.ActivityIndicatorStyle}>
+              <ActivityIndicator color="#009688" size="large" />
+            </View>
+          ) : (
+            <FlatList
+              data={this.state.getPremium}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <View style={styles.notificationBox}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.month}>
+                      {item.period_type.charAt(0).toUpperCase() +
+                        item.period_type.slice(1)}
+                    </Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={styles.rupee}>${item.price}</Text>
+                      <Text style={styles.monthYear}> Free</Text>
+                    </View>
 
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={styles.rupee}>$2.99</Text>
-                  <Text style={styles.monthYear}> /Monthly</Text>
+                    <Text style={styles.description}>
+                      Pay it forward pays for 4 other gamer
+                    </Text>
+                  </View>
+                  <View style={styles.buttonView}>
+                    <TouchableOpacity style={styles.subscriberButton}>
+                      <Image
+                        style={{height: 15, width: 18}}
+                        source={require('../../../assets/heart.png')}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: 'white',
+                          paddingLeft: 5,
+                          fontFamily: 'Montserrat-Regular_0',
+                        }}>
+                        Subscribe
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <Text style={styles.description}>
-                  Recurring monthly billing.
-                </Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList();
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular_0',
-                      fontSize: 15,
-                      color: 'white',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>Yearly</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={styles.rupee}>$35.88</Text>
-                  <Text style={styles.monthYear}> /Yearly</Text>
-                </View>
-
-                <Text style={styles.description}>Billed yearly</Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButton}
-                  onPress={() => {
-                    this.moveToUserList();
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular_0',
-                      fontSize: 15,
-                      color: 'white',
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.notificationBox}>
-              <View style={{flex: 1}}>
-                <Text style={styles.month}>Month</Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-
-                    alignItems: 'center',
-                  }}>
-                  <Image
-                    source={require('../../../assets/star.png')}
-                    style={{height: 30, width: 30}}
-                  />
-                  <Text style={styles.rupee}>Free</Text>
-                  <Text style={styles.monthYear}> /Weekly</Text>
-                </View>
-                <Text style={styles.description}>7-days free trial</Text>
-              </View>
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.subscriberButtonWithStar}
-                  onPress={() => {
-                    this.moveToUserList();
-                  }}>
-                  <Image
-                    style={{height: 15, width: 18}}
-                    source={require('../../../assets/star.png')}
-                  />
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular_0',
-                      fontSize: 15,
-                      color: 'white',
-                      paddingLeft: 5,
-                    }}>
-                    Subscribe
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.footer}>
-              <Text style={styles.restore}>Restore Perchase</Text>
-              <View style={{flexDirection: 'row', marginTop: 25}}>
-                <Text style={styles.termText}>Term of use</Text>
-                <Text style={styles.policyText}>Privacy policy</Text>
-              </View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={styles.para}>
-                  If you are starting a new app or learning for the first time
-                  you should follow V5 steps to create React Navigation Drawer
-                  but if you are still developing the application using React
-                  Navigation
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular_0',
-                    color: '#81b840',
-                    fontSize: 18,
-                    marginTop: 20,
-                  }}>
-                  Pay it forward account
-                </Text>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+              )}
+            />
+          )}
+        </View>
       </View>
     );
   }
@@ -205,7 +158,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   notificationBox: {
-    
     padding: 10,
     marginTop: 5,
     marginBottom: 5,
@@ -280,6 +232,10 @@ const styles = StyleSheet.create({
   para: {
     marginTop: 30,
     fontFamily: 'Montserrat-Regular_0',
-   
+  },
+  ActivityIndicatorStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

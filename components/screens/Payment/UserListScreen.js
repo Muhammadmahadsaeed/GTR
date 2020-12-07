@@ -83,7 +83,7 @@ export default class UserListScreen extends Component {
   }
   renderItem = ({item}) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity  >
         <View style={styles.row}>
           <Image source={{uri: item.image}} style={styles.pic} />
           <View

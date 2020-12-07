@@ -36,14 +36,7 @@ class LoginScreen extends React.Component {
       erorrFromServer: '',
     };
   }
-  removeErorr() {
-    this.setState({isloading: false});
-    this.setState({
-      showEmailEmptyErorr: false,
-      showPasswordEmptyErorr: false,
-    });
-    this.setState({showInvalidErorr: false});
-  }
+
   validate = (text) => {
     const userEmail = text.toLowerCase();
 
@@ -82,22 +75,33 @@ class LoginScreen extends React.Component {
     } else if (pwd === '') {
       this.setState({showPasswordEmptyErorr: true});
     } else {
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
+      let formdata = new FormData();
 
-      var raw = JSON.stringify({username: email, password: pwd});
-
-      var requestOptions = {
+      formdata.append('email', email.toLowerCase());
+      formdata.append('password', pwd);
+      fetch('https://app.guessthatreceipt.com/api/login', {
         method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formdata,
+      })
+        .then((response) => response.json())
 
-      fetch('https://gameshowapp.herokuapp.com/v1/auth/user', requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log('error', error));
+        .then((data) => {
+         
+          if (data.status_code == 422) {
+           this.setState({isloading: false,showInvalidErorr: true});
+          } else {
+            
+            this.props.store_user(data.data.user_details);
+            this.props.navigation.navigate('Drawer');
+          }
+        })
+        .catch((error) => {
+          
+          this.setState({isloading: false,showInvalidErorr: true});
+        });
     }
   }
 
@@ -160,7 +164,13 @@ class LoginScreen extends React.Component {
                 keyboardType="email-address"
                 returnKeyType="next"
                 onChangeText={(text) => this.validate(text)}
-                onFocus={() => this.removeErorr()}
+                onFocus={() =>
+                  this.setState({
+                    isloading: false,
+                    showEmailEmptyErorr: false,
+                    showInvalidErorr: false,
+                  })
+                }
               />
               <View style={styles.touchableButton} activeOpacity={0.8}>
                 {this.state.wrong && (
@@ -191,7 +201,13 @@ class LoginScreen extends React.Component {
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
                 onChangeText={(pwd) => this.setState({pwd: pwd})}
-                onFocus={() => this.removeErorr()}
+                onFocus={() =>
+                  this.setState({
+                    isloading: false,
+                    showPasswordEmptyErorr: false,
+                    showInvalidErorr: false,
+                  })
+                }
               />
 
               <View style={[styles.touchableButton]}>

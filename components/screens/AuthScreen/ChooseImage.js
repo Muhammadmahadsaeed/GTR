@@ -71,8 +71,8 @@ class ChooseImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const source = {uri: response.uri};
-
+        const source = {uri: response};
+        console.log(source)
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -98,8 +98,8 @@ class ChooseImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const source = {uri: response.uri};
-
+        const source = {uri: response};
+        console.log(source)
         this.setState({
           filePath: response,
           fileData: response,
@@ -145,8 +145,10 @@ class ChooseImage extends Component {
     var raw = JSON.stringify({
       first_name: firstName,
       last_name: lastName,
+     
       email: email,
       password: password,
+      cpassword: confirmPassword,
       phone_num: phoneNo,
       address: 'lOLLL',
       img_path: uri,
@@ -166,8 +168,13 @@ class ChooseImage extends Component {
       requestOptions,
     )
       .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error));
+      .then((result) => {
+        this.props.store_user(raw)
+        this.props.navigation.navigate('payitforward')
+      })
+      .catch((error) => {
+        this.setState({isErorr: true})
+      });
   }
   render() {
     return (
