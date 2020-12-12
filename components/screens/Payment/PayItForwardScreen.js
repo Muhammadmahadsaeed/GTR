@@ -28,7 +28,7 @@ export default class PayItForwardScreen extends Component {
     loading: false,
     getPremium: '',
     amount: 1000,
-    isVisible: false,
+   
   };
 
   async componentDidMount() {
@@ -60,14 +60,7 @@ export default class PayItForwardScreen extends Component {
   setModalVisible() {
     this.modalRef.show();
   }
-  showSpinner() {
-   
-    this.setState({isVisible: true});
-  }
-
-  hideSpinner() {
-    this.setState({isVisible: false});
-  }
+  
   render() {
     return (
       <View style={styles.container}>
@@ -157,23 +150,22 @@ export default class PayItForwardScreen extends Component {
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
             style={{flex: 1}}
-            source={{uri: 'http://pombopayapl.guessthatreceipt.com/'}}
+            source={{uri: `http://pombopaypal.guessthatreceipt.com/paypal/${this.state.amount}`}}
             originWhitelist={['*']}
             onNavigationStateChange={(data) => this.handleResponse(data)}
-            injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
+            // injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={true}
             scalesPageToFit={true}
-            onLoadProgress={() => this.showSpinner()}
-            onLoadEnd={() => this.hideSpinner()}
-            decelerationRate="normal"
+            renderLoading={() => (
+              <View style={styles.ActivityIndicatorStyle}>
+                <ActivityIndicator color="#009688" size="large" />
+              </View>
+            )}
+           
           />
-          {this.state.isVisible ? (
-            <View style={styles.ActivityIndicatorStyle}>
-              <ActivityIndicator color="#009688" size="large" />
-            </View>
-          ) : null}
+        
         </Modal>
       </View>
     );

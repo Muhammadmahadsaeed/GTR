@@ -13,71 +13,31 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
+  Platform,
 } from 'react-native';
-import firebase, { notifications } from 'react-native-firebase';
 
-const getToken = async() =>{
-  const firebaseToken = await firebase.messaging().getToken()
-  console.log(firebaseToken)
-  if(firebaseToken){
-    firebase.messaging().subscribeToTopic('topic')
-  }
-}
-// create channel
-const createChannel = () =>{
-    const channel = new firebase.notifications.Android.Channel(
-        'channelId',
-        'channelName',
-        firebase.notifications.Android.Importance.Max
-    ).setDescription('Description')
-    firebase.notifications().android.createChannel(channel)
-}
-//foreground notification 
-const notificationListener = () =>{
-    firebase.notifications().onNotification((notification)=>{
-        if(Platform.Os === 'android'){
-            const localNotification = new firebase.notifications.Notification({
-                sound : 'default',
-                show_in_foreground: true,
-            })
-            .setNotificationId(notification.notificationId)
-            .setTitle(notification.title)
-            .setSubtitle(notification.subtitle)
-            .setBody(notification.body)
-            .setData(notification.data)
-            .android.setChannelId('channelId')
-            .android.setPriority(firebase.notifications.Android.Priority.High)
-
-            firebase.notifications().displayNotification(localNotification)
-            .catch((err) => console.log(err))
-        }
-    })
-}
 class DailyChallengesScreen extends React.Component {
   constructor() {
     super();
-   
   }
-  
-  componentDidMount(){
-    getToken()
-    createChannel();
-    notificationListener()
-  }
- 
+
+  componentDidMount() {}
+
   moveToPlayerScreens() {
-    fetch('192.168.0.112:5000/api/notification/sendToAll',{
-      method: 'POST',
-    })
-    .then((response) => console.log("success"))
-    .catch((err) => console.log("erorr",err))
-    this.props.navigation.navigate('LiveScreen');
+    fetch(
+      'http://pombopaypal.guessthatreceipt.com/api/notification/sendToAll',
+      {
+        method: 'POST',
+      },
+    )
+      .then((response) => console.log('success'))
+      .catch((err) => console.log('erorr', err));
+    // this.props.navigation.navigate('LiveScreen');
   }
   moveToGameScreen() {
     this.props.navigation.navigate('GameScreen');
   }
   render() {
-    console.log(this.props.user);
     return (
       <View style={{flex: 1}}>
         <Image
@@ -105,25 +65,25 @@ class DailyChallengesScreen extends React.Component {
               </Text>
               <Text style={styles.para}> to win the price of the receipt</Text>
             </View>
-            {this.props.user.user.isAdmin == 0 ? (
-              <TouchableOpacity
-                onPress={() => {
-                  this.moveToPlayerScreens();
-                }}
-                style={[styles.buttonStyle, {marginTop: 70}]}
-                activeOpacity={0.5}>
-                <Text style={styles.buttonTextStyle}>Live</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  this.moveToGameScreen();
-                }}
-                style={[styles.buttonStyle, {marginTop: 70}]}
-                activeOpacity={0.5}>
-                <Text style={styles.buttonTextStyle}>Play</Text>
-              </TouchableOpacity>
-            )}
+            {/* {this.props.user.user.isAdmin == 0 ? ( */}
+            <TouchableOpacity
+              onPress={() => {
+                this.moveToPlayerScreens();
+              }}
+              style={[styles.buttonStyle, {marginTop: 70}]}
+              activeOpacity={0.5}>
+              <Text style={styles.buttonTextStyle}>Live</Text>
+            </TouchableOpacity>
+            {/* : */}
+            <TouchableOpacity
+              onPress={() => {
+                this.moveToGameScreen();
+              }}
+              style={[styles.buttonStyle, {marginTop: 70}]}
+              activeOpacity={0.5}>
+              <Text style={styles.buttonTextStyle}>Play</Text>
+            </TouchableOpacity>
+            {/* )} */}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>

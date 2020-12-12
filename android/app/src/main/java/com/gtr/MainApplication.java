@@ -31,8 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
-           //paypal
-          // packages.add(new RNPaypalPackage() );
+        
           //firebase packages
           packages.add(new RNFirebaseMessagingPackage());
           packages.add(new RNFirebaseLinksPackage());

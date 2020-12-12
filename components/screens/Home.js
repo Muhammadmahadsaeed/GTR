@@ -9,14 +9,14 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  
 } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
 const screenheight = Dimensions.get('screen').height;
 const windowheight = Dimensions.get('window').height;
 // import all basic components
 import {strTime, setCurrentDate} from './CommonComponents/DateTime';
+import firebase, {notifications} from 'react-native-firebase';
 
 class Home extends Component {
   constructor() {
@@ -27,14 +27,62 @@ class Home extends Component {
     this.props.navigation.navigate('DailyChallenges');
   }
   componentDidMount() {
-   
+    this.checkPermission();
+    this.createChannel();
+    this.notificationListener();
   }
+  async getToken(){
+    const firebaseToken = await firebase.messaging().getToken();
+    if (firebaseToken) {
+      firebase.messaging().subscribeToTopic('topic');
+    }
+  };
+  async checkPermission(){
+    const permission = await firebase.messaging().hasPermission();
+    if(permission){
+      console.log("permission=========",permission)
+      this.getToken()
+    }
+    else{
+      console.log("nh h====")
+    }
+  }
+  // create channel
+  createChannel = () => {
+    const channel = new firebase.notifications.Android.Channel(
+      'channelId',
+      'channelName',
+      firebase.notifications.Android.Importance.Max,
+    ).setDescription('Description');
+    firebase.notifications().android.createChannel(channel);
+  };
+  //foreground notification
+  notificationListener = () => {
+    firebase.notifications().onNotification((notification) => {
+      // if(Platform.OS == 'android'){
+      const localNotification = new firebase.notifications.Notification({
+        sound: 'default',
+        show_in_foreground: true,
+      })
+        .setNotificationId(notification.notificationId)
+        .setTitle(notification.title)
+        .setSubtitle(notification.subtitle)
+        .setBody(notification.body)
+        .setData(notification.data)
+        .android.setChannelId('channelId')
+        .android.setPriority(firebase.notifications.Android.Priority.High);
 
+      firebase
+        .notifications()
+        .displayNotification(localNotification)
+        .catch((err) => console.log(err));
+      // }
+    });
+  };
   render() {
-   
     return (
-      <SafeAreaView style={styles.MainContainer} forceInset={{top:'always'}} >
-        <View style={{flex: 1, }}>
+      <SafeAreaView style={styles.MainContainer} forceInset={{top: 'always'}}>
+        <View style={{flex: 1}}>
           <ScrollView style={[styles.body, {flex: 1}]}>
             <View style={styles.challengeView}>
               <View>
@@ -378,7 +426,6 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = (state) => {
- 
   return {
     user: state.user,
   };

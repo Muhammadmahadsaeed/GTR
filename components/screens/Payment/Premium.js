@@ -11,12 +11,15 @@ import {
   Dimensions,
   FlatList,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
-import RNPaypal from 'react-native-paypal-lib';
+import {WebView} from 'react-native-webview';
+
+import ModalView from './Modal';
 export default class Premium extends Component {
   constructor(props) {
     super();
-    this.state = {getPremium: ''};
+    this.state = {getPremium: '', amount: 0, status: 'Pending'};
   }
   async componentDidMount() {
     await fetch(
@@ -31,25 +34,25 @@ export default class Premium extends Component {
       })
       .catch((error) => console.log('error', error));
   }
-
-  moveToUserList(val, month) {
-    RNPaypal.paymentRequest({
-      clientId:
-        'AekbL8qYWEn-d3_lYH13EyyZonOrBSM_E94YzIUmMfZm-hsiC4KPzt3-wLjDRlnqVblzUqBG6Xjv0RJp',
-      environment: RNPaypal.ENVIRONMENT.NO_NETWORK,
-      intent: RNPaypal.INTENT.SALE,
-      price: val,
-      currency: 'USD',
-      description: month,
-      acceptCreditCards: true,
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  handleResponse = (data) => {
+    if (data.title === 'success') {
+      this.setState({showModal: false, status: 'Complete'});
+      this.setModalVisible()
+    } else if (data.title === 'cancel') {
+      this.setState({showModal: false, status: 'Cancelled'});
+    } else {
+      return;
+    }
+  };
+  moveToUserList(item) {
+   
+    this.setState({showModal: true,amount: item.price});
+    
   }
+  setModalVisible() {
+    this.modalRef.show();
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -108,7 +111,9 @@ export default class Premium extends Component {
                     </Text>
                   </View>
                   <View style={styles.buttonView}>
-                    <TouchableOpacity style={styles.subscriberButton}>
+                    <TouchableOpacity
+                      style={styles.subscriberButton}
+                      onPress={() => this.moveToUserList(item)}>
                       <Image
                         style={{height: 15, width: 18}}
                         source={require('../../../assets/heart.png')}
@@ -129,6 +134,30 @@ export default class Premium extends Component {
             />
           )}
         </View>
+        <ModalView ref={(target) => (this.modalRef = target)} />
+        <Modal
+          animationType="slide"
+          visible={this.state.showModal}
+          onRequestClose={() => this.setState({showModal: false})}>
+          <WebView
+            style={{flex: 1}}
+            source={{
+              uri: `http://pombopaypal.guessthatreceipt.com/paypal/${this.state.amount}`,
+            }}
+            originWhitelist={['*']}
+            onNavigationStateChange={(data) => this.handleResponse(data)}
+            // injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            startInLoadingState={true}
+            scalesPageToFit={true}
+            renderLoading={() => (
+              <View style={styles.ActivityIndicatorStyle}>
+                <ActivityIndicator color="#009688" size="large" />
+              </View>
+            )}
+          />
+        </Modal>
       </View>
     );
   }
