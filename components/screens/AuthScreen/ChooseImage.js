@@ -26,12 +26,6 @@ class ChooseImage extends Component {
   constructor(props) {
     super();
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNo: '',
-      password: '',
-      confirmPassword: '',
       isLoading: false,
       showErorr: '',
       isErorr: false,
@@ -41,19 +35,11 @@ class ChooseImage extends Component {
       },
       fileData: '',
       fileUri: '',
+      imgUri: '',
     };
   }
   componentDidMount() {
-    const {state} = this.props.navigation;
-
-    this.setState({
-      firstName: state.params.firstName,
-      lastName: state.params.lastName,
-      email: state.params.email,
-      phoneNo: state.params.pNum,
-      password: state.params.password,
-      confirmPassword: state.params.confirmPassword,
-    });
+   console.log(this.props.user.user.access_token)
   }
   launchCamera = () => {
     let options = {
@@ -72,8 +58,8 @@ class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response};
-        console.log(source)
         this.setState({
+          imgUri: source,
           filePath: response,
           fileData: response.data,
           fileUri: response.uri,
@@ -99,8 +85,9 @@ class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response};
-        console.log(source)
+
         this.setState({
+          imgUri: source,
           filePath: response,
           fileData: response,
           fileUri: response.uri,
@@ -125,55 +112,60 @@ class ChooseImage extends Component {
     this.setState({fileUri: ''});
   }
   moveToPaymentScreen() {
+    let pwd = this.props.navigation.getParam('pwd');
+    console.log("=========",this.state.imgUri.uri)
     this.setState({isLoading: true});
-    const {
-      firstName,
-      lastName,
-      email,
-      phoneNo,
-      password,
-      confirmPassword,
-    } = this.state;
-    const uri =
-      Platform.OS === 'android'
-        ? this.state.fileUri
-        : this.state.fileData.uri.replace('file://', '');
-
     var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append(
+      'Authorization',
+      `Bearer ${this.props.user.user.access_token}`,
+    );
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
-    var raw = JSON.stringify({
-      first_name: firstName,
-      last_name: lastName,
-     
-      email: email,
-      password: password,
-      cpassword: confirmPassword,
-      phone_num: phoneNo,
-      address: 'lOLLL',
-      img_path: uri,
-      postal_code: '122222',
-      username: email,
-    });
+    var urlencoded = new URLSearchParams();
+    urlencoded.append('avatar', this.state.imgUri);
 
     var requestOptions = {
-      method: 'POST',
+      method: 'PUT',
       headers: myHeaders,
-      body: raw,
+      body: urlencoded,
       redirect: 'follow',
     };
 
-    fetch(
-      'https://gameshowapp.herokuapp.com/v1/backend/users/create',
-      requestOptions,
-    )
-      .then((response) => response.text())
+    fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
+      .then((response) => response.json())
       .then((result) => {
-        this.props.store_user(raw)
-        this.props.navigation.navigate('payitforward')
+        console.log(result)
+        let formdata = new FormData();
+        formdata.append(
+          'email',
+          this.props.user.user.user_details.email.toLowerCase(),
+        );
+        formdata.append('password', pwd);
+        fetch('https://app.guessthatreceipt.com/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formdata,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({isloading: false})
+            console.log(data)
+            // this.props.store_user(data);
+            // this.props.navigation.navigate('payitforward');
+          })
+          .catch((error) => {
+            this.setState({isloading: false, showInvalidErorr: true});
+          });
+        // this.props.store_user(raw);
+        // this.props.navigation.navigate('payitforward');
+        // this.props.navigation.navigate('Login');
       })
       .catch((error) => {
-        this.setState({isErorr: true})
+        console.log(error);
+        this.setState({isErorr: true});
       });
   }
   render() {
@@ -186,27 +178,6 @@ class ChooseImage extends Component {
             source={require('../../../assets/bg1.png')}
           />
           <View style={styles.body}>
-            {this.state.isErorr && (
-              <View style={styles.showInvalidText}>
-                <Image
-                  style={{height: 40, width: 40}}
-                  source={require('../../../assets/LargeInvalidIcon.png')}
-                />
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    paddingLeft: 10,
-                  }}>
-                  <Text
-                    style={{
-                      color: 'red',
-                      fontFamily: 'Montserrat-Regular_0',
-                    }}>
-                    {this.state.showErorr}
-                  </Text>
-                </View>
-              </View>
-            )}
             <View style={styles.ImageSections}>
               <View style={styles.profileImage}>{this.renderFileUri()}</View>
             </View>
@@ -321,13 +292,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     resizeMode: 'contain',
-  },
-  showInvalidText: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    width: '70%',
   },
 });
 

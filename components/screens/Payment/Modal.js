@@ -22,7 +22,11 @@ class ModalView extends React.Component {
       modalVisible: false,
     };
   }
+  componentDidMount(){
+   
+  }
   show = () => {
+  
     this.setState({modalVisible: true});
   };
   close = () => {

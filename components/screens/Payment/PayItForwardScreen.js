@@ -14,22 +14,21 @@ import {
   FlatList,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
-
+import {connect} from 'react-redux';
 import ModalView from './Modal';
 
-export default class PayItForwardScreen extends Component {
+class PayItForwardScreen extends Component {
   constructor() {
     super();
     this.modalRef = React.createRef();
+    this.state = {
+      showModal: false,
+      status: 'Pending',
+      loading: false,
+      getPremium: '',
+      amount: 0,
+    };
   }
-  state = {
-    showModal: false,
-    status: 'Pending',
-    loading: false,
-    getPremium: '',
-    amount: 1000,
-   
-  };
 
   async componentDidMount() {
     await fetch(
@@ -46,21 +45,50 @@ export default class PayItForwardScreen extends Component {
   }
 
   handleResponse = (data) => {
+    let url = data.url;
+    let fields = url.split('?');
+    let paymentId = fields[1];
+    let formdata = new FormData();
+
     if (data.title === 'success') {
-      this.setState({showModal: false, status: 'Complete'});
+      formdata.append('pack_id', this.state.package.id);
+      formdata.append('transaction_id', paymentId);
+      fetch('https://app.guessthatreceipt.com/api/saveOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${this.props.user.user.access_token}`,
+        },
+        body: formdata,
+      })
+        .then((response) => response.json())
+
+        .then((data) => {
+          console.log(data);
+          this.setState({showModal: false, status: 'Complete'});
+          this.setModalVisible();
+        })
+        .catch((error) => {
+          console.log('====', error);
+        });
     } else if (data.title === 'cancel') {
       this.setState({showModal: false, status: 'Cancelled'});
     } else {
       return;
     }
   };
-  moveToUserList() {
-    this.setState({showModal: true});
+  moveToUserList(item) {
+    this.setState({
+      showModal: true,
+      amount: item.price,
+      package: item,
+    })
+   
   }
   setModalVisible() {
     this.modalRef.show();
   }
-  
+
   render() {
     return (
       <View style={styles.container}>
@@ -121,7 +149,7 @@ export default class PayItForwardScreen extends Component {
                   <View style={styles.buttonView}>
                     <TouchableOpacity
                       style={styles.subscriberButton}
-                      onPress={() => this.moveToUserList()}>
+                      onPress={() => this.moveToUserList(item)}>
                       <Image
                         style={{height: 15, width: 18}}
                         source={require('../../../assets/heart.png')}
@@ -150,10 +178,11 @@ export default class PayItForwardScreen extends Component {
           onRequestClose={() => this.setState({showModal: false})}>
           <WebView
             style={{flex: 1}}
-            source={{uri: `http://pombopaypal.guessthatreceipt.com/paypal/${this.state.amount}`}}
+            source={{
+              uri: `http://pombopaypal.guessthatreceipt.com/paypal/${this.state.amount}`,
+            }}
             originWhitelist={['*']}
             onNavigationStateChange={(data) => this.handleResponse(data)}
-            // injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={true}
@@ -163,9 +192,7 @@ export default class PayItForwardScreen extends Component {
                 <ActivityIndicator color="#009688" size="large" />
               </View>
             )}
-           
           />
-        
         </Modal>
       </View>
     );
@@ -246,3 +273,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+export default connect(mapStateToProps, null)(PayItForwardScreen);

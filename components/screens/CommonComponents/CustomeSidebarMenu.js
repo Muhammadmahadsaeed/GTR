@@ -31,20 +31,22 @@ class CustomSidebarMenu extends Component {
     };
   }
   componentDidMount(){
-    this.setState({user: this.props.user.user})
+   
+    this.setState({user: this.props.user.user.user_details})
   }
   logOut(){
     this.props.navigation.navigate('Login')
   }
   render() {
     const {user} = this.state
-    
+   
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
         <View style={styles.sideMenuProfile}>
           <Image
-            source={require('../../../assets/admin.png')}
+          source={{uri: `https://app.guessthatreceipt.com/storage/${user.avatar}`}}
+           
             style={styles.sideMenuProfileIcon}
           />
         </View>
@@ -59,7 +61,7 @@ class CustomSidebarMenu extends Component {
                 fontFamily: 'Montserrat-Bold_0',
                 fontSize: 22,
               }}>
-              {user.name}
+              {user.first_name} {user.last_name}
             </Text>
           </View>
           <View
@@ -70,7 +72,7 @@ class CustomSidebarMenu extends Component {
             }}>
             <Text style={styles.profileInfoText}>Phone No</Text>
             <Text> : </Text>
-            <Text style={styles.profileInfoTextRegular}> 03362474325</Text>
+          <Text style={styles.profileInfoTextRegular}> {user.phone_number}</Text>
           </View>
           <View
             style={{

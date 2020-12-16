@@ -23,7 +23,7 @@ class DailyChallengesScreen extends React.Component {
 
   componentDidMount() {}
 
-  moveToPlayerScreens() {
+  sendInivitaion() {
     fetch(
       'http://pombopaypal.guessthatreceipt.com/api/notification/sendToAll',
       {
@@ -32,12 +32,16 @@ class DailyChallengesScreen extends React.Component {
     )
       .then((response) => console.log('success'))
       .catch((err) => console.log('erorr', err));
-    // this.props.navigation.navigate('LiveScreen');
+    // 
+  }
+  goToLive(){
+    this.props.navigation.navigate('LiveScreen');
   }
   moveToGameScreen() {
     this.props.navigation.navigate('GameScreen');
   }
   render() {
+    const role = this.props.user.user.user_details.role_id;
     return (
       <View style={{flex: 1}}>
         <Image
@@ -65,25 +69,35 @@ class DailyChallengesScreen extends React.Component {
               </Text>
               <Text style={styles.para}> to win the price of the receipt</Text>
             </View>
-            {/* {this.props.user.user.isAdmin == 0 ? ( */}
-            <TouchableOpacity
-              onPress={() => {
-                this.moveToPlayerScreens();
-              }}
-              style={[styles.buttonStyle, {marginTop: 70}]}
-              activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Live</Text>
-            </TouchableOpacity>
-            {/* : */}
-            <TouchableOpacity
-              onPress={() => {
-                this.moveToGameScreen();
-              }}
-              style={[styles.buttonStyle, {marginTop: 70}]}
-              activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Play</Text>
-            </TouchableOpacity>
-            {/* )} */}
+            {role == 3 ? (
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.sendInivitaion();
+                  }}
+                  style={[styles.buttonStyle, {marginTop: 70}]}
+                  activeOpacity={0.5}>
+                  <Text style={styles.buttonTextStyle}>Send Inivitation</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.goToLive();
+                  }}
+                  style={[styles.buttonStyle]}
+                  activeOpacity={0.5}>
+                  <Text style={styles.buttonTextStyle}>Live</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  this.moveToGameScreen();
+                }}
+                style={[styles.buttonStyle, {marginTop: 70}]}
+                activeOpacity={0.5}>
+                <Text style={styles.buttonTextStyle}>Play</Text>
+              </TouchableOpacity>
+            )}
           </KeyboardAvoidingView>
         </ScrollView>
       </View>

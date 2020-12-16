@@ -93,8 +93,8 @@ class LoginScreen extends React.Component {
           if (data.status_code == 422) {
            this.setState({isloading: false,showInvalidErorr: true});
           } else {
-            
-            this.props.store_user(data.data.user_details);
+             
+            this.props.store_user(data.data);
             this.props.navigation.navigate('Drawer');
           }
         })

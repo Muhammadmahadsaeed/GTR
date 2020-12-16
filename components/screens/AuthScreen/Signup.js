@@ -12,8 +12,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
+import {connect} from 'react-redux';
+import {userObject} from '../../Redux/Action/action';
 class SignupScreen extends React.Component {
   constructor() {
     super();
@@ -38,6 +41,7 @@ class SignupScreen extends React.Component {
       pNumErorr: false,
       pwdErorr: false,
       cPwdErorr: false,
+      showErorr: '',
     };
   }
   validate = (text) => {
@@ -66,36 +70,37 @@ class SignupScreen extends React.Component {
     this.props.navigation.navigate('Login');
   }
   moveToChooseImage() {
+    this.setState({isloading: true});
     const {
       firstName,
-      // lastName,
+      lastName,
       email,
-      // pNum,
+      pNum,
       password,
       confirmPassword,
     } = this.state;
     if (
       firstName === '' &&
-      // lastName === '' &&
+      lastName === '' &&
       email === '' &&
-      // pNum === '' &&
+      pNum === '' &&
       password === '' &&
       confirmPassword === ''
     ) {
       this.setState({
         firstNameErorr: true,
       });
-      // this.setState({
-      //   lastNameErorr: true,
-      // });
+      this.setState({
+        lastNameErorr: true,
+      });
       this.setState({
         emailErorr: true,
         wrong: false,
         correct: false,
       });
-      // this.setState({
-      //   pNumErorr: true,
-      // });
+      this.setState({
+        pNumErorr: true,
+      });
       this.setState({
         pwdErorr: true,
       });
@@ -105,15 +110,15 @@ class SignupScreen extends React.Component {
     } else if (firstName == '') {
       this.setState({firstNameErorr: true});
     }
-    //  else if (lastName == '') {
-    //   this.setState({lastNameErorr: true});
-    // }
+     else if (lastName == '') {
+      this.setState({lastNameErorr: true});
+    }
     else if (email == '') {
       this.setState({emailErorr: true, wrong: false, correct: false});
     }
-    //  else if (pNum == '') {
-    //   this.setState({pNumErorr: true});
-    // }
+     else if (pNum == '') {
+      this.setState({pNumErorr: true});
+    }
     else if (password == '') {
       this.setState({pwdErorr: true});
     } else if (confirmPassword == '') {
@@ -121,6 +126,9 @@ class SignupScreen extends React.Component {
     } else {
       let formdata = new FormData();
       formdata.append('name', firstName.toLowerCase());
+      formdata.append('first_name', firstName.toLowerCase());
+      formdata.append('last_name', lastName.toLowerCase());
+      formdata.append('phone_number', pNum);
       formdata.append('email', email.toLowerCase());
       formdata.append('password', password);
       formdata.append('password_confirmation', confirmPassword);
@@ -134,16 +142,44 @@ class SignupScreen extends React.Component {
         .then((response) => response.json())
 
         .then((data) => {
-          console.log(data)
-          // if (data.status_code == 422) {
-          //   this.setState({isloading: false, showInvalidErorr: true});
-          // } else {
-          //   this.props.store_user(data.data.user_details);
-          //   this.props.navigation.navigate('Drawer');
-          // }
+          if (data.status_code == 422) {
+            this.setState({
+              isloading: false,
+              showErorr: data.message,
+              isErorr: true,
+            });
+          } else {
+            let loginData = new FormData();
+            loginData.append('email', email.toLowerCase());
+            loginData.append('password', password);
+            fetch('https://app.guessthatreceipt.com/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              body: loginData,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                this.setState({
+                  isloading: false,
+                });
+                  this.props.store_user(data.data);
+                  this.props.navigation.navigate('Second',{pwd: password});
+              })
+              .catch((error) => {
+                console.log(error)
+                this.setState({isloading: false,showInvalidErorr: true});
+              });
+            
+          }
         })
         .catch((error) => {
-          // this.setState({isloading: false, showInvalidErorr: true});
+          this.setState({
+            isloading: false,
+            isErorr: true,
+            showErorr: error.message,
+          });
         });
     }
   }
@@ -168,7 +204,29 @@ class SignupScreen extends React.Component {
         />
         <ScrollView keyboardShouldPersistTaps="handled" style={{flex: 1}}>
           <KeyboardAvoidingView enabled>
-            <View style={[styles.SectionStyle, {marginTop: 50}]}>
+            {this.state.isErorr && (
+              <View style={styles.showInvalidText}>
+                <Image
+                  style={{height: 40, width: 40}}
+                  source={require('../../../assets/LargeInvalidIcon.png')}
+                />
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    paddingLeft: 10,
+                    flex: 1,
+                  }}>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontFamily: 'Montserrat-Regular_0',
+                    }}>
+                    {this.state.showErorr}
+                  </Text>
+                </View>
+              </View>
+            )}
+            <View style={[styles.SectionStyle, {marginTop: 20}]}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="First Name"
@@ -176,7 +234,9 @@ class SignupScreen extends React.Component {
                 autoCapitalize="sentences"
                 returnKeyType="next"
                 onChangeText={(text) => this.setState({firstName: text})}
-                onFocus={() => this.setState({firstNameErorr: false})}
+                onFocus={() =>
+                  this.setState({firstNameErorr: false, isloading: false})
+                }
               />
               {this.state.firstNameErorr && (
                 <View style={styles.touchableButton}>
@@ -188,7 +248,7 @@ class SignupScreen extends React.Component {
               )}
             </View>
 
-            {/* <View style={styles.SectionStyle}>
+            <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="Last Name"
@@ -206,7 +266,7 @@ class SignupScreen extends React.Component {
                   />
                 </View>
               )}
-            </View> */}
+            </View>
 
             <View style={styles.SectionStyle}>
               <TextInput
@@ -216,7 +276,9 @@ class SignupScreen extends React.Component {
                 keyboardType="email-address"
                 returnKeyType="next"
                 onChangeText={(text) => this.validate(text)}
-                onFocus={() => this.setState({emailErorr: false})}
+                onFocus={() =>
+                  this.setState({emailErorr: false, isloading: false})
+                }
               />
               <View style={styles.touchableButton} activeOpacity={0.8}>
                 {this.state.wrong && (
@@ -240,7 +302,7 @@ class SignupScreen extends React.Component {
               </View>
             </View>
 
-            {/* <View style={styles.SectionStyle}>
+            <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
                 placeholder="Phone Number"
@@ -257,7 +319,7 @@ class SignupScreen extends React.Component {
                   />
                 </View>
               )}
-            </View> */}
+            </View>
 
             <View style={styles.SectionStyle}>
               <TextInput
@@ -267,7 +329,9 @@ class SignupScreen extends React.Component {
                 secureTextEntry={this.state.hidePassword}
                 returnKeyType="next"
                 onChangeText={(e) => this.setState({password: e})}
-                onFocus={() => this.setState({pwdErorr: false})}
+                onFocus={() =>
+                  this.setState({pwdErorr: false, isloading: false})
+                }
               />
               <View style={[styles.touchableButton]}>
                 {this.state.pwdErorr ? (
@@ -311,7 +375,9 @@ class SignupScreen extends React.Component {
                 secureTextEntry={this.state.hideConfirmPassword}
                 returnKeyType="next"
                 onChangeText={(e) => this.checkPassword(e)}
-                onFocus={() => this.setState({cPwdErorr: false})}
+                onFocus={() =>
+                  this.setState({cPwdErorr: false, isloading: false})
+                }
               />
               <View style={[styles.touchableButton]}>
                 {this.state.cPwdErorr ? (
@@ -375,7 +441,11 @@ class SignupScreen extends React.Component {
               onPress={() => {
                 this.moveToChooseImage();
               }}>
-              <Text style={styles.buttonTextStyle}>NEXT</Text>
+              {this.state.isloading ? (
+                <ActivityIndicator size="large" color="#81b840" />
+              ) : (
+                <Text style={styles.buttonTextStyle}>NEXT</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.SignUpbuttonStyle]}
@@ -397,8 +467,6 @@ class SignupScreen extends React.Component {
     );
   }
 }
-export default SignupScreen;
-
 const styles = StyleSheet.create({
   backgroundImage: {
     position: 'absolute',
@@ -500,4 +568,25 @@ const styles = StyleSheet.create({
     width: '70%',
     marginLeft: 20,
   },
+  showInvalidText: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '70%',
+  },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    store_user: (user) => dispatch(userObject(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);

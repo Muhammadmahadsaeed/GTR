@@ -14,14 +14,22 @@ import {
   Modal,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
-
+import {connect} from 'react-redux';
 import ModalView from './Modal';
-export default class Premium extends Component {
+class Premium extends Component {
   constructor(props) {
     super();
-    this.state = {getPremium: '', amount: 0, status: 'Pending'};
+    this.state = {
+      getPremium: '',
+      amount: 0,
+      status: 'Pending',
+      showModal: false,
+      package: '',
+      modalText: '',
+    };
   }
   async componentDidMount() {
+   
     await fetch(
       'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
       {
@@ -35,9 +43,32 @@ export default class Premium extends Component {
       .catch((error) => console.log('error', error));
   }
   handleResponse = (data) => {
+    let url = data.url;
+    let fields = url.split('?');
+    let paymentId = fields[1];
+    let formdata = new FormData();
+
     if (data.title === 'success') {
-      this.setState({showModal: false, status: 'Complete'});
-      this.setModalVisible()
+      formdata.append('pack_id', this.state.package.id);
+      formdata.append('transaction_id', paymentId);
+      fetch('https://app.guessthatreceipt.com/api/saveOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${this.props.user.user.access_token}`
+        },
+        body: formdata,
+      })
+        .then((response) => response.json())
+
+        .then((data) => {
+          console.log(data);
+          this.setState({showModal: false, status: 'Complete'});
+          this.setModalVisible();
+        })
+        .catch((error) => {
+          console.log("====",error);
+        });
     } else if (data.title === 'cancel') {
       this.setState({showModal: false, status: 'Cancelled'});
     } else {
@@ -45,9 +76,17 @@ export default class Premium extends Component {
     }
   };
   moveToUserList(item) {
-   
-    this.setState({showModal: true,amount: item.price});
-    
+    this.setState({package: item});
+    if (item.price === '0.00') {
+      this.setModalVisible();
+    } else {
+      this.setState({
+        showModal: true,
+        modalText: item.description,
+        amount: item.price,
+        package: item,
+      });
+    }
   }
   setModalVisible() {
     this.modalRef.show();
@@ -134,7 +173,10 @@ export default class Premium extends Component {
             />
           )}
         </View>
-        <ModalView ref={(target) => (this.modalRef = target)} />
+        <ModalView
+          ref={(target) => (this.modalRef = target)}
+          text={this.state.modalText}
+        />
         <Modal
           animationType="slide"
           visible={this.state.showModal}
@@ -146,7 +188,6 @@ export default class Premium extends Component {
             }}
             originWhitelist={['*']}
             onNavigationStateChange={(data) => this.handleResponse(data)}
-            // injectedJavaScript={`document.getElementById('price').value =${this.state.amount};document.f1.submit()`}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={true}
@@ -268,3 +309,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+export default connect(mapStateToProps, null)(Premium);

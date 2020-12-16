@@ -40,7 +40,7 @@ class Home extends Component {
   async checkPermission(){
     const permission = await firebase.messaging().hasPermission();
     if(permission){
-      console.log("permission=========",permission)
+     
       this.getToken()
     }
     else{
@@ -60,6 +60,7 @@ class Home extends Component {
   notificationListener = () => {
     firebase.notifications().onNotification((notification) => {
       // if(Platform.OS == 'android'){
+        console.log(notification)
       const localNotification = new firebase.notifications.Notification({
         sound: 'default',
         show_in_foreground: true,
