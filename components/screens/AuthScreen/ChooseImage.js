@@ -39,7 +39,7 @@ class ChooseImage extends Component {
     };
   }
   componentDidMount() {
-   console.log(this.props.user.user.access_token)
+    console.log(this.props.user.user.access_token);
   }
   launchCamera = () => {
     let options = {
@@ -85,11 +85,10 @@ class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response};
-
         this.setState({
           imgUri: source,
           filePath: response,
-          fileData: response,
+          fileData: response.data,
           fileUri: response.uri,
         });
       }
@@ -113,7 +112,6 @@ class ChooseImage extends Component {
   }
   moveToPaymentScreen() {
     let pwd = this.props.navigation.getParam('pwd');
-    console.log("=========",this.state.imgUri.uri)
     this.setState({isLoading: true});
     var myHeaders = new Headers();
     myHeaders.append(
@@ -121,52 +119,53 @@ class ChooseImage extends Component {
       `Bearer ${this.props.user.user.access_token}`,
     );
     myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
-
     var urlencoded = new URLSearchParams();
-    urlencoded.append('avatar', this.state.imgUri);
-
+    urlencoded.append(
+      'avatar',
+      `data:image/jpeg;base64,${this.state.fileData}`,
+    );
+    
     var requestOptions = {
       method: 'PUT',
       headers: myHeaders,
       body: urlencoded,
       redirect: 'follow',
     };
-
-    fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result)
-        let formdata = new FormData();
-        formdata.append(
-          'email',
-          this.props.user.user.user_details.email.toLowerCase(),
-        );
-        formdata.append('password', pwd);
-        fetch('https://app.guessthatreceipt.com/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formdata,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            this.setState({isloading: false})
-            console.log(data)
-            // this.props.store_user(data);
-            // this.props.navigation.navigate('payitforward');
-          })
-          .catch((error) => {
-            this.setState({isloading: false, showInvalidErorr: true});
-          });
-        // this.props.store_user(raw);
-        // this.props.navigation.navigate('payitforward');
-        // this.props.navigation.navigate('Login');
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState({isErorr: true});
-      });
+    // fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
+    //   .then((response) => response.text())
+    //   .then((result) => {
+    //     console.log(result);
+    //     let formdata = new FormData();
+    //     formdata.append(
+    //       'email',
+    //       this.props.user.user.user_details.email.toLowerCase(),
+    //     );
+    //     formdata.append('password', pwd);
+    //     fetch('https://app.guessthatreceipt.com/api/login', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //       body: formdata,
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         this.setState({isloading: false});
+    //         console.log(data);
+    //         // this.props.store_user(data);
+    //         // this.props.navigation.navigate('payitforward');
+    //       })
+    //       .catch((error) => {
+    //         this.setState({isloading: false, showInvalidErorr: true});
+    //       });
+    //     // this.props.store_user(raw);
+    //     // this.props.navigation.navigate('payitforward');
+    //     // this.props.navigation.navigate('Login');
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     this.setState({isErorr: true});
+    //   });
   }
   render() {
     return (
