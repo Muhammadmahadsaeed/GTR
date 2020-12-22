@@ -16,9 +16,13 @@ import {
   Platform,
 } from 'react-native';
 
+import  requestCameraAndAudioPermission  from "./Permission";
+
 class DailyChallengesScreen extends React.Component {
   constructor() {
     super();
+    
+   
   }
 
   componentDidMount() {}
@@ -35,7 +39,13 @@ class DailyChallengesScreen extends React.Component {
     // 
   }
   goToLive(){
-    this.props.navigation.navigate('LiveScreen');
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission().then(() => {
+        // console.log('requested!');
+        this.props.navigation.navigate('LiveScreen');
+      });
+    }
+   
   }
   moveToGameScreen() {
     this.props.navigation.navigate('GameScreen');
