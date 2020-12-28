@@ -30,23 +30,40 @@ class CustomSidebarMenu extends Component {
       ],
     };
   }
-  componentDidMount(){
-   
-    this.setState({user: this.props.user.user.user_details})
+  componentDidMount() {
+    this.setState({user: this.props.user.user.user_details});
   }
-  logOut(){
-    this.props.navigation.navigate('Login')
+  logOut() {
+    let formdata = new FormData();
+    formdata.append('status', 'off');
+    fetch('https://app.guessthatreceipt.com/api/userOnOff', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${this.props.user.user.access_token}`,
+      },
+      body: formdata,
+    })
+      .then((response) => response.json())
+
+      .then((data) => {
+        this.props.navigation.navigate('Login');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   render() {
-    const {user} = this.state
-   
+    const {user} = this.state;
+
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
         <View style={styles.sideMenuProfile}>
           <Image
-          source={{uri: `https://app.guessthatreceipt.com/storage/${user.avatar}`}}
-           
+            source={{
+              uri: `https://app.guessthatreceipt.com/storage/${user.avatar}`,
+            }}
             style={styles.sideMenuProfileIcon}
           />
         </View>
@@ -67,31 +84,22 @@ class CustomSidebarMenu extends Component {
           <View
             style={{
               marginTop: 15,
+              marginBottom: 20,
               flexDirection: 'row',
               // justifyContent: 'space-around',
             }}>
             <Text style={styles.profileInfoText}>Phone No</Text>
             <Text> : </Text>
-          <Text style={styles.profileInfoTextRegular}> {user.phone_number}</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              // justifyContent: 'space-around',
-              // alignItems:'stretch',
-              marginTop: 10,
-              marginBottom: 20,
-            }}>
-            <Text style={styles.profileInfoText}>Rate</Text>
-            <Text> : </Text>
-            <Text style={styles.profileInfoTextRegular}>05/06</Text>
+            <Text style={styles.profileInfoTextRegular}>
+             
+              {user.phone_number}
+            </Text>
           </View>
         </View>
 
         {/*Setting up Navigation Options from option array using loop*/}
         <View style={{width: '100%'}}>
           {this.state.items.map((item, key) => (
-           
             <View
               style={{
                 alignItems: 'flex-start',
@@ -127,7 +135,10 @@ class CustomSidebarMenu extends Component {
           ))}
         </View>
         <View style={{position: 'absolute', bottom: 30}}>
-          <Text onPress={()=> {this.logOut()}}
+          <Text
+            onPress={() => {
+              this.logOut();
+            }}
             style={{
               fontFamily: 'Montserrat-Bold_0',
               color: '#81b840',
@@ -176,10 +187,8 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = (state) => {
- 
   return {
     user: state.user,
   };
-
 };
 export default connect(mapStateToProps, null)(CustomSidebarMenu);

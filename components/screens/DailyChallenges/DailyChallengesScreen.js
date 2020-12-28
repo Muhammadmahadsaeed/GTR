@@ -48,7 +48,13 @@ class DailyChallengesScreen extends React.Component {
    
   }
   moveToGameScreen() {
-    this.props.navigation.navigate('GameScreen');
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission().then(() => {
+        // console.log('requested!');
+        this.props.navigation.navigate('LiveScreen');
+      });
+    }
+    // this.props.navigation.navigate('GameScreen');
   }
   render() {
     const role = this.props.user.user.user_details.role_id;

@@ -31,14 +31,16 @@ class PayItForwardScreen extends Component {
   }
 
   async componentDidMount() {
-    await fetch(
-      'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
-      {
+    await fetch('https://app.guessthatreceipt.com/api/subscriptions?type=forward',{
         method: 'GET',
-      },
-    )
+        headers:{
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${this.props.user.user.access_token}`,
+        }
+      })
       .then((response) => response.json())
       .then((result) => {
+        console.log(result.data)
         this.setState({getPremium: result.data});
       })
       .catch((error) => console.log('error', error));
@@ -128,6 +130,7 @@ class PayItForwardScreen extends Component {
             </View>
           ) : (
             <FlatList
+              showsVerticalScrollIndicator={false}
               data={this.state.getPremium}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (

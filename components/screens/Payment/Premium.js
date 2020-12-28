@@ -30,13 +30,14 @@ class Premium extends Component {
   }
   async componentDidMount() {
    
-    await fetch(
-      'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
-      {
-        method: 'GET',
-      },
-    )
-      .then((response) => response.json())
+    await fetch('https://app.guessthatreceipt.com/api/subscriptions?type=premium',{
+      method: 'GET',
+      headers:{
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${this.props.user.user.access_token}`,
+      }
+    })
+    .then((response) => response.json())
       .then((result) => {
         this.setState({getPremium: result.data});
       })
@@ -131,6 +132,7 @@ class Premium extends Component {
             </View>
           ) : (
             <FlatList
+            showsVerticalScrollIndicator={false}
               data={this.state.getPremium}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (

@@ -87,20 +87,33 @@ class LoginScreen extends React.Component {
         body: formdata,
       })
         .then((response) => response.json())
-
         .then((data) => {
-         
           if (data.status_code == 422) {
-           this.setState({isloading: false,showInvalidErorr: true});
+            this.setState({isloading: false, showInvalidErorr: true});
           } else {
-             
-            this.props.store_user(data.data);
-            this.props.navigation.navigate('Drawer');
+            
+            let checkUserOnline = new FormData();
+            checkUserOnline.append('status', 'on');
+            fetch('https://app.guessthatreceipt.com/api/userOnOff', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${data.data.access_token}`,
+              },
+              body: checkUserOnline,
+            })
+              .then((response) => response.json())
+              .then((res) => {
+                this.props.store_user(data.data);
+                this.props.navigation.navigate('Drawer');
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((error) => {
-          
-          this.setState({isloading: false,showInvalidErorr: true});
+          this.setState({isloading: false, showInvalidErorr: true});
         });
     }
   }

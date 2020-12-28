@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Dimensions,
-  Image,
-} from 'react-native';
+import {Dimensions, Image} from 'react-native';
 
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -21,9 +18,6 @@ import * as PaymentScreens from '../screens/Payment/index';
 import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 import * as PlayerScreens from '../screens/PlayersScreens/index';
-
-
-
 
 // Tab Navigation for userlist and giver
 const TabScreen = createMaterialTopTabNavigator(
@@ -92,7 +86,7 @@ const Payment_StackNavigator = createStackNavigator({
       },
     }),
   },
-  
+
   Second: {
     screen: TabScreen,
     title: 'none',
@@ -114,9 +108,6 @@ const Payment_StackNavigator = createStackNavigator({
     }),
   },
 });
-
-
-
 
 //Stack Navigation for Home Screen
 const Home_StackNavigator = createStackNavigator({
@@ -146,7 +137,6 @@ const Home_StackNavigator = createStackNavigator({
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
       headerTitle: '',
-
       headerStyle: {
         backgroundColor: 'none',
         shadowOffset: {
@@ -159,7 +149,7 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
-
+ 
   GameScreen: {
     screen: PlayerScreens.AnswerScreen,
     navigationOptions: ({navigation}) => ({
@@ -391,7 +381,6 @@ const BottomTabScreen = createBottomTabNavigator(
   },
 );
 
-
 //Authentication
 const AuthNavigator = createStackNavigator({
   Login: {
@@ -441,6 +430,7 @@ const LiveStreaming = createStackNavigator({
 
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
+   
   },
   PlayerScreen: {
     screen: PlayerScreens.SeePlayers,
