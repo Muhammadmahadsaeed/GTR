@@ -131,41 +131,41 @@ class ChooseImage extends Component {
       body: urlencoded,
       redirect: 'follow',
     };
-    // fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
-    //   .then((response) => response.text())
-    //   .then((result) => {
-    //     console.log(result);
-    //     let formdata = new FormData();
-    //     formdata.append(
-    //       'email',
-    //       this.props.user.user.user_details.email.toLowerCase(),
-    //     );
-    //     formdata.append('password', pwd);
-    //     fetch('https://app.guessthatreceipt.com/api/login', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //       body: formdata,
-    //     })
-    //       .then((response) => response.json())
-    //       .then((data) => {
-    //         this.setState({isloading: false});
-    //         console.log(data);
-    //         // this.props.store_user(data);
-    //         // this.props.navigation.navigate('payitforward');
-    //       })
-    //       .catch((error) => {
-    //         this.setState({isloading: false, showInvalidErorr: true});
-    //       });
-    //     // this.props.store_user(raw);
-    //     // this.props.navigation.navigate('payitforward');
-    //     // this.props.navigation.navigate('Login');
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     this.setState({isErorr: true});
-    //   });
+    fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        let formdata = new FormData();
+        formdata.append(
+          'email',
+          this.props.user.user.user_details.email.toLowerCase(),
+        );
+        formdata.append('password', pwd);
+        fetch('https://app.guessthatreceipt.com/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formdata,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({isloading: false});
+            
+             this.props.store_user(data.data);
+            this.props.navigation.navigate('payitforward');
+          })
+          .catch((error) => {
+            this.setState({isloading: false, showInvalidErorr: true});
+          });
+        // this.props.store_user(raw);
+        // this.props.navigation.navigate('payitforward');
+        // this.props.navigation.navigate('Login');
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({isErorr: true});
+      });
   }
   render() {
     return (
@@ -302,7 +302,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    store_user: (user) => dispatch(userObject(user)),
+    store_user: (user) => dispatch({type: 'SET_USER', payload: user}),
   };
 };
 

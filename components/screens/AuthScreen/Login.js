@@ -16,8 +16,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {userObject} from '../../Redux/Action/action';
-import {bindActionCreators} from 'redux';
+
+
 
 class LoginScreen extends React.Component {
   constructor() {
@@ -104,6 +104,7 @@ class LoginScreen extends React.Component {
             })
               .then((response) => response.json())
               .then((res) => {
+              
                 this.props.store_user(data.data);
                 this.props.navigation.navigate('Drawer');
               })
@@ -418,16 +419,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
+
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    store_user: (user) => dispatch(userObject(user)),
+    store_user: (user) => dispatch({type: 'SET_USER', payload: user}),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(null, mapDispatchToProps)(LoginScreen);

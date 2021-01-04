@@ -8,6 +8,7 @@ import {
   Dimensions,
   StyleSheet,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import RtcEngine, {
   ChannelProfile,
@@ -16,28 +17,13 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-
+import {connect} from 'react-redux';
 const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
 
-interface Props {}
-
-interface State {
-  appId: string;
-  token: string;
-  channelName: string;
-  joinSucceed: boolean;
-  peerIds: number[];
-  toggle: boolean;
-  enableDisableVideoToggle: boolean;
-  enableDisableAudioToggle: boolean;
-}
-
-export default class App extends Component<Props, State> {
-  _engine?: RtcEngine;
-
+class LiveStreamingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,9 +36,11 @@ export default class App extends Component<Props, State> {
       enableDisableVideoToggle: true,
       enableDisableAudioToggle: true,
     };
+    this._engine = React.createRef();
   }
 
   componentDidMount() {
+    console.log(this.props.user.counter.length);
     fetch(
       'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
       {
@@ -62,7 +50,15 @@ export default class App extends Component<Props, State> {
       .then((res) => res.json())
       .then((result) => {
         this.setState({token: result.key});
-        this.init();
+        this.init().then(() => {
+          this.setState({toggle: false});
+          this._engine.current.joinChannel(
+            this.state.token,
+            this.state.channelName,
+            null,
+            0,
+          );
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -71,25 +67,27 @@ export default class App extends Component<Props, State> {
 
   init = async () => {
     const {appId} = this.state;
-    this._engine = await RtcEngine.create(appId);
-    await this._engine.enableVideo();
-    await this._engine.enableAudio();
+    this._engine.current = await RtcEngine.create(appId);
+    await this._engine.current.enableVideo();
+    await this._engine.current.enableAudio();
     // Enable the local video preview.
-    await this._engine.startPreview();
+    await this._engine.current.startPreview();
     // Set the channel profile as live streaming.
-    // await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting)
+    // await this._engine.current.setChannelProfile(ChannelProfile.LiveBroadcasting)
     // Set the usr role as host.
-    // await this._engine.setClientRole(ClientRole.Audience)
+    if (this.props.user.counter.length > 2) {
+      console.log('length bhr gai');
+      await this._engine.current.setClientRole(ClientRole.Audience);
+    }
+    // this._engine.current.addListener('Warning', (warn) => {
+    //   console.log('Warning', warn);
+    // });
 
-    this._engine.addListener('Warning', (warn) => {
-      console.log('Warning', warn);
-    });
+    // this._engine.current.addListener('Error', (err) => {
+    //   console.log('Error', err);
+    // });
 
-    this._engine.addListener('Error', (err) => {
-      console.log('Error', err);
-    });
-
-    this._engine.addListener('UserJoined', (uid, elapsed) => {
+    this._engine.current.addListener('UserJoined', (uid, elapsed) => {
       console.log('UserJoined', uid, elapsed);
       // Get current peer IDs
       const {peerIds} = this.state;
@@ -102,7 +100,7 @@ export default class App extends Component<Props, State> {
       }
     });
 
-    this._engine.addListener('UserOffline', (uid, reason) => {
+    this._engine.current.addListener('UserOffline', (uid, reason) => {
       console.log('UserOffline', uid, reason);
       const {peerIds} = this.state;
       this.setState({
@@ -112,19 +110,22 @@ export default class App extends Component<Props, State> {
     });
 
     // If Local user joins RTC channel
-    this._engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
-      console.log('JoinChannelSuccess', channel, uid, elapsed);
-      // Set state variable to true
-      this.setState({
-        joinSucceed: true,
-      });
-    });
+    this._engine.current.addListener(
+      'JoinChannelSuccess',
+      (channel, uid, elapsed) => {
+        console.log('JoinChannelSuccess', channel, uid, elapsed);
+        // Set state variable to true
+        this.setState({
+          joinSucceed: true,
+        });
+      },
+    );
   };
 
   startCall = async () => {
     // Join Channel using null token and channel name
     this.setState({toggle: false});
-    await this._engine?.joinChannel(
+    await this._engine.current.joinChannel(
       this.state.token,
       this.state.channelName,
       null,
@@ -133,28 +134,34 @@ export default class App extends Component<Props, State> {
   };
 
   endCall = async () => {
-    await this._engine?.leaveChannel();
+    console.log('call==');
+    await this._engine.current.leaveChannel();
+    this.props.removeUserCount([]);
     this.setState({toggle: true, peerIds: [], joinSucceed: false});
   };
   switch() {
-    console.log('devices');
-    this._engine?.switchCamera();
+    this._engine.current?.switchCamera();
   }
   enableDisableAudio() {
     if (this.state.enableDisableAudioToggle) {
       this.setState({enableDisableAudioToggle: false});
+      this._engine.current?.disableAudio();
     } else {
       this.setState({enableDisableAudioToggle: true});
+      this._engine.current?.enableAudio();
     }
   }
   enableDisableVideo() {
     if (this.state.enableDisableVideoToggle) {
       this.setState({enableDisableVideoToggle: false});
-      // this._engine?.disableVideo();
+      this._engine.current?.disableVideo();
     } else {
       this.setState({enableDisableVideoToggle: true});
-      // this._engine?.enableVideo();
+      this._engine.current?.enableVideo();
     }
+  }
+  componentWillUnmount(){
+    console.log("call hoa")
   }
 
   render() {
@@ -190,7 +197,6 @@ export default class App extends Component<Props, State> {
               <View style={styles.pauseButton}>
                 {this.state.toggle ? (
                   <TouchableOpacity
-                    style={styles.pauseButton}
                     activeOpacity={0.8}
                     onPress={this.startCall}>
                     <Image
@@ -199,10 +205,7 @@ export default class App extends Component<Props, State> {
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={this.endCall}
-                    style={styles.pauseButton}>
+                  <TouchableOpacity activeOpacity={0.8} onPress={this.endCall}>
                     <Image
                       source={require('../../../assets/pause.png')}
                       style={styles.pauseButtonImage}
@@ -245,6 +248,7 @@ export default class App extends Component<Props, State> {
 
   _renderVideos = () => {
     const {joinSucceed} = this.state;
+
     return joinSucceed ? (
       <View style={styles.fullView}>
         <RtcLocalView.SurfaceView
@@ -255,11 +259,15 @@ export default class App extends Component<Props, State> {
         {this._renderRemoteVideos()}
       </View>
     ) : (
-      <View>
-        <Image
-          style={{height: '100%', width: '100%'}}
-          source={require('../../../assets/fake.jpg')}
-        />
+      // <View>
+      //   <Image
+      //     style={{height: '100%', width: '100%'}}
+      //     source={require('../../../assets/fake.jpg')}
+      //   />
+      // </View>
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size={60} color="#81b840" />
+        <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
       </View>
     );
   };
@@ -291,22 +299,6 @@ export default class App extends Component<Props, State> {
 const styles = StyleSheet.create({
   max: {
     flex: 1,
-  },
-  buttonHolder: {
-    height: 100,
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#0093E9',
-    borderRadius: 25,
-  },
-  buttonText: {
-    color: '#fff',
   },
   fullView: {
     width: dimensions.width,
@@ -345,12 +337,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     bottom: 0,
-    position: 'absolute',
+    // position: 'absolute',
   },
   pauseButtonImage: {
     height: '100%',
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
   },
   icons: {
     flex: 1,
@@ -367,4 +359,29 @@ const styles = StyleSheet.create({
     width: '100%',
     resizeMode: 'contain',
   },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#222',
+  },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeUserCount: (userCount) =>
+      dispatch({type: 'REMOVE_ALL_COUNT', payload: userCount}),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LiveStreamingScreen);

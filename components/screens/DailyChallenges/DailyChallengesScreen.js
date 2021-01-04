@@ -16,16 +16,32 @@ import {
   Platform,
 } from 'react-native';
 
-import  requestCameraAndAudioPermission  from "./Permission";
+import requestCameraAndAudioPermission from './Permission';
 
 class DailyChallengesScreen extends React.Component {
   constructor() {
     super();
-    
-   
+    this.state = {schedule: false};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    
+    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((res) => {
+        // console.log(res.status_code)
+        if (res.status_code === 200) {
+          this.setState({schedule: false});
+        } else {
+          this.setState({schedule: true});
+        }
+      });
+  }
 
   sendInivitaion() {
     fetch(
@@ -36,28 +52,28 @@ class DailyChallengesScreen extends React.Component {
     )
       .then((response) => console.log('success'))
       .catch((err) => console.log('erorr', err));
-    // 
+    //
   }
-  goToLive(){
+  goToLive() {
     if (Platform.OS === 'android') {
       requestCameraAndAudioPermission().then(() => {
         // console.log('requested!');
         this.props.navigation.navigate('LiveScreen');
       });
     }
-   
   }
   moveToGameScreen() {
     if (Platform.OS === 'android') {
       requestCameraAndAudioPermission().then(() => {
-        // console.log('requested!');
+        this.props.addUserCount("user:1")
         this.props.navigation.navigate('LiveScreen');
       });
     }
+
     // this.props.navigation.navigate('GameScreen');
   }
   render() {
-    const role = this.props.user.user.user_details.role_id;
+    const role =  this.props.user.user.user.user_details.role_id
     return (
       <View style={{flex: 1}}>
         <Image
@@ -106,11 +122,12 @@ class DailyChallengesScreen extends React.Component {
               </View>
             ) : (
               <TouchableOpacity
+                disabled={this.state.schedule}
                 onPress={() => {
                   this.moveToGameScreen();
                 }}
                 style={[styles.buttonStyle, {marginTop: 70}]}
-                activeOpacity={0.5}>
+                activeOpacity={0.8}>
                 <Text style={styles.buttonTextStyle}>Play</Text>
               </TouchableOpacity>
             )}
@@ -167,7 +184,13 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state,
   };
 };
-export default connect(mapStateToProps, null)(DailyChallengesScreen);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addUserCount: (userCount) => 
+    dispatch({type: 'ADD_TO_COUNT', payload: userCount}),
+  };
+};
+export default connect(mapStateToProps,mapDispatchToProps)(DailyChallengesScreen);

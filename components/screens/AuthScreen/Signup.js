@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
-import {userObject} from '../../Redux/Action/action';
+
 class SignupScreen extends React.Component {
   constructor() {
     super();
@@ -577,16 +577,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    store_user: (user) => dispatch(userObject(user)),
+    store_user: (user) => dispatch({type: 'SET_USER', payload: user}),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
+export default connect(null, mapDispatchToProps)(SignupScreen);
