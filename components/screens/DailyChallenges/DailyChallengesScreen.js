@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 //Import all required component
 import {
   StyleSheet,
-  TextInput,
   View,
   Text,
   Image,
@@ -14,34 +13,21 @@ import {
   ImageBackground,
   Dimensions,
   Platform,
+  ActivityIndicator
 } from 'react-native';
-
-import requestCameraAndAudioPermission from './Permission';
 
 class DailyChallengesScreen extends React.Component {
   constructor() {
     super();
-    this.state = {schedule: false};
+    this.state = {
+      schedule: false,
+      scheduleArray: [],
+      isloading: false,
+      flashMessage: false,
+    };
   }
 
-  componentDidMount() {
-    
-    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
-      },
-    })
-      .then((result) => result.json())
-      .then((res) => {
-        // console.log(res.status_code)
-        if (res.status_code === 200) {
-          this.setState({schedule: false});
-        } else {
-          this.setState({schedule: true});
-        }
-      });
-  }
+  componentDidMount() {}
 
   sendInivitaion() {
     fetch(
@@ -62,18 +48,53 @@ class DailyChallengesScreen extends React.Component {
       });
     }
   }
-  moveToGameScreen() {
-    if (Platform.OS === 'android') {
-      requestCameraAndAudioPermission().then(() => {
-        this.props.addUserCount("user:1")
-        this.props.navigation.navigate('LiveScreen');
-      });
-    }
+  moveToHostOrAudienceScreen() {
+    this.setState({isloading:true})
+    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((res) => {
+        if (res.data != null) {
+          this.setState({isloading: false})
+          const params = new URLSearchParams();
+          params.append('schedule_id', `${res.data.id}`);
 
-    // this.props.navigation.navigate('GameScreen');
+          fetch('https://app.guessthatreceipt.com/api/gameLiveEntry', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            },
+            body: params.toString(),
+          })
+            .then((response) => response.json())
+            .then((result) => {
+              console.log(result)
+              if (result.message == 'this is previous user so he can join') {
+                this.props.navigation.navigate('LiveScreen');
+              } else {
+                this.props.navigation.navigate('Audience');
+              }
+            })
+            .catch((error) => console.log('error', error));
+        } else {
+          this.setState({isloading: false, flashMessage: true}, () => {
+            setTimeout(() => this.closeFlashMessage(), 3000);
+          });
+        }
+      });
+  }
+  closeFlashMessage() {
+    this.setState({
+      flashMessage: false,
+    });
   }
   render() {
-    const role =  this.props.user.user.user.user_details.role_id
+    const role = this.props.user.user.user.user_details.role_id;
     return (
       <View style={{flex: 1}}>
         <Image
@@ -122,17 +143,27 @@ class DailyChallengesScreen extends React.Component {
               </View>
             ) : (
               <TouchableOpacity
-                disabled={this.state.schedule}
                 onPress={() => {
-                  this.moveToGameScreen();
+                  this.moveToHostOrAudienceScreen();
                 }}
                 style={[styles.buttonStyle, {marginTop: 70}]}
                 activeOpacity={0.8}>
-                <Text style={styles.buttonTextStyle}>Play</Text>
+                {this.state.isloading ? (
+                  <ActivityIndicator size="large" color="white" />
+                ) : (
+                  <Text style={styles.buttonTextStyle}>Play</Text>
+                )}
               </TouchableOpacity>
             )}
           </KeyboardAvoidingView>
         </ScrollView>
+        {this.state.flashMessage == true ? (
+          <View style={styles.flashMessage}>
+            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+              Product has been added to your cart
+            </Text>
+          </View>
+        ) : null}
       </View>
     );
   }
@@ -181,16 +212,20 @@ const styles = StyleSheet.create({
     color: '#81b840',
     fontSize: 16,
   },
+  flashMessage: {
+    position: 'absolute',
+    backgroundColor: '#81b840',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    bottom: 0,
+  },
 });
 const mapStateToProps = (state) => {
   return {
     user: state,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addUserCount: (userCount) => 
-    dispatch({type: 'ADD_TO_COUNT', payload: userCount}),
-  };
-};
-export default connect(mapStateToProps,mapDispatchToProps)(DailyChallengesScreen);
+
+export default connect(mapStateToProps, null)(DailyChallengesScreen);

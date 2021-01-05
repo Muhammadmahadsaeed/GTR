@@ -454,7 +454,34 @@ const LiveStreaming = createStackNavigator({
     }),
   },
 });
+const AudienceStack = createStackNavigator({
+ 
+  Audience: {
+    screen: PlayerScreens.AudienceScreen,
+    navigationOptions: ({navigation}) => ({
+      animationEnabled: true,
+      gestureEnabled: true,
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      safeAreaInsets: {top: 0},
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'transparent',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
 
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+   
+  },
+ 
+});
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator(
   {
@@ -468,6 +495,9 @@ const DrawerNavigator = createDrawerNavigator(
     LiveScreen: {
       screen: LiveStreaming,
     },
+    Audience:{
+      screen: AudienceStack
+    }
   },
   {
     //For the Custom sidebar menu we have to provide our CustomSidebarMenu

@@ -23,22 +23,7 @@ const dimensions = {
   height: Dimensions.get('window').height,
 };
 
-interface Props {}
-
-interface State {
-  appId: string;
-  token: string;
-  channelName: string;
-  joinSucceed: boolean;
-  peerIds: number[];
-  toggle: boolean;
-  enableDisableVideoToggle: boolean;
-  enableDisableAudioToggle: boolean;
-}
-
-class LiveStreamingScreen extends Component<Props, State> {
-  _engine?: RtcEngine;
-
+class AudienceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,17 +36,28 @@ class LiveStreamingScreen extends Component<Props, State> {
       enableDisableVideoToggle: true,
       enableDisableAudioToggle: true,
     };
+    this._engine = React.createRef();
   }
 
   componentDidMount() {
     fetch(
-      'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',{
-        method: 'GET'
-      })
+      'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
+      {
+        method: 'GET',
+      },
+    )
       .then((res) => res.json())
       .then((result) => {
         this.setState({token: result.key});
-        this.init();
+        this.init().then(() => {
+          this.setState({toggle: false});
+          this._engine.current.joinChannel(
+            this.state.token,
+            this.state.channelName,
+            null,
+            0,
+          );
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -70,25 +66,18 @@ class LiveStreamingScreen extends Component<Props, State> {
 
   init = async () => {
     const {appId} = this.state;
-    this._engine = await RtcEngine.create(appId);
-    await this._engine.enableVideo();
-    await this._engine.enableAudio();
+    this._engine.current = await RtcEngine.create(appId);
+    await this._engine.current.enableVideo();
+    await this._engine.current.enableAudio();
     // Enable the local video preview.
-    await this._engine.startPreview();
+    await this._engine.current.startPreview();
     // Set the channel profile as live streaming.
-    // await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting)
+    await this._engine.current.setChannelProfile(
+      ChannelProfile.LiveBroadcasting,
+    );
     // Set the usr role as host.
-    // await this._engine.setClientRole(ClientRole.Audience)
-
-    this._engine.addListener('Warning', (warn) => {
-      console.log('Warning', warn);
-    });
-
-    this._engine.addListener('Error', (err) => {
-      console.log('Error', err);
-    });
-
-    this._engine.addListener('UserJoined', (uid, elapsed) => {
+    await this._engine.current.setClientRole(ClientRole.Audience);
+    this._engine.current.addListener('UserJoined', (uid, elapsed) => {
       console.log('UserJoined', uid, elapsed);
       // Get current peer IDs
       const {peerIds} = this.state;
@@ -101,7 +90,7 @@ class LiveStreamingScreen extends Component<Props, State> {
       }
     });
 
-    this._engine.addListener('UserOffline', (uid, reason) => {
+    this._engine.current.addListener('UserOffline', (uid, reason) => {
       console.log('UserOffline', uid, reason);
       const {peerIds} = this.state;
       this.setState({
@@ -111,19 +100,22 @@ class LiveStreamingScreen extends Component<Props, State> {
     });
 
     // If Local user joins RTC channel
-    this._engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
-      console.log('JoinChannelSuccess', channel, uid, elapsed);
-      // Set state variable to true
-      this.setState({
-        joinSucceed: true,
-      });
-    });
+    this._engine.current.addListener(
+      'JoinChannelSuccess',
+      (channel, uid, elapsed) => {
+        console.log('JoinChannelSuccess', channel, uid, elapsed);
+        // Set state variable to true
+        this.setState({
+          joinSucceed: true,
+        });
+      },
+    );
   };
 
   startCall = async () => {
     // Join Channel using null token and channel name
     this.setState({toggle: false});
-    await this._engine?.joinChannel(
+    await this._engine.current.joinChannel(
       this.state.token,
       this.state.channelName,
       null,
@@ -132,37 +124,19 @@ class LiveStreamingScreen extends Component<Props, State> {
   };
 
   endCall = async () => {
-    await this._engine?.leaveChannel();
+    console.log('call==');
+    await this._engine.current.leaveChannel();
     this.setState({toggle: true, peerIds: [], joinSucceed: false});
   };
-  switch() {
-    
-    this._engine?.switchCamera();
-  }
-  enableDisableAudio() {
-    if (this.state.enableDisableAudioToggle) {
-      this.setState({enableDisableAudioToggle: false});
-      this._engine?.disableAudio();
-    } else {
-      this.setState({enableDisableAudioToggle: true});
-      this._engine?.enableAudio();
-    }
-  }
-  enableDisableVideo() {
-    if (this.state.enableDisableVideoToggle) {
-      this.setState({enableDisableVideoToggle: false});
-      this._engine?.disableVideo();
-    } else {
-      this.setState({enableDisableVideoToggle: true});
-      this._engine?.enableVideo();
-    }
+
+  componentWillUnmount() {
+    console.log('call hoa');
   }
 
   render() {
     return (
       <View style={styles.max}>
         {this._renderVideos()}
-
         <View style={styles.bottom}>
           <View style={styles.icons}>
             <View style={{height: 35, width: 35}}>
@@ -173,25 +147,10 @@ class LiveStreamingScreen extends Component<Props, State> {
                 />
               </TouchableOpacity>
             </View>
-            <View style={styles.iconView}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => this.enableDisableAudio()}>
-                <Image
-                  source={
-                    this.state.enableDisableAudioToggle
-                      ? require('../../../assets/enableMic.png')
-                      : require('../../../assets/disableMic.png')
-                  }
-                  style={styles.cameraImage}
-                />
-              </TouchableOpacity>
-            </View>
             <View>
               <View style={styles.pauseButton}>
                 {this.state.toggle ? (
                   <TouchableOpacity
-                    style={styles.pauseButton}
                     activeOpacity={0.8}
                     onPress={this.startCall}>
                     <Image
@@ -200,10 +159,7 @@ class LiveStreamingScreen extends Component<Props, State> {
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={this.endCall}
-                    style={styles.pauseButton}>
+                  <TouchableOpacity activeOpacity={0.8} onPress={this.endCall}>
                     <Image
                       source={require('../../../assets/pause.png')}
                       style={styles.pauseButtonImage}
@@ -211,32 +167,6 @@ class LiveStreamingScreen extends Component<Props, State> {
                   </TouchableOpacity>
                 )}
               </View>
-            </View>
-
-            <View style={styles.iconView}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={{height: 40, width: 40}}
-                onPress={() => this.enableDisableVideo()}>
-                <Image
-                  source={
-                    this.state.enableDisableVideoToggle
-                      ? require('../../../assets/enableVideo.png')
-                      : require('../../../assets/disableVideo.png')
-                  }
-                  style={styles.cameraImage}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={{height: 40, width: 40}}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => this.switch()}>
-                <Image
-                  source={require('../../../assets/camera.png')}
-                  style={styles.cameraImage}
-                />
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -246,7 +176,7 @@ class LiveStreamingScreen extends Component<Props, State> {
 
   _renderVideos = () => {
     const {joinSucceed} = this.state;
-   
+
     return joinSucceed ? (
       <View style={styles.fullView}>
         <RtcLocalView.SurfaceView
@@ -257,21 +187,10 @@ class LiveStreamingScreen extends Component<Props, State> {
         {this._renderRemoteVideos()}
       </View>
     ) : (
-      <View>
-        <Image
-          style={{height: '100%', width: '100%'}}
-          source={require('../../../assets/fake.jpg')}
-        />
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size={60} color="#81b840" />
+        <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
       </View>
-      // <View style={styles.activityIndicator}>
-
-      //   <ActivityIndicator
-      //     size={60}
-      //     color="#81b840"
-
-      //   />
-      //   <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
-      // </View>
     );
   };
 
@@ -303,37 +222,21 @@ const styles = StyleSheet.create({
   max: {
     flex: 1,
   },
-  buttonHolder: {
-    height: 100,
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#0093E9',
-    borderRadius: 25,
-  },
-  buttonText: {
-    color: '#fff',
-  },
   fullView: {
     width: dimensions.width,
     height: '100%',
   },
   remoteContainer: {
     width: '100%',
-    height: 150,
+    flex: 1,
     position: 'absolute',
-    top: 5,
+    marginVertical: 20,
   },
   remote: {
     width: 150,
     height: 150,
-    marginHorizontal: 2.5,
-    borderRadius: 50,
+    marginHorizontal: 5,
+    borderRadius: 100,
     backgroundColor: 'red',
   },
   noUserText: {
@@ -356,13 +259,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     bottom: 0,
-    position: 'absolute',
-  
+    // position: 'absolute',
   },
   pauseButtonImage: {
     height: '100%',
     width: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
   },
   icons: {
     flex: 1,
@@ -390,10 +292,10 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state,
   };
 };
-export default connect(mapStateToProps, null)(LiveStreamingScreen);
+
+export default connect(mapStateToProps, null)(AudienceScreen);

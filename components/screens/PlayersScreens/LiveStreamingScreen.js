@@ -17,6 +17,8 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
+
+import requestCameraAndAudioPermission from '../DailyChallenges/Permission';
 import {connect} from 'react-redux';
 const dimensions = {
   width: Dimensions.get('window').width,
@@ -40,29 +42,31 @@ class LiveStreamingScreen extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.user.counter.length);
-    fetch(
-      'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
-      {
-        method: 'GET',
-      },
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        this.setState({token: result.key});
-        this.init().then(() => {
-          this.setState({toggle: false});
-          this._engine.current.joinChannel(
-            this.state.token,
-            this.state.channelName,
-            null,
-            0,
-          );
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission().then(() => {
+        fetch(
+          'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
+          {
+            method: 'GET',
+          })
+          .then((res) => res.json())
+          .then((result) => {
+            this.setState({token: result.key});
+            this.init().then(() => {
+              this.setState({toggle: false});
+              this._engine.current.joinChannel(
+                result.key,
+                this.state.channelName,
+                null,
+                0,
+              );
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
+    }
   }
 
   init = async () => {
@@ -72,21 +76,6 @@ class LiveStreamingScreen extends Component {
     await this._engine.current.enableAudio();
     // Enable the local video preview.
     await this._engine.current.startPreview();
-    // Set the channel profile as live streaming.
-    // await this._engine.current.setChannelProfile(ChannelProfile.LiveBroadcasting)
-    // Set the usr role as host.
-    if (this.props.user.counter.length > 2) {
-      console.log('length bhr gai');
-      await this._engine.current.setClientRole(ClientRole.Audience);
-    }
-    // this._engine.current.addListener('Warning', (warn) => {
-    //   console.log('Warning', warn);
-    // });
-
-    // this._engine.current.addListener('Error', (err) => {
-    //   console.log('Error', err);
-    // });
-
     this._engine.current.addListener('UserJoined', (uid, elapsed) => {
       console.log('UserJoined', uid, elapsed);
       // Get current peer IDs
@@ -136,32 +125,32 @@ class LiveStreamingScreen extends Component {
   endCall = async () => {
     console.log('call==');
     await this._engine.current.leaveChannel();
-    this.props.removeUserCount([]);
     this.setState({toggle: true, peerIds: [], joinSucceed: false});
   };
   switch() {
-    this._engine.current?.switchCamera();
+    this._engine.current.switchCamera();
   }
   enableDisableAudio() {
     if (this.state.enableDisableAudioToggle) {
       this.setState({enableDisableAudioToggle: false});
-      this._engine.current?.disableAudio();
+      this._engine.current.disableAudio();
     } else {
       this.setState({enableDisableAudioToggle: true});
-      this._engine.current?.enableAudio();
+      this._engine.current.enableAudio();
     }
   }
   enableDisableVideo() {
     if (this.state.enableDisableVideoToggle) {
       this.setState({enableDisableVideoToggle: false});
-      this._engine.current?.disableVideo();
+      this._engine.current.disableVideo();
     } else {
       this.setState({enableDisableVideoToggle: true});
-      this._engine.current?.enableVideo();
+      this._engine.current.enableVideo();
     }
   }
-  componentWillUnmount(){
-    console.log("call hoa")
+  componentWillUnmount() {
+    console.log('call hoa');
+    // this._engine.current.destory()
   }
 
   render() {
@@ -375,13 +364,5 @@ const mapStateToProps = (state) => {
     user: state,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    removeUserCount: (userCount) =>
-      dispatch({type: 'REMOVE_ALL_COUNT', payload: userCount}),
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LiveStreamingScreen);
+
+export default connect(mapStateToProps, null)(LiveStreamingScreen);
