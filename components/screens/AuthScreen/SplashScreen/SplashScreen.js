@@ -7,10 +7,10 @@ import {
   Text, TouchableOpacity,ActivityIndicator
 
 } from 'react-native';
+import {connect} from 'react-redux';
 
 
-
-export default class SplashScreen extends React.Component {
+class SplashScreen extends React.Component {
   constructor(){
     super()
     this.state = {
@@ -18,6 +18,7 @@ export default class SplashScreen extends React.Component {
     }
   }
   componentDidMount() {
+    console.log(this.props.user)
     setTimeout( () => {
        this.setTimePassed();
     },2000);
@@ -81,3 +82,11 @@ const styles = StyleSheet.create({
    
   },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+export default connect(mapStateToProps, null)(SplashScreen);

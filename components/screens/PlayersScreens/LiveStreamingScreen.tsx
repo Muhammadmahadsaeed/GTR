@@ -8,7 +8,7 @@ import {
   Dimensions,
   StyleSheet,
   Image,
-  ActivityIndicator,
+  ActivityIndicator,FlatList
 } from 'react-native';
 import RtcEngine, {
   ChannelProfile,
@@ -17,15 +17,39 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
 import requestCameraAndAudioPermission from '../DailyChallenges/Permission';
 import {connect} from 'react-redux';
 const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
+interface Props {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
 
-class LiveStreamingScreen extends Component {
+/**
+ * @property peerIds Array for storing connected peers
+ * @property appId
+ * @property channelName Channel Name for the current session
+ * @property joinSucceed State variable for storing success
+ */
+interface State {
+  appId: string;
+  token: string;
+  channelName: string;
+  joinSucceed: boolean;
+  peerIds: number[];
+  toggle: boolean;
+  enableDisableVideoToggle: boolean;
+  enableDisableAudioToggle: boolean;
+}
+class LiveStreamingScreen extends Component<Props, State> {
+  _engine?: RtcEngine;
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +62,6 @@ class LiveStreamingScreen extends Component {
       enableDisableVideoToggle: true,
       enableDisableAudioToggle: true,
     };
-    this._engine = React.createRef();
   }
 
   componentDidMount() {
@@ -48,13 +71,14 @@ class LiveStreamingScreen extends Component {
           'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
           {
             method: 'GET',
-          })
+          },
+        )
           .then((res) => res.json())
           .then((result) => {
             this.setState({token: result.key});
             this.init().then(() => {
               this.setState({toggle: false});
-              this._engine.current.joinChannel(
+              this._engine?.joinChannel(
                 result.key,
                 this.state.channelName,
                 null,
@@ -71,12 +95,12 @@ class LiveStreamingScreen extends Component {
 
   init = async () => {
     const {appId} = this.state;
-    this._engine.current = await RtcEngine.create(appId);
-    await this._engine.current.enableVideo();
-    await this._engine.current.enableAudio();
+    this._engine = await RtcEngine.create(appId);
+    await this._engine.enableVideo();
+    await this._engine.enableAudio();
     // Enable the local video preview.
-    await this._engine.current.startPreview();
-    this._engine.current.addListener('UserJoined', (uid, elapsed) => {
+    await this._engine.startPreview();
+    this._engine.addListener('UserJoined', (uid, elapsed) => {
       console.log('UserJoined', uid, elapsed);
       // Get current peer IDs
       const {peerIds} = this.state;
@@ -89,7 +113,7 @@ class LiveStreamingScreen extends Component {
       }
     });
 
-    this._engine.current.addListener('UserOffline', (uid, reason) => {
+    this._engine.addListener('UserOffline', (uid, reason) => {
       console.log('UserOffline', uid, reason);
       const {peerIds} = this.state;
       this.setState({
@@ -99,22 +123,19 @@ class LiveStreamingScreen extends Component {
     });
 
     // If Local user joins RTC channel
-    this._engine.current.addListener(
-      'JoinChannelSuccess',
-      (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed);
-        // Set state variable to true
-        this.setState({
-          joinSucceed: true,
-        });
-      },
-    );
+    this._engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
+      console.log('JoinChannelSuccess', channel, uid, elapsed);
+      // Set state variable to true
+      this.setState({
+        joinSucceed: true,
+      });
+    });
   };
 
   startCall = async () => {
     // Join Channel using null token and channel name
     this.setState({toggle: false});
-    await this._engine.current.joinChannel(
+    await this._engine?.joinChannel(
       this.state.token,
       this.state.channelName,
       null,
@@ -123,41 +144,67 @@ class LiveStreamingScreen extends Component {
   };
 
   endCall = async () => {
-    console.log('call==');
-    await this._engine.current.leaveChannel();
+    console.log('call end==');
+    await this._engine?.leaveChannel();
     this.setState({toggle: true, peerIds: [], joinSucceed: false});
   };
   switch() {
-    this._engine.current.switchCamera();
+    this._engine?.switchCamera();
   }
   enableDisableAudio() {
     if (this.state.enableDisableAudioToggle) {
       this.setState({enableDisableAudioToggle: false});
-      this._engine.current.disableAudio();
+      this._engine?.disableAudio();
     } else {
       this.setState({enableDisableAudioToggle: true});
-      this._engine.current.enableAudio();
+      this._engine?.enableAudio();
     }
   }
   enableDisableVideo() {
     if (this.state.enableDisableVideoToggle) {
       this.setState({enableDisableVideoToggle: false});
-      this._engine.current.disableVideo();
+      this._engine?.disableVideo();
     } else {
       this.setState({enableDisableVideoToggle: true});
-      this._engine.current.enableVideo();
+      this._engine?.enableVideo();
     }
   }
   componentWillUnmount() {
     console.log('call hoa');
-    // this._engine.current.destory()
+    this._engine?.destroy();
   }
-
+  moveToGamerOrAnswer() {
+    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((res) => {
+        if (res.data != null) {
+          const role = this.props.user.user.user.user_details.role_id;
+          
+          if (role === '2') {
+            this.props.navigation.navigate('UserAnswerScreen',{schedule: res});
+          } else {
+            this.props.navigation.navigate('PlayerScreen');
+          }
+        }
+      });
+  }
   render() {
     return (
       <View style={styles.max}>
         {this._renderVideos()}
-
+        <View style={styles.icon}>
+          <TouchableOpacity onPress={() => this.moveToGamerOrAnswer()}>
+            <Image
+              source={require('../../../assets/backIcon.png')}
+              style={styles.iconImage}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.bottom}>
           <View style={styles.icons}>
             <View style={{height: 35, width: 35}}>
@@ -248,12 +295,6 @@ class LiveStreamingScreen extends Component {
         {this._renderRemoteVideos()}
       </View>
     ) : (
-      // <View>
-      //   <Image
-      //     style={{height: '100%', width: '100%'}}
-      //     source={require('../../../assets/fake.jpg')}
-      //   />
-      // </View>
       <View style={styles.activityIndicator}>
         <ActivityIndicator size={60} color="#81b840" />
         <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
@@ -288,6 +329,18 @@ class LiveStreamingScreen extends Component {
 const styles = StyleSheet.create({
   max: {
     flex: 1,
+    justifyContent: 'center',
+  },
+  icon: {
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    height: 100,
+    width: 50,
+    position: 'absolute',
+  },
+  iconImage: {
+    resizeMode: 'cover',
   },
   fullView: {
     width: dimensions.width,

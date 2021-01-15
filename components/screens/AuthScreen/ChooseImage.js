@@ -113,26 +113,18 @@ class ChooseImage extends Component {
   moveToPaymentScreen() {
     let pwd = this.props.navigation.getParam('pwd');
     this.setState({isLoading: true});
-    var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${this.props.user.user.access_token}`,
-    );
-    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
-    var urlencoded = new URLSearchParams();
-    urlencoded.append(
-      'avatar',
-      `data:image/jpeg;base64,${this.state.fileData}`,
-    );
-    
-    var requestOptions = {
+    const params = new URLSearchParams();
+    params.append('avatar',`data:image/jpeg;base64,${this.state.fileData}`);
+
+    fetch('https://app.guessthatreceipt.com/api/users/update', {
       method: 'PUT',
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: 'follow',
-    };
-    fetch('https://app.guessthatreceipt.com/api/users/update', requestOptions)
-      .then((response) => response.text())
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.access_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+      body: params.toString(),
+    })
+      .then((response) => response.json())
       .then((result) => {
         console.log(result);
         let formdata = new FormData();
@@ -151,7 +143,7 @@ class ChooseImage extends Component {
           .then((response) => response.json())
           .then((data) => {
             this.setState({isloading: false});
-            
+             
              this.props.store_user(data.data);
             this.props.navigation.navigate('payitforward');
           })

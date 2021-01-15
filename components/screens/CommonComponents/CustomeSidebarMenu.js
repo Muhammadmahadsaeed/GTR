@@ -31,6 +31,7 @@ class CustomSidebarMenu extends Component {
     };
   }
   componentDidMount() {
+    console.log(this.props.user.user);
     this.setState({user: this.props.user.user.user_details});
   }
   logOut() {
@@ -40,7 +41,7 @@ class CustomSidebarMenu extends Component {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${this.props.user.user.access_token}`,
+        Authorization: `Bearer ${this.props.user.access_token}`,
       },
       body: formdata,
     })
@@ -55,7 +56,7 @@ class CustomSidebarMenu extends Component {
   }
   render() {
     const {user} = this.state;
-
+   
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
@@ -91,7 +92,6 @@ class CustomSidebarMenu extends Component {
             <Text style={styles.profileInfoText}>Phone No</Text>
             <Text> : </Text>
             <Text style={styles.profileInfoTextRegular}>
-             
               {user.phone_number}
             </Text>
           </View>

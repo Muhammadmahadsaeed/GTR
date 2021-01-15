@@ -13,7 +13,7 @@ import {
   ImageBackground,
   Dimensions,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 class DailyChallengesScreen extends React.Component {
@@ -41,15 +41,10 @@ class DailyChallengesScreen extends React.Component {
     //
   }
   goToLive() {
-    if (Platform.OS === 'android') {
-      requestCameraAndAudioPermission().then(() => {
-        // console.log('requested!');
-        this.props.navigation.navigate('LiveScreen');
-      });
-    }
+    this.props.navigation.navigate('LiveScreen',{schedule: this.state.scheduleArray});
   }
   moveToHostOrAudienceScreen() {
-    this.setState({isloading:true})
+    this.setState({isloading: true});
     fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
       method: 'GET',
       headers: {
@@ -59,7 +54,8 @@ class DailyChallengesScreen extends React.Component {
       .then((result) => result.json())
       .then((res) => {
         if (res.data != null) {
-          this.setState({isloading: false})
+
+          this.setState({isloading: false,scheduleArray: res});
           const params = new URLSearchParams();
           params.append('schedule_id', `${res.data.id}`);
 
@@ -75,7 +71,8 @@ class DailyChallengesScreen extends React.Component {
             .then((result) => {
               console.log(result)
               if (result.message == 'this is previous user so he can join') {
-                this.props.navigation.navigate('LiveScreen');
+                
+                this.props.navigation.navigate('LiveScreen',{schedule: this.state.scheduleArray});
               } else {
                 this.props.navigation.navigate('Audience');
               }
@@ -160,7 +157,7 @@ class DailyChallengesScreen extends React.Component {
         {this.state.flashMessage == true ? (
           <View style={styles.flashMessage}>
             <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
-              Product has been added to your cart
+              Game will host on monday to friday at 7:00 PM
             </Text>
           </View>
         ) : null}

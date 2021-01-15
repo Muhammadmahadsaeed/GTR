@@ -149,26 +149,7 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
- 
-  GameScreen: {
-    screen: PlayerScreens.AnswerScreen,
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'none',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
-    }),
-  },
+
 });
 //Stack Navigation for Notification Screen
 const Notification_StackNavigator = createStackNavigator({
@@ -408,6 +389,7 @@ const AuthNavigator = createStackNavigator({
 });
 //Live Streaming
 const LiveStreaming = createStackNavigator({
+  
   LiveScreen: {
     screen: PlayerScreens.LiveStreamingScreen,
     navigationOptions: ({navigation}) => ({
@@ -434,6 +416,27 @@ const LiveStreaming = createStackNavigator({
   },
   PlayerScreen: {
     screen: PlayerScreens.SeePlayers,
+    navigationOptions: ({navigation}) => ({
+      animationEnabled: true,
+      gestureEnabled: true,
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  },
+  UserAnswerScreen: {
+    screen: PlayerScreens.AnswerScreen,
     navigationOptions: ({navigation}) => ({
       animationEnabled: true,
       gestureEnabled: true,

@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import RtcEngine, {
   ChannelProfile,
@@ -22,8 +23,26 @@ const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
+interface Props {}
 
-class AudienceScreen extends Component {
+/**
+ * @property peerIds Array for storing connected peers
+ * @property appId
+ * @property channelName Channel Name for the current session
+ * @property joinSucceed State variable for storing success
+ */
+interface State {
+  appId: string;
+  token: string;
+  channelName: string;
+  joinSucceed: boolean;
+  peerIds: number[];
+  toggle: boolean;
+  enableDisableVideoToggle: boolean;
+  enableDisableAudioToggle: boolean;
+}
+class AudienceScreen extends Component<Props, State> {
+  _engine?: RtcEngine;
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +55,6 @@ class AudienceScreen extends Component {
       enableDisableVideoToggle: true,
       enableDisableAudioToggle: true,
     };
-    this._engine = React.createRef();
   }
 
   componentDidMount() {
@@ -51,7 +69,7 @@ class AudienceScreen extends Component {
         this.setState({token: result.key});
         this.init().then(() => {
           this.setState({toggle: false});
-          this._engine.current.joinChannel(
+          this._engine?.joinChannel(
             this.state.token,
             this.state.channelName,
             null,
@@ -66,18 +84,16 @@ class AudienceScreen extends Component {
 
   init = async () => {
     const {appId} = this.state;
-    this._engine.current = await RtcEngine.create(appId);
-    await this._engine.current.enableVideo();
-    await this._engine.current.enableAudio();
+    this._engine = await RtcEngine.create(appId);
+    await this._engine?.enableVideo();
+    await this._engine?.enableAudio();
     // Enable the local video preview.
-    await this._engine.current.startPreview();
+    await this._engine?.startPreview();
     // Set the channel profile as live streaming.
-    await this._engine.current.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
-    );
+    await this._engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
     // Set the usr role as host.
-    await this._engine.current.setClientRole(ClientRole.Audience);
-    this._engine.current.addListener('UserJoined', (uid, elapsed) => {
+    await this._engine?.setClientRole(ClientRole.Audience);
+    this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.log('UserJoined', uid, elapsed);
       // Get current peer IDs
       const {peerIds} = this.state;
@@ -90,7 +106,7 @@ class AudienceScreen extends Component {
       }
     });
 
-    this._engine.current.addListener('UserOffline', (uid, reason) => {
+    this._engine?.addListener('UserOffline', (uid, reason) => {
       console.log('UserOffline', uid, reason);
       const {peerIds} = this.state;
       this.setState({
@@ -100,22 +116,19 @@ class AudienceScreen extends Component {
     });
 
     // If Local user joins RTC channel
-    this._engine.current.addListener(
-      'JoinChannelSuccess',
-      (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed);
-        // Set state variable to true
-        this.setState({
-          joinSucceed: true,
-        });
-      },
-    );
+    this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
+      console.log('JoinChannelSuccess', channel, uid, elapsed);
+      // Set state variable to true
+      this.setState({
+        joinSucceed: true,
+      });
+    });
   };
 
   startCall = async () => {
     // Join Channel using null token and channel name
     this.setState({toggle: false});
-    await this._engine.current.joinChannel(
+    await this._engine?.joinChannel(
       this.state.token,
       this.state.channelName,
       null,
@@ -124,13 +137,13 @@ class AudienceScreen extends Component {
   };
 
   endCall = async () => {
-    console.log('call==');
-    await this._engine.current.leaveChannel();
+    await this._engine?.leaveChannel();
     this.setState({toggle: true, peerIds: [], joinSucceed: false});
   };
 
   componentWillUnmount() {
     console.log('call hoa');
+    this._engine?.destroy();
   }
 
   render() {
@@ -139,14 +152,6 @@ class AudienceScreen extends Component {
         {this._renderVideos()}
         <View style={styles.bottom}>
           <View style={styles.icons}>
-            <View style={{height: 35, width: 35}}>
-              <TouchableOpacity activeOpacity={0.8}>
-                <Image
-                  source={require('../../../assets/enableSpeaker.png')}
-                  style={styles.cameraImage}
-                />
-              </TouchableOpacity>
-            </View>
             <View>
               <View style={styles.pauseButton}>
                 {this.state.toggle ? (
@@ -178,14 +183,7 @@ class AudienceScreen extends Component {
     const {joinSucceed} = this.state;
 
     return joinSucceed ? (
-      <View style={styles.fullView}>
-        <RtcLocalView.SurfaceView
-          style={styles.max}
-          channelId={this.state.channelName}
-          renderMode={VideoRenderMode.Hidden}
-        />
-        {this._renderRemoteVideos()}
-      </View>
+      <View style={styles.fullView}>{this._renderRemoteVideos()}</View>
     ) : (
       <View style={styles.activityIndicator}>
         <ActivityIndicator size={60} color="#81b840" />
@@ -196,24 +194,40 @@ class AudienceScreen extends Component {
 
   _renderRemoteVideos = () => {
     const {peerIds} = this.state;
+
     return (
-      <ScrollView
-        style={styles.remoteContainer}
-        contentContainerStyle={{paddingHorizontal: 2.5}}
-        horizontal={true}>
-        {peerIds.map((value, index, array) => {
-          return (
-            <RtcRemoteView.SurfaceView
-              key={index}
-              style={styles.remote}
-              uid={value}
-              channelId={this.state.channelName}
-              renderMode={VideoRenderMode.Hidden}
-              zOrderMediaOverlay={true}
-            />
-          );
-        })}
-      </ScrollView>
+      <FlatList
+        data={peerIds}
+        keyExtractor={(index) => index.toString()}
+        numColumns={2}
+        renderItem={({value, index, array}) => (
+          <RtcRemoteView.SurfaceView
+            key={index}
+            style={styles.remote}
+            uid={value}
+            channelId={this.state.channelName}
+            renderMode={VideoRenderMode.Hidden}
+            zOrderMediaOverlay={true}
+          />
+        )}
+      />
+      // <ScrollView
+      //   style={styles.remoteContainer}
+      //   contentContainerStyle={{paddingHorizontal: 2.5}}
+      //   horizontal={false}>
+      //   {peerIds.map((value, index, array) => {
+      //     return (
+      //       <RtcRemoteView.SurfaceView
+      //         key={index}
+      //         style={styles.remote}
+      //         uid={value}
+      //         channelId={this.state.channelName}
+      //         renderMode={VideoRenderMode.Hidden}
+      //         zOrderMediaOverlay={true}
+      //       />
+      //     );
+      //   })}
+      // </ScrollView>
     );
   };
 }
@@ -233,11 +247,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   remote: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     marginHorizontal: 5,
     borderRadius: 100,
-    backgroundColor: 'red',
   },
   noUserText: {
     paddingHorizontal: 10,

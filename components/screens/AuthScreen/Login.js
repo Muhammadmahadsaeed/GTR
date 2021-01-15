@@ -104,7 +104,7 @@ class LoginScreen extends React.Component {
             })
               .then((response) => response.json())
               .then((res) => {
-              
+                
                 this.props.store_user(data.data);
                 this.props.navigation.navigate('Drawer');
               })
