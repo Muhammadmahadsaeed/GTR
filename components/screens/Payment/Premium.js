@@ -29,15 +29,17 @@ class Premium extends Component {
     };
   }
   async componentDidMount() {
-   
-    await fetch('https://app.guessthatreceipt.com/api/subscriptions?type=premium',{
-      method: 'GET',
-      headers:{
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${this.props.user.user.access_token}`,
-      }
-    })
-    .then((response) => response.json())
+    await fetch(
+      'https://app.guessthatreceipt.com/api/subscriptions?type=premium',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${this.props.user.user.access_token}`,
+        },
+      },
+    )
+      .then((response) => response.json())
       .then((result) => {
         this.setState({getPremium: result.data});
       })
@@ -56,19 +58,18 @@ class Premium extends Component {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${this.props.user.user.access_token}`
+          Authorization: `Bearer ${this.props.user.user.access_token}`,
         },
         body: formdata,
       })
         .then((response) => response.json())
 
         .then((data) => {
-          console.log(data);
           this.setState({showModal: false, status: 'Complete'});
           this.setModalVisible();
         })
         .catch((error) => {
-          console.log("====",error);
+          console.log('====', error);
         });
     } else if (data.title === 'cancel') {
       this.setState({showModal: false, status: 'Cancelled'});
@@ -77,9 +78,28 @@ class Premium extends Component {
     }
   };
   moveToUserList(item) {
+    let formdata = new FormData();
     this.setState({package: item});
     if (item.price === '0.00') {
-      this.setModalVisible();
+      formdata.append('pack_id', this.state.package.id);
+      formdata.append('transaction_id', item.description);
+      fetch('https://app.guessthatreceipt.com/api/saveOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${this.props.user.user.access_token}`,
+        },
+        body: formdata,
+      })
+        .then((response) => response.json())
+
+        .then((data) => {
+          console.log(data)
+          this.setModalVisible();
+        })
+        .catch((error) => {
+          console.log('====', error);
+        });
     } else {
       this.setState({
         showModal: true,
@@ -132,7 +152,7 @@ class Premium extends Component {
             </View>
           ) : (
             <FlatList
-            showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               data={this.state.getPremium}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -311,7 +331,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
 
 const mapStateToProps = (state) => {
   return {

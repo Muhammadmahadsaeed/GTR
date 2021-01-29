@@ -31,7 +31,7 @@ class CustomSidebarMenu extends Component {
     };
   }
   componentDidMount() {
-    console.log(this.props.user.user);
+   
     this.setState({user: this.props.user.user.user_details});
   }
   logOut() {

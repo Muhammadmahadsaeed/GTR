@@ -172,6 +172,7 @@ class LiveStreamingScreen extends Component<Props, State> {
   componentWillUnmount() {
     console.log('call hoa');
     this._engine?.destroy();
+    
   }
   moveToGamerOrAnswer() {
     fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {

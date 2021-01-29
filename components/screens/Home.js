@@ -12,39 +12,54 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
-const screenheight = Dimensions.get('screen').height;
-const windowheight = Dimensions.get('window').height;
+
 // import all basic components
 import {strTime, setCurrentDate} from './CommonComponents/DateTime';
 import firebase, {notifications} from 'react-native-firebase';
+import ErorrMessage from './CommonComponents/ErorrMessage';
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      flashMessage: false,
+      package: '',
+    };
   }
-  moveToDailyChallengesScreen() {
-    this.props.navigation.navigate('DailyChallenges');
-  }
+
   componentDidMount() {
     this.checkPermission();
     this.createChannel();
     this.notificationListener();
+    this.getPackage();
   }
-  async getToken(){
+  async getPackage() {
+    await fetch('https://app.guessthatreceipt.com/api/getUserCurrentPackage', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState({package: result.data});
+      })
+      .catch((error) => console.log('error', error));
+  }
+  async getToken() {
     const firebaseToken = await firebase.messaging().getToken();
     if (firebaseToken) {
       firebase.messaging().subscribeToTopic('topic');
     }
-  };
-  async checkPermission(){
+  }
+
+  async checkPermission() {
     const permission = await firebase.messaging().hasPermission();
-    if(permission){
-     
-      this.getToken()
-    }
-    else{
-      console.log("nh h====")
+    if (permission) {
+      this.getToken();
+    } else {
+      console.log('nh h====');
     }
   }
   // create channel
@@ -60,7 +75,7 @@ class Home extends Component {
   notificationListener = () => {
     firebase.notifications().onNotification((notification) => {
       // if(Platform.OS == 'android'){
-        console.log(notification)
+      console.log(notification);
       const localNotification = new firebase.notifications.Notification({
         sound: 'default',
         show_in_foreground: true,
@@ -80,7 +95,37 @@ class Home extends Component {
       // }
     });
   };
+  checkPackage() {
+    // fetch('https://app.guessthatreceipt.com/api/getUserCurrentPackage', {
+    //   method: 'POST',
+    //   headers: {
+    //     Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     console.log(result.data)
+    //     if(result.data === "Unauthenticated."){
+    //       console.log("bhkari h sala")
+
+    //        this.setState({flashMessage: true}, () => {
+    //         setTimeout(() => this.closeFlashMessage(), 3000);
+    //       });
+    //     }
+    //     else{
+    this.props.navigation.navigate('DailyChallenges');
+    //   }
+    // })
+    // .catch((error) => console.log('error', error));
+  }
+  closeFlashMessage() {
+    this.setState({
+      flashMessage: false,
+    });
+  }
   render() {
+    console.log(this.state.package);
     return (
       <SafeAreaView style={styles.MainContainer} forceInset={{top: 'always'}}>
         <View style={{flex: 1}}>
@@ -99,7 +144,7 @@ class Home extends Component {
                 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.moveToDailyChallengesScreen();
+                    this.checkPackage();
                   }}>
                   <Text style={styles.challengeViewTextView}>View</Text>
                 </TouchableOpacity>
@@ -280,9 +325,23 @@ class Home extends Component {
                   <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={styles.month}>Active</Text>
                     <View style={{flexDirection: 'row'}}>
-                      <Text style={styles.rupee}>$11.96</Text>
+                      {this.state.package ? (
+                        <Text style={styles.rupee}>
+                          {this.state.package.amount}
+                        </Text>
+                      ) : (
+                        <Text style={styles.rupee}>$11.96</Text>
+                      )}
                     </View>
-                    <Text style={styles.description}>Expiry: 28-sep-2020</Text>
+                    {this.state.package ? (
+                      <Text style={styles.description}>
+                        {this.state.package.exp_date}
+                      </Text>
+                    ) : (
+                      <Text style={styles.description}>
+                        Expiry: 28-sep-2020
+                      </Text>
+                    )}
                   </View>
                   <View style={styles.buttonView}>
                     <TouchableOpacity
@@ -300,6 +359,14 @@ class Home extends Component {
               </View>
             </View>
           </ScrollView>
+          {this.state.flashMessage ? (
+            <View style={styles.flashMessage}>
+              <Text
+                style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+                Phle paisa do
+              </Text>
+            </View>
+          ) : null}
         </View>
       </SafeAreaView>
     );
@@ -425,10 +492,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
+  flashMessage: {
+    position: 'absolute',
+    backgroundColor: '#81b840',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    bottom: 0,
+  },
 });
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
+    user: state,
   };
 };
 export default connect(mapStateToProps, null)(Home);

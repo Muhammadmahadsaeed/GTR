@@ -1,0 +1,269 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
+import RtcEngine, {
+  ChannelProfile,
+  ClientRole,
+  RtcLocalView,
+  RtcRemoteView,
+  VideoRenderMode,
+} from 'react-native-agora';
+import {connect} from 'react-redux';
+const dimensions = {
+  width: Dimensions.get('window').width,
+  height: Dimensions.get('window').height,
+};
+
+function AudienceScreen() {
+  const [toggle, setToggle] = useState(true);
+  const [channelName] = useState('GTR');
+  const [joinSucceed, setJoinSuccess] = useState(false);
+  const [peerIds, setPeerIds] = useState([]);
+  const [token, setToken] = useState('');
+  const AgoraEngine = useRef();
+
+  const init = async () => {
+    AgoraEngine.current = await RtcEngine.create(
+      '253294740cac43e6965ff2e03099c520',
+    );
+    await AgoraEngine.current.enableVideo();
+    await AgoraEngine.current.enableAudio();
+    // Enable the local video preview.
+    await AgoraEngine.current.startPreview();
+    // Set the channel profile as live streaming.
+    await AgoraEngine.current.setChannelProfile(
+      ChannelProfile.LiveBroadcasting,
+    );
+    // Set the usr role as host.
+    await AgoraEngine.current.setClientRole(ClientRole.Audience);
+    AgoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
+      console.log('UserJoined', uid, elapsed);
+      if (peerIds.indexOf(uid) === -1) {
+        setPeerIds([...peerIds, uid])
+      }
+    });
+
+    AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
+      console.log('UserOffline', uid, reason);
+      // setPeerIds(peerIds: peerIds.filter((id) => id !== uid));
+    });
+
+    // If Local user joins RTC channel
+    AgoraEngine.current.addListener(
+      'JoinChannelSuccess',
+      (channel, uid, elapsed) => {
+        console.log('JoinChannelSuccess', channel, uid, elapsed);
+        setJoinSuccess(true);
+        
+      },
+    );
+  };
+
+  useEffect(() => {
+    fetch(
+      'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
+      {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((result) => {
+        setToken(result.key);
+        init().then(() => {
+          setToggle(false);
+          AgoraEngine.current.joinChannel(token, channelName, null, 0);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      return () => {
+        console.log("call hoa")
+        AgoraEngine.current.destroy();
+      };
+  },[]);
+
+  const startCall = async () => {
+    // Join Channel using null token and channel name
+    setToggle(false);
+    
+    await AgoraEngine.current.joinChannel(token, channelName, null, 0);
+  };
+
+  const endCall = async () => {
+    await AgoraEngine.current.leaveChannel();
+    // this.setState(toggle: true, peerIds: [], joinSucceed: false});
+  };
+
+  const _renderVideos = () => {
+    return (
+      <View>
+        {joinSucceed ? (
+          <View style={styles.fullView}>{_renderRemoteVideos()}</View>
+        ) : (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size={60} color="#81b840" />
+            <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const _renderRemoteVideos = () => {
+    return (
+      <FlatList
+        data={peerIds}
+        keyExtractor={(index) => index.toString()}
+        numColumns={2}
+        renderItem={({value, index, array}) => (
+          <RtcRemoteView.SurfaceView
+            key={index}
+            style={styles.remote}
+            uid={value}
+            channelId={channelName}
+            renderMode={VideoRenderMode.Hidden}
+            zOrderMediaOverlay={true}
+          />
+        )}
+      />
+      // <ScrollView
+      //   style={styles.remoteContainer}
+      //   contentContainerStyle={{paddingHorizontal: 2.5}}
+      //   horizontal={false}>
+      //   {peerIds.map((value, index, array) => {
+      //     return (
+      //       <RtcRemoteView.SurfaceView
+      //         key={index}
+      //         style={styles.remote}
+      //         uid={value}
+      //         channelId={this.state.channelName}
+      //         renderMode={VideoRenderMode.Hidden}
+      //         zOrderMediaOverlay={true}
+      //       />
+      //     );
+      //   })}
+      // </ScrollView>
+    );
+  };
+  console.log(token,toggle,peerIds)
+  return (
+    <View style={styles.max}>
+      {_renderVideos()}
+      <View style={styles.bottom}>
+        <View style={styles.icons}>
+          <View>
+            <View style={styles.pauseButton}>
+              {toggle ? (
+                <TouchableOpacity activeOpacity={0.8} onPress={startCall()}>
+                  <Image
+                    source={require('../../../assets/play.png')}
+                    style={styles.pauseButtonImage}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity activeOpacity={0.8} onPress={endCall()}>
+                  <Image
+                    source={require('../../../assets/pause.png')}
+                    style={styles.pauseButtonImage}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  max: {
+    flex: 1,
+  },
+  fullView: {
+    width: dimensions.width,
+    height: '100%',
+    
+  },
+  remoteContainer: {
+    width: '100%',
+    flex: 1,
+    position: 'absolute',
+    marginVertical: 20,
+  },
+  remote: {
+    width: 100,
+    height: 100,
+    marginHorizontal: 5,
+    borderRadius: 100,
+  },
+  noUserText: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: '#0093E9',
+  },
+  //   bottom
+  bottom: {
+    height: 55,
+    backgroundColor: '#81b840',
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
+    justifyContent: 'center',
+  },
+  pauseButton: {
+    height: 60,
+    width: 60,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    bottom: 0,
+    // position: 'absolute',
+  },
+  pauseButtonImage: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+  },
+  icons: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  iconView: {
+    height: 40,
+    width: 50,
+  },
+  cameraImage: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#222',
+  },
+});
+
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+export default connect(mapStateToProps, null)(AudienceScreen);

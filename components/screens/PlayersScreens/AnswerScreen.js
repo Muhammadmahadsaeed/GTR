@@ -11,10 +11,14 @@ import {
   Dimensions,
   ActivityIndicator,
   Animated,
+  Platform,
+  SafeAreaView,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
+
 const height = Dimensions.get('window').height;
+
 class AnswerScreen extends Component {
   constructor() {
     super();
@@ -23,21 +27,20 @@ class AnswerScreen extends Component {
       isloading: false,
       flashMessage: false,
       saveAnswer: false,
+      emptyText: false,
+      onAnswerSubmit: false,
     };
   }
 
   submitAnswer() {
     this.setState({isloading: true});
     if (this.state.answer == '') {
-      this.setState({isloading: false, flashMessage: true}, () => {
-        setTimeout(() => this.closeFlashMessage(), 3000);
-      });
+      this.setState({emptyText: true,isloading: false});
     } else {
       let formData = new FormData();
       const schedule = this.props.navigation.getParam('schedule');
       formData.append('answer', this.state.answer);
       formData.append('schedule_id', schedule.data.id);
-
       fetch('https://app.guessthatreceipt.com/api/gameSaveAnswer', {
         method: 'POST',
         headers: {
@@ -48,10 +51,19 @@ class AnswerScreen extends Component {
       })
         .then((result) => result.json())
         .then((res) => {
-          this.setState({isloading: false})
-          // this.setState({isloading: false, saveAnswer: true}, () => {
-          //   setTimeout(() => this.closeFlashMessage(), 3000);
-          // });
+          fetch('https://app.guessthatreceipt.com/api/getSingleUserRewards', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({isloading: false});
+              console.log(result);
+            })
+            .catch((error) => console.log('error', error));
         })
         .catch((error) => console.log('error', error));
     }
@@ -59,56 +71,75 @@ class AnswerScreen extends Component {
   closeFlashMessage() {
     this.setState({
       flashMessage: false,
-     
     });
+  }
+  onTimeFinished(){
+    console.log('ON_COMPLETE BEFORE RETURN');
   }
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView enabled>
-            <View style={styles.counter}>
-              <CountdownCircleTimer
-                isPlaying
-                duration={10}
-                size={100}
-                colors={[
-                  ['#004777', 0.4],
-                  ['#F7B801', 0.4],
-                  ['#A30000', 0.2],
-                ]}
-                onComplete={() => {
-                  console.log('ON_COMPLETE BEFORE RETURN');
-                }}>
-                {({remainingTime, animatedColor}) => (
-                  <Animated.Text
-                    style={{...styles.remainingTime, color: animatedColor}}>
-                    {remainingTime}
-                  </Animated.Text>
-                )}
-              </CountdownCircleTimer>
-            </View>
-            <View style={styles.seperator}></View>
+          <View style={styles.counter}>
+            <CountdownCircleTimer
+              isPlaying={true}
+              duration={10}
+              size={100}
+              colors={[
+                ['#004777', 0.4],
+                ['#F7B801', 0.4],
+                ['#A30000', 0.2],
+              ]}
+              onComplete={() => {
+                this.onTimeFinished()
+              }}>
+              {({remainingTime, animatedColor}) => (
+                <Animated.Text
+                  style={{...styles.remainingTime, color: animatedColor}}>
+                  {remainingTime}
+                </Animated.Text>
+              )}
+            </CountdownCircleTimer>
+          </View>
+          <View style={styles.seperator}></View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : null}
+            style={{flex: 1}}>
             <View style={styles.answerView}>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={styles.heading}>Guess that receipt</Text>
               </View>
-              <View style={styles.SectionStyle}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="$ 00.00"
-                  placeholderTextColor="#81b840"
-                  keyboardType="numeric"
-                  returnKeyType="next"
-                  onChangeText={(e) => this.setState({answer: e})}
-                />
+              <View
+                style={{
+                  width: '70%',
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                  alignSelf: 'center',
+                }}>
+                <View style={styles.SectionStyle}>
+                  <TextInput
+                    style={styles.inputStyle}
+                    placeholder="$ 00.00"
+                    placeholderTextColor="#81b840"
+                    keyboardType="numeric"
+                    onChangeText={(e) => this.setState({answer: e})}
+                    onFocus={() =>
+                      this.setState({emptyText: false, isloading: false})
+                    }
+                  />
+                </View>
+                {this.state.emptyText ? (
+                  <View style={{paddingVertical: 5}}>
+                    <Text style={styles.erorrText}>Please fill it</Text>
+                  </View>
+                ) : null}
               </View>
+
               <View>
                 <TouchableOpacity
-                  onPress={this.startTimer}
-                  // onPress={() => {
-                  //   this.submitAnswer();
-                  // }}
+                  onPress={() => {
+                    this.submitAnswer();
+                  }}
                   style={styles.buttonStyle}
                   activeOpacity={0.8}>
                   {this.state.isloading ? (
@@ -121,20 +152,28 @@ class AnswerScreen extends Component {
             </View>
           </KeyboardAvoidingView>
         </ScrollView>
-        {this.state.flashMessage == true ? (
-          <View style={styles.flashMessage}>
-            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
-              Please Fill it
-            </Text>
-          </View>
-        ) : null}
-       
-      </View>
+        {/* {this.state.flashMessage == true ? (
+      //     <View style={styles.flashMessage}>
+      //       <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+      //         Please Fill it
+      //       </Text>
+      //     </View>
+      //   ) : null} */}
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#222',
+  },
   container: {
     flex: 1,
   },
@@ -155,11 +194,6 @@ const styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: 'row',
     height: 45,
-    width: '40%',
-    marginTop: 10,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
     justifyContent: 'center',
     alignSelf: 'center',
   },
@@ -217,6 +251,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     bottom: 0,
+  },
+  erorrText: {
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular_0',
+    color: 'red',
   },
 });
 const mapStateToProps = (state) => {

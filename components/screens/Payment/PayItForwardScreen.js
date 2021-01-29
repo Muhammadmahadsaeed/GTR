@@ -40,7 +40,6 @@ class PayItForwardScreen extends Component {
       })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.data)
         this.setState({getPremium: result.data});
       })
       .catch((error) => console.log('error', error));
@@ -66,7 +65,7 @@ class PayItForwardScreen extends Component {
         .then((response) => response.json())
 
         .then((data) => {
-          console.log(data);
+         
           this.setState({showModal: false, status: 'Complete'});
           this.setModalVisible();
         })
