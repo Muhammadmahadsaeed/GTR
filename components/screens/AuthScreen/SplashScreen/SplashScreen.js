@@ -3,8 +3,7 @@ import {
 
   StyleSheet,
   ImageBackground,
-  View, Image,
-  Text, TouchableOpacity,ActivityIndicator
+  View, Image,ActivityIndicator
 
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -83,10 +82,10 @@ const styles = StyleSheet.create({
   },
 });
 
+
 const mapStateToProps = (state) => {
   return {
     user: state,
   };
 };
-
 export default connect(mapStateToProps, null)(SplashScreen);

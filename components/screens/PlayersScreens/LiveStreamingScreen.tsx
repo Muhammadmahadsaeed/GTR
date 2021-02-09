@@ -8,7 +8,8 @@ import {
   Dimensions,
   StyleSheet,
   Image,
-  ActivityIndicator,FlatList
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import RtcEngine, {
   ChannelProfile,
@@ -24,6 +25,7 @@ import {
 } from 'react-navigation';
 import requestCameraAndAudioPermission from '../DailyChallenges/Permission';
 import {connect} from 'react-redux';
+
 const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
@@ -172,7 +174,6 @@ class LiveStreamingScreen extends Component<Props, State> {
   componentWillUnmount() {
     console.log('call hoa');
     this._engine?.destroy();
-    
   }
   moveToGamerOrAnswer() {
     fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
@@ -185,15 +186,16 @@ class LiveStreamingScreen extends Component<Props, State> {
       .then((res) => {
         if (res.data != null) {
           const role = this.props.user.user.user.user_details.role_id;
-          
+
           if (role === '2') {
-            this.props.navigation.navigate('UserAnswerScreen',{schedule: res});
+            this.props.navigation.navigate('UserAnswerScreen', {schedule: res});
           } else {
             this.props.navigation.navigate('PlayerScreen');
           }
         }
       });
   }
+  
   render() {
     return (
       <View style={styles.max}>
@@ -308,8 +310,7 @@ class LiveStreamingScreen extends Component<Props, State> {
     return (
       <ScrollView
         style={styles.remoteContainer}
-        contentContainerStyle={{paddingHorizontal: 2.5}}
-        horizontal={true}>
+        contentContainerStyle={{paddingHorizontal: 2.5}}>
         {peerIds.map((value, index, array) => {
           return (
             <RtcRemoteView.SurfaceView

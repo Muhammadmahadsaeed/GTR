@@ -1,9 +1,10 @@
+import { combineReducers } from 'redux';
 const SET_USER = 'SET_USER';
 const REMOVE_USER = 'REMOVE_USER';
 const initialState = {
   user: null,
 };
-const userReducer = (state = initialState, action) => {
+const user = (state = initialState, action) => {
   
   switch (action.type) {
     case SET_USER: {
@@ -20,4 +21,5 @@ const userReducer = (state = initialState, action) => {
       return state;
   }
 };
-export default userReducer;
+export default combineReducers({ user });
+

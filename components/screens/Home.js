@@ -1,6 +1,4 @@
-//This is an example code for Navigation Drawer with Custom Side bar//
 import React, {Component} from 'react';
-//import react in our code.
 import {
   StyleSheet,
   View,
@@ -12,11 +10,8 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
-
-// import all basic components
 import {strTime, setCurrentDate} from './CommonComponents/DateTime';
-import firebase, {notifications} from 'react-native-firebase';
-import ErorrMessage from './CommonComponents/ErorrMessage';
+import firebase from 'react-native-firebase';
 
 class Home extends Component {
   constructor() {
@@ -49,6 +44,7 @@ class Home extends Component {
   }
   async getToken() {
     const firebaseToken = await firebase.messaging().getToken();
+  
     if (firebaseToken) {
       firebase.messaging().subscribeToTopic('topic');
     }
@@ -75,7 +71,6 @@ class Home extends Component {
   notificationListener = () => {
     firebase.notifications().onNotification((notification) => {
       // if(Platform.OS == 'android'){
-      console.log(notification);
       const localNotification = new firebase.notifications.Notification({
         sound: 'default',
         show_in_foreground: true,
@@ -85,6 +80,7 @@ class Home extends Component {
         .setSubtitle(notification.subtitle)
         .setBody(notification.body)
         .setData(notification.data)
+        
         .android.setChannelId('channelId')
         .android.setPriority(firebase.notifications.Android.Priority.High);
 
@@ -125,7 +121,7 @@ class Home extends Component {
     });
   }
   render() {
-    console.log(this.state.package);
+    
     return (
       <SafeAreaView style={styles.MainContainer} forceInset={{top: 'always'}}>
         <View style={{flex: 1}}>

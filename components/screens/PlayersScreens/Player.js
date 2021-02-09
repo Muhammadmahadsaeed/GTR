@@ -9,8 +9,8 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-
-export default class Players extends Component {
+import {connect} from 'react-redux';
+class Players extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,6 +78,7 @@ export default class Players extends Component {
       ],
     };
   }
+ 
   moveToHome() {
     this.props.navigation.navigate('HomeScreen')
   }
@@ -211,3 +212,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold_0',
   },
 });
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+export default connect(mapStateToProps, null)(Players);

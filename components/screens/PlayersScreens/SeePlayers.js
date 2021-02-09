@@ -10,11 +10,11 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-
-export default class SeePlayers extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+import {connect} from 'react-redux';
+class SeePlayers extends Component {
+  // constructor() {
+  //   super();
+   state = {
       calls: [
         {
           id: 1,
@@ -78,6 +78,23 @@ export default class SeePlayers extends Component {
         },
       ],
     };
+  // }
+  componentDidMount(){
+    
+    fetch('https://app.guessthatreceipt.com/api/gameUsers',{
+      method: 'GET',
+      headers:{
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      }
+    })
+    .then((res) => res.json())
+    .then((result)=>{
+      console.log(result)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
   moveToHome() {
     this.props.navigation.navigate('HomeScreen');
@@ -217,3 +234,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular_0',
   },
 });
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+export default connect(mapStateToProps, null)(SeePlayers);

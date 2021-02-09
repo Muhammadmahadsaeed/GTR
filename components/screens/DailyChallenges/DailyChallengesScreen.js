@@ -69,7 +69,7 @@ class DailyChallengesScreen extends React.Component {
           })
             .then((response) => response.json())
             .then((result) => {
-              console.log(result)
+            
               if (result.message == 'this is previous user so he can join') {
                 
                 this.props.navigation.navigate('LiveScreen',{schedule: this.state.scheduleArray});

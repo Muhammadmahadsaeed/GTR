@@ -1,5 +1,5 @@
 import {createStore, combineReducers,applyMiddleware} from 'redux';
-import userReducer from '../Reducer/reducer';
+import user from '../Reducer/reducer';
 import AsyncStorage from '@react-native-community/async-storage';
 import counter from '../Reducer/countReducer';
 import { persistStore, persistReducer } from 'redux-persist' 
@@ -11,8 +11,8 @@ const persistConfig = { // configuration object for redux-persist
   whitelist: ['userReducer']
 }
 
-const rootReducer = combineReducers({user: userReducer});
-const configureStore = persistReducer(persistConfig, rootReducer); // create a persisted reducer
+// const rootReducer = combineReducers({user: userReducer});
+const configureStore = persistReducer(persistConfig, user); // create a persisted reducer
 
 export default()=>{
   const store = createStore(configureStore, 

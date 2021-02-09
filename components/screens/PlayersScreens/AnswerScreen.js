@@ -16,7 +16,8 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
-
+import FailedModalView from './FailedModal';
+import PassedModalView from './PassedModal';
 const height = Dimensions.get('window').height;
 
 class AnswerScreen extends Component {
@@ -29,11 +30,14 @@ class AnswerScreen extends Component {
       saveAnswer: false,
       emptyText: false,
       onAnswerSubmit: false,
+      startTimer: true
     };
+    this.faildModal = React.createRef();
+    this.passedModal = React.createRef();
   }
 
   submitAnswer() {
-    this.setState({isloading: true});
+    this.setState({isloading: true,startTimer:false});
     if (this.state.answer == '') {
       this.setState({emptyText: true,isloading: false});
     } else {
@@ -61,7 +65,13 @@ class AnswerScreen extends Component {
             .then((response) => response.json())
             .then((result) => {
               this.setState({isloading: false});
-              console.log(result);
+              if(result.data.length){
+               this.setPassedModalVisible()
+              }
+              else{
+                this.setModalVisible()
+              }
+              
             })
             .catch((error) => console.log('error', error));
         })
@@ -74,7 +84,13 @@ class AnswerScreen extends Component {
     });
   }
   onTimeFinished(){
-    console.log('ON_COMPLETE BEFORE RETURN');
+    this.setModalVisible()
+  }
+  setModalVisible() {
+    this.faildModal.show();
+  }
+  setPassedModalVisible() {
+    this.passedModal.show();
   }
   render() {
     return (
@@ -82,7 +98,7 @@ class AnswerScreen extends Component {
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.counter}>
             <CountdownCircleTimer
-              isPlaying={true}
+              isPlaying={this.state.startTimer}
               duration={10}
               size={100}
               colors={[
@@ -152,13 +168,8 @@ class AnswerScreen extends Component {
             </View>
           </KeyboardAvoidingView>
         </ScrollView>
-        {/* {this.state.flashMessage == true ? (
-      //     <View style={styles.flashMessage}>
-      //       <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
-      //         Please Fill it
-      //       </Text>
-      //     </View>
-      //   ) : null} */}
+        <FailedModalView ref={(target) => (this.faildModal = target)} {...this.props} />
+        <PassedModalView ref={(target) => (this.passedModal = target)} {...this.props} />
       </SafeAreaView>
     );
   }
@@ -243,15 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Montserrat-Bold_0',
   },
-  flashMessage: {
-    position: 'absolute',
-    backgroundColor: '#81b840',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    bottom: 0,
-  },
+
   erorrText: {
     fontSize: 15,
     fontFamily: 'Montserrat-Regular_0',
