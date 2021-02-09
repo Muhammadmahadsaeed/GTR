@@ -16,7 +16,7 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
-  VideoRenderMode,
+  VideoRenderMode,AgoraView
 } from 'react-native-agora';
 import {
   NavigationParams,
@@ -72,20 +72,14 @@ class LiveStreamingScreen extends Component<Props, State> {
         fetch(
           'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
           {
-            method: 'GET',
-          },
-        )
+            method: 'GET'
+          })
           .then((res) => res.json())
           .then((result) => {
             this.setState({token: result.key});
             this.init().then(() => {
               this.setState({toggle: false});
-              this._engine?.joinChannel(
-                result.key,
-                this.state.channelName,
-                null,
-                0,
-              );
+              this._engine?.joinChannel(result.key,this.state.channelName,null,0);
             });
           })
           .catch((err) => {
@@ -129,7 +123,7 @@ class LiveStreamingScreen extends Component<Props, State> {
       console.log('JoinChannelSuccess', channel, uid, elapsed);
       // Set state variable to true
       this.setState({
-        joinSucceed: true,
+        joinSucceed: true
       });
     });
   };
@@ -141,8 +135,7 @@ class LiveStreamingScreen extends Component<Props, State> {
       this.state.token,
       this.state.channelName,
       null,
-      0,
-    );
+      0);
   };
 
   endCall = async () => {
@@ -317,6 +310,7 @@ class LiveStreamingScreen extends Component<Props, State> {
               key={index}
               style={styles.remote}
               uid={value}
+              
               channelId={this.state.channelName}
               renderMode={VideoRenderMode.Hidden}
               zOrderMediaOverlay={true}
@@ -357,7 +351,7 @@ const styles = StyleSheet.create({
   remote: {
     width: 150,
     height: 150,
-    marginHorizontal: 2.5,
+    marginHorizontal: 2,
     borderRadius: 50,
     backgroundColor: 'red',
   },

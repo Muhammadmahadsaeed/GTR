@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ScrollView,
+  ActivityIndicator,
   FlatList,
   Dimensions,
 } from 'react-native';
@@ -14,96 +14,43 @@ import {connect} from 'react-redux';
 class SeePlayers extends Component {
   // constructor() {
   //   super();
-   state = {
-      calls: [
-        {
-          id: 1,
-          name: 'Mark Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar7.png',
-        },
-        {
-          id: 2,
-          name: 'Clark Man',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-        },
-        {
-          id: 3,
-          name: 'Jaden Boor',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar5.png',
-        },
-        {
-          id: 4,
-          name: 'Srick Tree',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar4.png',
-        },
-        {
-          id: 5,
-          name: 'Erick Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar3.png',
-        },
-        {
-          id: 6,
-          name: 'Francis Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar2.png',
-        },
-        {
-          id: 8,
-          name: 'Matilde Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-        },
-        {
-          id: 9,
-          name: 'John Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar4.png',
-        },
-        {
-          id: 10,
-          name: 'Fermod Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar7.png',
-        },
-        {
-          id: 11,
-          name: 'Danny Doe',
-          status: 'active',
-          image: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-        },
-      ],
-    };
+  state = {
+    users: [],
+    isLoading: true,
+  };
   // }
-  componentDidMount(){
-    
-    fetch('https://app.guessthatreceipt.com/api/gameUsers',{
-      method: 'GET',
-      headers:{
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
-      }
-    })
-    .then((res) => res.json())
-    .then((result)=>{
-      console.log(result)
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+  componentDidMount() {
+    fetch(
+      'https://app.guessthatreceipt.com/api/gameAnwerList?reward=reward&status=expired',
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+        },
+      },
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({isLoading: false, users: result.data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   moveToHome() {
     this.props.navigation.navigate('HomeScreen');
   }
   renderItem = ({item}) => {
+    console.log(item.user);
     return (
       <TouchableOpacity>
         <View style={styles.row}>
-          <Image source={{uri: item.image}} style={styles.pic} />
+          <Image
+            source={{
+              uri: `https://app.guessthatreceipt.com/storage/${item.user.avatar}`,
+            }}
+            style={styles.pic}
+          />
           <View
             style={{
               flex: 1,
@@ -115,7 +62,7 @@ class SeePlayers extends Component {
                 style={styles.nameTxt}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {item.name}
+                {item.user.name}
               </Text>
             </View>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -151,10 +98,15 @@ class SeePlayers extends Component {
         <View style={styles.heading}>
           <Text style={styles.headingText}>Gamers</Text>
         </View>
+        {this.state.isLoading && (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size={60} color="#81b840" />
+          </View>
+        )}
         <FlatList
           style={{width: '100%', marginBottom: 20}}
           extraData={this.state}
-          data={this.state.calls}
+          data={this.state.users}
           keyExtractor={(item) => {
             return item.id;
           }}
@@ -232,6 +184,11 @@ const styles = StyleSheet.create({
     color: '#777',
     fontSize: 13,
     fontFamily: 'Montserrat-Regular_0',
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 const mapStateToProps = (state) => {
