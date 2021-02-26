@@ -29,26 +29,26 @@
       </activity>
       <!-- foreground notification -->
       <!-- Change the value to true to enable pop-up for in foreground (remote-only, for local use ignoreInForeground) -->
-        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground" android:value="true"/>
+        <!-- <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground" android:value="true"/> -->
         <!-- Change the resource name to your App's accent color - or any other color you want -->
         <!-- <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@color/{black}"/> -->
         <!-- or @android:color/{name} to use a standard color -->
         <!-- change notification icon -->
          <!-- <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap-hdpi/ic_launcher" /> -->
 
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
+        <!-- <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
+        </receiver> -->
         <!-- firebase message services -->
-        <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
+        <!-- <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
         <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
           <intent-filter>
             <action android:name="com.google.firebase.MESSAGING_EVENT" />
           </intent-filter>
-        </service>
+        </service> -->
         <!-- <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService" android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

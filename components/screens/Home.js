@@ -11,7 +11,7 @@ import {
 import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
 import {strTime, setCurrentDate} from './CommonComponents/DateTime';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
 class Home extends Component {
   constructor() {
@@ -23,9 +23,9 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.checkPermission();
-    this.createChannel();
-    this.notificationListener();
+    // this.checkPermission();
+    // this.createChannel();
+    // this.notificationListener();
     this.getPackage();
   }
   async getPackage() {
@@ -42,55 +42,55 @@ class Home extends Component {
       })
       .catch((error) => console.log('error', error));
   }
-  async getToken() {
-    const firebaseToken = await firebase.messaging().getToken();
+  // async getToken() {
+  //   const firebaseToken = await firebase.messaging().getToken();
   
-    if (firebaseToken) {
-      firebase.messaging().subscribeToTopic('topic');
-    }
-  }
+  //   if (firebaseToken) {
+  //     firebase.messaging().subscribeToTopic('topic');
+  //   }
+  // }
 
-  async checkPermission() {
-    const permission = await firebase.messaging().hasPermission();
-    if (permission) {
-      this.getToken();
-    } else {
-      console.log('nh h====');
-    }
-  }
+  // async checkPermission() {
+  //   const permission = await firebase.messaging().hasPermission();
+  //   if (permission) {
+  //     this.getToken();
+  //   } else {
+  //     console.log('nh h====');
+  //   }
+  // }
   // create channel
-  createChannel = () => {
-    const channel = new firebase.notifications.Android.Channel(
-      'channelId',
-      'channelName',
-      firebase.notifications.Android.Importance.Max,
-    ).setDescription('Description');
-    firebase.notifications().android.createChannel(channel);
-  };
+  // createChannel = () => {
+  //   const channel = new firebase.notifications.Android.Channel(
+  //     'channelId',
+  //     'channelName',
+  //     firebase.notifications.Android.Importance.Max,
+  //   ).setDescription('Description');
+  //   firebase.notifications().android.createChannel(channel);
+  // };
   //foreground notification
-  notificationListener = () => {
-    firebase.notifications().onNotification((notification) => {
-      // if(Platform.OS == 'android'){
-      const localNotification = new firebase.notifications.Notification({
-        sound: 'default',
-        show_in_foreground: true,
-      })
-        .setNotificationId(notification.notificationId)
-        .setTitle(notification.title)
-        .setSubtitle(notification.subtitle)
-        .setBody(notification.body)
-        .setData(notification.data)
+  // notificationListener = () => {
+  //   firebase.notifications().onNotification((notification) => {
+  //     // if(Platform.OS == 'android'){
+  //     const localNotification = new firebase.notifications.Notification({
+  //       sound: 'default',
+  //       show_in_foreground: true,
+  //     })
+  //       .setNotificationId(notification.notificationId)
+  //       .setTitle(notification.title)
+  //       .setSubtitle(notification.subtitle)
+  //       .setBody(notification.body)
+  //       .setData(notification.data)
         
-        .android.setChannelId('channelId')
-        .android.setPriority(firebase.notifications.Android.Priority.High);
+  //       .android.setChannelId('channelId')
+  //       .android.setPriority(firebase.notifications.Android.Priority.High);
 
-      firebase
-        .notifications()
-        .displayNotification(localNotification)
-        .catch((err) => console.log(err));
-      // }
-    });
-  };
+  //     firebase
+  //       .notifications()
+  //       .displayNotification(localNotification)
+  //       .catch((err) => console.log(err));
+  //     // }
+  //   });
+  // };
   checkPackage() {
     // fetch('https://app.guessthatreceipt.com/api/getUserCurrentPackage', {
     //   method: 'POST',
