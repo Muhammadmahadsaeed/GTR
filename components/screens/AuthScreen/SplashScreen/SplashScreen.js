@@ -17,7 +17,6 @@ class SplashScreen extends React.Component {
     }
   }
   componentDidMount() {
-    console.log(this.props.user)
     setTimeout( () => {
        this.setTimePassed();
     },2000);
@@ -25,12 +24,19 @@ class SplashScreen extends React.Component {
   }
   setTimePassed() {
      this.setState({loading : false}) 
-     this.props.navigation.navigate('AuthScreen')
+     
+     if(this.props.user.user.user !== null){
+      this.props.navigation.navigate('Drawer');
+     }
+     else{
+      this.props.navigation.navigate('AuthScreen')
+     }
+     
   }
   render() {
     return (
 
-      <View style={styles.container} >
+      <View style={styles.container}>
         <ImageBackground style={styles.backgroundImage} source={require('../../../../assets/bg.png')}>
 
           <View style={styles.logoContainer}>

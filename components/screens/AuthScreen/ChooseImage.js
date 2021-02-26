@@ -85,6 +85,7 @@ class ChooseImage extends Component {
         alert(response.customButton);
       } else {
         const source = {uri: response};
+        console.log(response)
         this.setState({
           imgUri: source,
           filePath: response,
@@ -114,7 +115,7 @@ class ChooseImage extends Component {
     let pwd = this.props.navigation.getParam('pwd');
     this.setState({isLoading: true});
     const params = new URLSearchParams();
-    params.append('avatar',`data:image/jpeg;base64,${this.state.fileData}`);
+    params.append('avatar',`data:image/jpg;base64,${this.state.fileData}`);
 
     fetch('https://app.guessthatreceipt.com/api/users/update', {
       method: 'PUT',
@@ -145,7 +146,7 @@ class ChooseImage extends Component {
             this.setState({isloading: false});
              
              this.props.store_user(data.data);
-            this.props.navigation.navigate('payitforward');
+            // this.props.navigation.navigate('payitforward');
           })
           .catch((error) => {
             this.setState({isloading: false, showInvalidErorr: true});

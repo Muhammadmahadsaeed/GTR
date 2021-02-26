@@ -10,6 +10,7 @@ import {
   Image,
   ActivityIndicator,
   FlatList,
+  ListRenderItem,
 } from 'react-native';
 import RtcEngine, {
   ChannelProfile,
@@ -18,6 +19,8 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
+
+import requestCameraAndAudioPermission from '../DailyChallenges/Permission';
 import {connect} from 'react-redux';
 const dimensions = {
   width: Dimensions.get('window').width,
@@ -58,28 +61,32 @@ class AudienceScreen extends Component<Props, State> {
   }
 
   componentDidMount() {
-    fetch(
-      'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
-      {
-        method: 'GET',
-      },
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        this.setState({token: result.key});
-        this.init().then(() => {
-          this.setState({toggle: false});
-          this._engine?.joinChannel(
-            this.state.token,
-            this.state.channelName,
-            null,
-            0,
-          );
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission().then(() => {
+        fetch(
+          'http://pombopaypal.guessthatreceipt.com/api/DemoServer/rtcToken?channelName=GTR',
+          {
+            method: 'GET',
+          },
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            this.setState({token: result.key});
+            this.init().then(() => {
+              this.setState({toggle: false});
+              this._engine?.joinChannel(
+                this.state.token,
+                this.state.channelName,
+                null,
+                0,
+              );
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
+    }
   }
 
   init = async () => {
@@ -119,9 +126,7 @@ class AudienceScreen extends Component<Props, State> {
     this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.log('JoinChannelSuccess', channel, uid, elapsed);
       // Set state variable to true
-      this.setState({
-        joinSucceed: true,
-      });
+      this.setState({joinSucceed: true});
     });
   };
 
@@ -180,54 +185,32 @@ class AudienceScreen extends Component<Props, State> {
   }
 
   _renderVideos = () => {
-    const {joinSucceed} = this.state;
-
+    const {joinSucceed, peerIds} = this.state;
+    console.log(peerIds);
     return joinSucceed ? (
-      <View style={styles.fullView}>{this._renderRemoteVideos()}</View>
+      <View style={styles.fullView}>
+        <FlatList
+          data={peerIds}
+          keyExtractor={(index) => index.toString()}
+          numColumns={5}
+          renderItem={({item}) => {
+            return (
+              <RtcRemoteView.SurfaceView
+                style={styles.remote}
+                uid={item}
+                channelId={this.state.channelName}
+                renderMode={VideoRenderMode.Hidden}
+                zOrderMediaOverlay={true}
+              />
+            );
+          }}
+        />
+      </View>
     ) : (
       <View style={styles.activityIndicator}>
         <ActivityIndicator size={60} color="#81b840" />
         <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
       </View>
-    );
-  };
-
-  _renderRemoteVideos = () => {
-    const {peerIds} = this.state;
-
-    return (
-      <FlatList
-        data={peerIds}
-        keyExtractor={(index) => index.toString()}
-        numColumns={2}
-        renderItem={({value, index, array}) => (
-          <RtcRemoteView.SurfaceView
-            key={index}
-            style={styles.remote}
-            uid={value}
-            channelId={this.state.channelName}
-            renderMode={VideoRenderMode.Hidden}
-            zOrderMediaOverlay={true}
-          />
-        )}
-      />
-      // <ScrollView
-      //   style={styles.remoteContainer}
-      //   contentContainerStyle={{paddingHorizontal: 2.5}}
-      //   horizontal={false}>
-      //   {peerIds.map((value, index, array) => {
-      //     return (
-      //       <RtcRemoteView.SurfaceView
-      //         key={index}
-      //         style={styles.remote}
-      //         uid={value}
-      //         channelId={this.state.channelName}
-      //         renderMode={VideoRenderMode.Hidden}
-      //         zOrderMediaOverlay={true}
-      //       />
-      //     );
-      //   })}
-      // </ScrollView>
     );
   };
 }

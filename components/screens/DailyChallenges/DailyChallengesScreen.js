@@ -21,13 +21,27 @@ class DailyChallengesScreen extends React.Component {
     super();
     this.state = {
       schedule: false,
-      scheduleArray: [],
+      scheduleArray: '',
       isloading: false,
       flashMessage: false,
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((res) => {
+        this.setState({scheduleArray: res});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   sendInivitaion() {
     fetch(
@@ -41,49 +55,42 @@ class DailyChallengesScreen extends React.Component {
     //
   }
   goToLive() {
-    this.props.navigation.navigate('LiveScreen',{schedule: this.state.scheduleArray});
+    this.props.navigation.navigate('LiveScreen');
   }
   moveToHostOrAudienceScreen() {
+    const res = this.state.scheduleArray
+    
     this.setState({isloading: true});
-    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
-      },
-    })
-      .then((result) => result.json())
-      .then((res) => {
-        if (res.data != null) {
-
-          this.setState({isloading: false,scheduleArray: res});
-          const params = new URLSearchParams();
-          params.append('schedule_id', `${res.data.id}`);
-
-          fetch('https://app.guessthatreceipt.com/api/gameLiveEntry', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${this.props.user.user.user.access_token}`,
-              'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-            },
-            body: params.toString(),
-          })
-            .then((response) => response.json())
-            .then((result) => {
-            
-              if (result.message == 'this is previous user so he can join') {
-                
-                this.props.navigation.navigate('LiveScreen',{schedule: this.state.scheduleArray});
-              } else {
-                this.props.navigation.navigate('Audience');
-              }
-            })
-            .catch((error) => console.log('error', error));
-        } else {
-          this.setState({isloading: false, flashMessage: true}, () => {
-            setTimeout(() => this.closeFlashMessage(), 3000);
-          });
-        }
+    if (res.data !== null) {
+      
+      this.setState({isloading: false});
+      const params = new URLSearchParams();
+      params.append('schedule_id', `${res.data.id}`);
+      fetch('https://app.guessthatreceipt.com/api/gameLiveEntry', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
+        body: params.toString(),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.message == 'this is previous user so he can join') {
+            this.props.navigation.navigate('LiveScreen', {
+              schedule: res,
+            });
+          } else {
+            this.props.navigation.navigate('Audience');
+          }
+        })
+        .catch((error) => console.log('error', error));
+    } else {
+      
+      this.setState({isloading: false, flashMessage: true}, () => {
+        setTimeout(() => this.closeFlashMessage(), 3000);
       });
+    }
   }
   closeFlashMessage() {
     this.setState({

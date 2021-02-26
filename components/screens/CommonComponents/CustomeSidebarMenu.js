@@ -31,10 +31,10 @@ class CustomSidebarMenu extends Component {
     };
   }
   componentDidMount() {
-   
     this.setState({user: this.props.user.user.user_details});
   }
   logOut() {
+    
     let formdata = new FormData();
     formdata.append('status', 'off');
     fetch('https://app.guessthatreceipt.com/api/userOnOff', {
@@ -49,6 +49,7 @@ class CustomSidebarMenu extends Component {
 
       .then((data) => {
         this.props.navigation.navigate('Login');
+        this.props.removeUser(null);
       })
       .catch((err) => {
         console.log(err);
@@ -56,7 +57,7 @@ class CustomSidebarMenu extends Component {
   }
   render() {
     const {user} = this.state;
-   
+
     return (
       <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
@@ -191,4 +192,10 @@ const mapStateToProps = (state) => {
     user: state.user,
   };
 };
-export default connect(mapStateToProps, null)(CustomSidebarMenu);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeUser: (RemoveUser) => 
+      dispatch({type: 'REMOVE_USER', payload: RemoveUser}),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CustomSidebarMenu);
