@@ -18,6 +18,7 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
+
 import {
   NavigationParams,
   NavigationScreenProp,
@@ -133,7 +134,6 @@ class LiveStreamingScreen extends Component<Props, State> {
           peerIds: [...peerIds, uid],
         });
       }
-      this.getJoinedUsers()
     });
 
     this._engine.addListener('UserOffline', (uid, reason) => {
@@ -150,7 +150,6 @@ class LiveStreamingScreen extends Component<Props, State> {
       console.log('JoinChannelSuccess', channel, uid, elapsed);
       // Set state variable to true
       this.setState({joinSucceed: true});
-      this.getJoinedUsers();
     });
   };
 
@@ -163,15 +162,16 @@ class LiveStreamingScreen extends Component<Props, State> {
       null,
       0,
     );
-    this.getJoinedUsers();
   };
 
   endCall = async () => {
     const role = this.props.user.user.user.user_details.role_id;
     if (role === '2') {
+      console.log('user');
       await this._engine?.leaveChannel();
       this.setState({toggle: true, peerIds: [], joinSucceed: false});
     } else {
+      console.log('user nh h');
       const schedule = this.state.schedule;
       const params = new URLSearchParams();
       params.append('schedule_id', schedule.id);
@@ -186,6 +186,7 @@ class LiveStreamingScreen extends Component<Props, State> {
       })
         .then((result) => result.json())
         .then((res) => {
+          // clearTimeout(this.timer);
           this._engine?.leaveChannel();
           this.setState({toggle: true, peerIds: [], joinSucceed: false});
         })
@@ -219,8 +220,9 @@ class LiveStreamingScreen extends Component<Props, State> {
   moveToGamer() {
     this.props.navigation.navigate('PlayerScreen');
   }
-  getJoinedUsers() {
-    fetch('https://app.guessthatreceipt.com/api/gameUsers', {
+
+  async moveToAnswer() {
+    fetch('https://app.guessthatreceipt.com/api/getGameSchedule', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.props.user.user.user.access_token}`,
@@ -228,21 +230,19 @@ class LiveStreamingScreen extends Component<Props, State> {
     })
       .then((result) => result.json())
       .then((res) => {
-        console.log('users join===========', res.data.length);
-        // this.setState({schedule: res.data});
+        console.log(res.data);
+        if (res.data.is_expired === 'active') {
+          console.log('abhi nahi');
+        } else {
+          this.props.navigation.navigate('UserAnswerScreen', {
+            schedule: res,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
-  moveToAnswer() {
-    this.getSchedule();
-    console.log('schedule====');
-    if (this.state.schedule.is_expired === 'active') {
-      console.log('abhi nahi');
-    } else {
-      console.log('hogya');
-    }
+
     // const params = new URLSearchParams();
     // params.append('schedule_id', '');
     // params.append('status', '');
@@ -267,7 +267,27 @@ class LiveStreamingScreen extends Component<Props, State> {
     //         }
     //   });
   }
+  getJoinedUsers() {
+    fetch('https://app.guessthatreceipt.com/api/gameUsers', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((res) => {
+        console.log('users join===========', res.data.length);
+        // this.setState({schedule: res.data});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  // timer: ReturnType<typeof setInterval> = setInterval(() => {
+  //   this.getJoinedUsers();
+  // }, 2000);
   render() {
+    
     const role = this.props.user.user.user.user_details.role_id;
     return (
       <View style={styles.max}>

@@ -65,12 +65,13 @@ class AnswerScreen extends Component {
             .then((response) => response.json())
             .then((result) => {
               this.setState({isloading: false});
-              if(result.data.length){
-               this.setPassedModalVisible()
-              }
-              else{
-                this.setModalVisible()
-              }
+              console.log(result)
+              // if(result.data.length){
+              //  this.setPassedModalVisible()
+              // }
+              // else{
+              //   this.setModalVisible()
+              // }
               
             })
             .catch((error) => console.log('error', error));

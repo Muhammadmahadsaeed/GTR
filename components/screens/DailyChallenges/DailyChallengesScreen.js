@@ -58,11 +58,10 @@ class DailyChallengesScreen extends React.Component {
     this.props.navigation.navigate('LiveScreen');
   }
   moveToHostOrAudienceScreen() {
-    const res = this.state.scheduleArray
-    
+    const res = this.state.scheduleArray;
+
     this.setState({isloading: true});
-    if (res.data !== null) {
-      
+    if (res.data.is_expired === 'active') {
       this.setState({isloading: false});
       const params = new URLSearchParams();
       params.append('schedule_id', `${res.data.id}`);
@@ -76,17 +75,18 @@ class DailyChallengesScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((result) => {
-          if (result.message == 'this is previous user so he can join') {
+          if (result.message === 'Successfully' || result.message === 'this is previous user so he can join') {
+           
             this.props.navigation.navigate('LiveScreen', {
               schedule: res,
             });
           } else {
+           
             this.props.navigation.navigate('Audience');
           }
         })
         .catch((error) => console.log('error', error));
     } else {
-      
       this.setState({isloading: false, flashMessage: true}, () => {
         setTimeout(() => this.closeFlashMessage(), 3000);
       });

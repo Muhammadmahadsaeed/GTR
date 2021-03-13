@@ -150,8 +150,10 @@ class AudienceScreen extends Component<Props, State> {
     console.log('call hoa');
     this._engine?.destroy();
   }
-
+ 
+ 
   render() {
+ 
     return (
       <View style={styles.max}>
         {this._renderVideos()}

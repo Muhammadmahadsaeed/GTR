@@ -195,6 +195,7 @@ class Premium extends Component {
             />
           )}
         </View>
+        
         <ModalView
           ref={(target) => (this.modalRef = target)}
           text={this.state.modalText}
