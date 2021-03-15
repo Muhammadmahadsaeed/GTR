@@ -31,6 +31,7 @@ class SeePlayers extends Component {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log(result)
         this.setState({isLoading: false, users: result.data});
       })
       .catch((err) => {
