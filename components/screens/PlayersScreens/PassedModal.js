@@ -66,7 +66,7 @@ class PassedModalView extends React.Component {
                     fontSize: 25,
                     fontFamily: 'Montserrat-Bold_0',
                   }}>
-                 Congratulations!
+                 Thank You!
                 </Text>
                 <View style={{marginTop: 10}}>
                   <Text
@@ -74,7 +74,7 @@ class PassedModalView extends React.Component {
                       textAlign: 'center',
                       fontFamily: 'Montserrat-Regular_0',
                     }}>
-                    Right answer you are win
+                    Your answer has been submited
                   </Text>
                 </View>
               </View>

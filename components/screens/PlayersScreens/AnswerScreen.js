@@ -30,16 +30,16 @@ class AnswerScreen extends Component {
       saveAnswer: false,
       emptyText: false,
       onAnswerSubmit: false,
-      startTimer: true
+      startTimer: true,
     };
     this.faildModal = React.createRef();
     this.passedModal = React.createRef();
   }
 
   submitAnswer() {
-    this.setState({isloading: true,startTimer:false});
+    this.setState({isloading: true, startTimer: false});
     if (this.state.answer == '') {
-      this.setState({emptyText: true,isloading: false});
+      this.setState({emptyText: true, isloading: false});
     } else {
       let formData = new FormData();
       const schedule = this.props.navigation.getParam('schedule');
@@ -65,14 +65,10 @@ class AnswerScreen extends Component {
             .then((response) => response.json())
             .then((result) => {
               this.setState({isloading: false});
-              console.log(result)
-              // if(result.data.length){
-              //  this.setPassedModalVisible()
-              // }
-              // else{
-              //   this.setModalVisible()
-              // }
-              
+
+              if (result.status_code === 200) {
+                this.setPassedModalVisible();
+              }
             })
             .catch((error) => console.log('error', error));
         })
@@ -84,8 +80,8 @@ class AnswerScreen extends Component {
       flashMessage: false,
     });
   }
-  onTimeFinished(){
-    this.setModalVisible()
+  onTimeFinished() {
+    this.setModalVisible();
   }
   setModalVisible() {
     this.faildModal.show();
@@ -108,7 +104,7 @@ class AnswerScreen extends Component {
                 ['#A30000', 0.2],
               ]}
               onComplete={() => {
-                this.onTimeFinished()
+                this.onTimeFinished();
               }}>
               {({remainingTime, animatedColor}) => (
                 <Animated.Text
@@ -169,8 +165,14 @@ class AnswerScreen extends Component {
             </View>
           </KeyboardAvoidingView>
         </ScrollView>
-        <FailedModalView ref={(target) => (this.faildModal = target)} {...this.props} />
-        <PassedModalView ref={(target) => (this.passedModal = target)} {...this.props} />
+        <FailedModalView
+          ref={(target) => (this.faildModal = target)}
+          {...this.props}
+        />
+        <PassedModalView
+          ref={(target) => (this.passedModal = target)}
+          {...this.props}
+        />
       </SafeAreaView>
     );
   }

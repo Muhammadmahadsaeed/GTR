@@ -16,7 +16,7 @@ class Winner extends Component {
   //   super();
   state = {
     users: [],
-    isLoading: true
+    isLoading: true,
   };
   // }
   componentDidMount() {
@@ -31,64 +31,60 @@ class Winner extends Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        this.setState({isLoading: false,users: result.data});
+        this.setState({isLoading: false, users: result.data});
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
+  moveToHome() {
+    this.props.navigation.navigate('HomeScreen');
+  }
   renderItem = ({item}) => {
-    console.log(item.user);
     return (
-      <TouchableOpacity>
-        <View style={styles.row}>
-          <Image
-            source={{
-              uri: `https://app.guessthatreceipt.com/storage/${item.user.avatar}`,
-            }}
-            style={styles.pic}
-          />
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <View style={styles.nameContainer}>
+      <View style={styles.row}>
+        <Image
+          source={{
+            uri: `https://app.guessthatreceipt.com/storage/${item.user.avatar}`,
+          }}
+          style={styles.pic}
+        />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">
+              {item.user.first_name} {item.user.last_name}
+            </Text>
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.mblTxt}>Answer</Text>
+            <View
+              style={{
+                backgroundColor: '#81b840',
+                borderRadius: 50,
+                paddingTop: 5,
+                paddingBottom: 5,
+                paddingLeft: 30,
+                paddingRight: 30,
+              }}>
               <Text
-                style={styles.nameTxt}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                {item.user.name}
+                style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
+                {item.answer}
               </Text>
             </View>
-            {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.mblTxt}>Answer</Text>
-              <View
-                style={{
-                  backgroundColor: '#81b840',
-                  borderRadius: 50,
-                  paddingTop: 5,
-                  paddingBottom: 5,
-                  paddingLeft: 30,
-                  paddingRight: 30,
-                }}>
-                <Text
-                  style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
-                  $500
-                </Text>
-              </View>
-            </View> */}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
-
+ 
   render() {
     return (
-      <View style={{flex: 1, alignItems: 'center'}}>
+      <View style={{flex: 1}}>
         <Image
           style={styles.backgroundImage}
           source={require('../../assets/bg1.png')}
@@ -96,20 +92,18 @@ class Winner extends Component {
         <View style={styles.heading}>
           <Text style={styles.headingText}>Winners</Text>
         </View>
-        {this.state.isLoading &&
+        {this.state.isLoading && (
           <View style={styles.activityIndicator}>
             <ActivityIndicator size={60} color="#81b840" />
           </View>
-  }
-          <FlatList
-            style={{width: '100%', marginBottom: 20}}
-            extraData={this.state}
-            data={this.state.users}
-            keyExtractor={(item) => {
-              return item.id;
-            }}
-            renderItem={this.renderItem}
-          />
+        )}
+        <FlatList
+          style={{ height: '20%'}}
+          extraData={this.state}
+          data={this.state.users}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={this.renderItem}
+        />
        
       </View>
     );
@@ -161,8 +155,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   pic: {
     borderRadius: 30,
@@ -189,6 +183,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
 });
 const mapStateToProps = (state) => {
   return {

@@ -514,6 +514,7 @@ const DrawerNavigator = createDrawerNavigator(
 const RootNavigator = createSwitchNavigator({
   SplashScreen: AuthScreens.SplashScreen,
   AuthScreen: AuthNavigator,
+  Reset: AuthScreens.ResetPassword,
   RegisterScreen: {
     screen: Register_StackNavigator,
   },

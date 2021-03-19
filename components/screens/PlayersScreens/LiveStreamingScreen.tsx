@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   Platform,
-  ScrollView,
+  ToastAndroid,
   Text,
   TouchableOpacity,
   View,
@@ -230,9 +230,9 @@ class LiveStreamingScreen extends Component<Props, State> {
     })
       .then((result) => result.json())
       .then((res) => {
-        console.log(res.data);
         if (res.data.is_expired === 'active') {
-          console.log('abhi nahi');
+         
+          ToastAndroid.show('Please check your email', ToastAndroid.SHORT)
         } else {
           this.props.navigation.navigate('UserAnswerScreen', {
             schedule: res,

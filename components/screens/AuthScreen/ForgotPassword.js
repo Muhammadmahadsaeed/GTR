@@ -11,44 +11,44 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
-  ImageBackground,
+  ToastAndroid,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
 class ForgotPassword extends React.Component {
   constructor() {
     super();
     this.state = {
-     
       email: '',
-    }
+      error: '',
+      isloading: false,
+    };
   }
 
   moveToResetPassword() {
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-
-    var raw = JSON.stringify({email: this.state.email});
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
+    this.setState({isloading: true});
     fetch(
-      'https://gameshowapp.herokuapp.com/v1/backend/send/email',
-      requestOptions,
+      `https://app.guessthatreceipt.com/api/forgetPassword?email=${this.state.email}`,
+      {
+        method: 'GET',
+      },
     )
       .then((response) => response.json())
       .then((result) => {
-       if(result.data.send){
-        this.props.navigation.navigate('ResetPassword')
-       }
+        if (result.status) {
+          ToastAndroid.show('Please check your email', ToastAndroid.SHORT)
+          this.setState({isloading: false});
+          this.props.navigation.navigate('Reset')
+        } else {
+          this.setState({isloading: false});
+          this.setState({error: 'Invalid email'});
+        }
       })
-      .catch((error) => console.log('error', error));
-    
+      .catch((error) => {
+        this.setState({isloading: false});
+        console.log('error', error);
+      });
   }
 
   render() {
@@ -105,7 +105,14 @@ class ForgotPassword extends React.Component {
                 keyboardType="email-address"
                 returnKeyType="next"
                 onChangeText={(email) => this.setState({email: email})}
+                onFocus={() => this.setState({error: ''})}
               />
+            </View>
+
+            <View style={{width: '70%', alignSelf: 'center'}}>
+              <Text style={{color: 'red', fontFamily: 'Montserrat-Regular_0'}}>
+                {this.state.error}
+              </Text>
             </View>
 
             <TouchableOpacity
@@ -114,7 +121,11 @@ class ForgotPassword extends React.Component {
               }}
               style={styles.buttonStyle}
               activeOpacity={0.5}>
-              <Text style={styles.buttonTextStyle}>Send</Text>
+              {this.state.isloading ? (
+                <ActivityIndicator size="large" color="white" />
+              ) : (
+                <Text style={styles.buttonTextStyle}>Send</Text>
+              )}
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </ScrollView>

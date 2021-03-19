@@ -31,7 +31,6 @@ class SeePlayers extends Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
         this.setState({isLoading: false, users: result.data});
       })
       .catch((err) => {
@@ -42,56 +41,73 @@ class SeePlayers extends Component {
     this.props.navigation.navigate('HomeScreen');
   }
   renderItem = ({item}) => {
-    console.log(item.user);
     return (
-      <TouchableOpacity>
-        <View style={styles.row}>
-          <Image
-            source={{
-              uri: `https://app.guessthatreceipt.com/storage/${item.user.avatar}`,
-            }}
-            style={styles.pic}
-          />
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <View style={styles.nameContainer}>
+      <View style={styles.row}>
+        <Image
+          source={{
+            uri: `https://app.guessthatreceipt.com/storage/${item.user.avatar}`,
+          }}
+          style={styles.pic}
+        />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">
+              {item.user.first_name} {item.user.last_name}
+            </Text>
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.mblTxt}>Answer</Text>
+            <View
+              style={{
+                backgroundColor: '#81b840',
+                borderRadius: 50,
+                paddingTop: 5,
+                paddingBottom: 5,
+                paddingLeft: 30,
+                paddingRight: 30,
+              }}>
               <Text
-                style={styles.nameTxt}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                {item.user.name}
+                style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
+                {item.answer}
               </Text>
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.mblTxt}>Answer</Text>
-              <View
-                style={{
-                  backgroundColor: '#81b840',
-                  borderRadius: 50,
-                  paddingTop: 5,
-                  paddingBottom: 5,
-                  paddingLeft: 30,
-                  paddingRight: 30,
-                }}>
-                <Text
-                  style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
-                  $500
-                </Text>
-              </View>
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
-
+  sendRewars = () => {
+    const {users} = this.state;
+   
+    let rewards = users.map((item) => {
+      let reward = {
+        game_id: item.game_id,
+        user_id: item.user_id,
+        rewardAmount: item.rewardAmount,
+      };
+      return reward;
+    });
+ 
+    fetch('https://app.guessthatreceipt.com/api/saveRewardsAdmin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+      },
+      body: JSON.stringify({rewards}),
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+  };
   render() {
     return (
-      <View style={{flex: 1, alignItems: 'center'}}>
+      <View style={{flex: 1}}>
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg1.png')}
@@ -105,14 +121,17 @@ class SeePlayers extends Component {
           </View>
         )}
         <FlatList
-          style={{width: '100%', marginBottom: 20}}
+          style={{height: '20%'}}
           extraData={this.state}
           data={this.state.users}
-          keyExtractor={(item) => {
-            return item.id;
-          }}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderItem}
         />
+        <TouchableOpacity style={styles.bottomView} onPress={this.sendRewars}>
+          <Text style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
+            Send Rewards
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -163,8 +182,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   pic: {
     borderRadius: 30,
@@ -190,6 +209,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  bottomView: {
+    width: 150,
+    height: 50,
+    backgroundColor: '#81b840',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    borderRadius: 100,
   },
 });
 const mapStateToProps = (state) => {
