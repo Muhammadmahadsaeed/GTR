@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   seperator: {height: 50},
   heading: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
     fontSize: 25,
   },
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     borderBottomWidth: 2,
     borderColor: '#81b840',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
   },
   answerView: {
@@ -255,12 +255,12 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
 
   erorrText: {
     fontSize: 15,
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: 'red',
   },
 });

@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
 });
 const mapStateToProps = (state) => {

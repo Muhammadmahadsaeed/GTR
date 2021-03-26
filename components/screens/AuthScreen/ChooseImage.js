@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'white',
     fontSize: 14,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     marginLeft: 10,
   },
   imageIconStyle: {

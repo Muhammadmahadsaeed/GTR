@@ -77,7 +77,7 @@ class CustomSidebarMenu extends Component {
             }}>
             <Text
               style={{
-                fontFamily: 'Montserrat-Bold_0',
+                fontFamily: 'Montserrat-Bold',
                 fontSize: 22,
               }}>
               {user.first_name} {user.last_name}
@@ -113,7 +113,7 @@ class CustomSidebarMenu extends Component {
               <Text
                 style={{
                   fontSize: 15,
-                  fontFamily: 'Montserrat-Regular_0',
+                  fontFamily: 'Montserrat-Regular',
 
                   color:
                     global.currentScreenIndex === key ? '#81b840' : 'black',
@@ -141,7 +141,7 @@ class CustomSidebarMenu extends Component {
               this.logOut();
             }}
             style={{
-              fontFamily: 'Montserrat-Bold_0',
+              fontFamily: 'Montserrat-Bold',
               color: '#81b840',
               fontSize: 16,
             }}>
@@ -181,10 +181,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileInfoText: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   profileInfoTextRegular: {
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 const mapStateToProps = (state) => {

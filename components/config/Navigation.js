@@ -255,7 +255,7 @@ const Register_StackNavigator = createStackNavigator({
         textAlign: 'center',
         // flex: 1,
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold_0',
+        fontFamily: 'Montserrat-Bold',
         color: 'white',
       },
       headerStyle: {

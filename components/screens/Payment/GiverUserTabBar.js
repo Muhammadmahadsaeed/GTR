@@ -15,7 +15,7 @@ const GiverUserTabBar = (props) => {
   return (
     <View style={styles.paymentContainer}>
       <View style={styles.paymentText}>
-        <Text style={{color: '#81b840', fontSize: 20, fontFamily:"Montserrat-Bold_0"}}>
+        <Text style={{color: '#81b840', fontSize: 20, fontFamily:"Montserrat-Bold"}}>
           Pay it forward{' '}
         </Text>
       </View>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingRight:20,
     paddingLeft:20,
-    fontFamily:'Montserrat-Bold_0'
+    fontFamily:'Montserrat-Bold'
     
   },
   paymentText: {

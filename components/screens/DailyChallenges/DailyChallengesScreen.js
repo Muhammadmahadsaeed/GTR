@@ -163,7 +163,7 @@ class DailyChallengesScreen extends React.Component {
         </ScrollView>
         {this.state.flashMessage == true ? (
           <View style={styles.flashMessage}>
-            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular'}}>
               Game will host on monday to friday at 7:00 PM
             </Text>
           </View>
@@ -204,15 +204,15 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   heading: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
     fontSize: 35,
   },
   para: {
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: '#81b840',
     fontSize: 16,
   },

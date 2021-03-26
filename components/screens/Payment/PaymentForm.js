@@ -29,7 +29,7 @@ export default class PaymentForm extends Component {
             <View style={styles.paymentMethod}>
               <Text
                 style={{
-                  fontFamily: 'Montserrat-Bold_0',
+                  fontFamily: 'Montserrat-Bold',
                   color: 'gray',
                 }}>
                 Total price
@@ -38,7 +38,7 @@ export default class PaymentForm extends Component {
                 style={{
                   paddingTop: 15,
                   fontSize: 35,
-                  fontFamily: 'Montserrat-Bold_0',
+                  fontFamily: 'Montserrat-Bold',
                   color: '#81b840',
                 }}>
                 $7,99.00
@@ -46,7 +46,7 @@ export default class PaymentForm extends Component {
               <Text
                 style={{
                   paddingTop: 15,
-                  fontFamily: 'Montserrat-Bold_0',
+                  fontFamily: 'Montserrat-Bold',
                   color: 'gray',
                 }}>
                 Payment method
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 22,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
   },
   paymentMethod: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   creditButtonText: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: 'white',
   },
 });

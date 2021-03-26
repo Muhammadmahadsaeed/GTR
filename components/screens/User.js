@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   headingText:{
     fontSize:25,
-    fontFamily:'Montserrat-Bold_0',
+    fontFamily:'Montserrat-Bold',
     color:'#81b840'
   },
   editBtnSection1: {
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   label: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 15,
     paddingLeft: 15,
     color: 'gray',
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   buttonImage: {
     resizeMode: 'contain',
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     backgroundColor: 'white',
   },
   touchableButton: {

@@ -64,7 +64,7 @@ class PassedModalView extends React.Component {
                   style={{
                     color: '#81b840',
                     fontSize: 25,
-                    fontFamily: 'Montserrat-Bold_0',
+                    fontFamily: 'Montserrat-Bold',
                   }}>
                  Thank You!
                 </Text>
@@ -72,7 +72,7 @@ class PassedModalView extends React.Component {
                   <Text
                     style={{
                       textAlign: 'center',
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     Your answer has been submited
                   </Text>
@@ -85,7 +85,7 @@ class PassedModalView extends React.Component {
                       fontSize: 15,
                       color: 'white',
                       paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     OK
                   </Text>

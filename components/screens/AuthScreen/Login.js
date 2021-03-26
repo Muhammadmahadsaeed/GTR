@@ -156,14 +156,14 @@ class LoginScreen extends React.Component {
                   <Text
                     style={{
                       color: 'white',
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     Your Email and Password has
                   </Text>
                   <Text
                     style={{
                       color: 'white',
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     been incorrect
                   </Text>
@@ -270,7 +270,7 @@ class LoginScreen extends React.Component {
               <Text
                 style={{
                   color: 'white',
-                  fontFamily: 'Montserrat-Bold_0',
+                  fontFamily: 'Montserrat-Bold',
                   marginLeft: 5,
                 }}>
                 Forgot Password
@@ -371,13 +371,13 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginTop: 20,
     marginBottom: 20,
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   buttonTextStyle: {
     color: '#81b840',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   inputStyle: {
     flex: 1,
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'white',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     backgroundColor: '#a1ca70',
   },
   errorTextStyle: {

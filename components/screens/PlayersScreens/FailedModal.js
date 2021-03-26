@@ -64,7 +64,7 @@ class FailedModalView extends React.Component {
                   style={{
                     color: '#81b840',
                     fontSize: 25,
-                    fontFamily: 'Montserrat-Bold_0',
+                    fontFamily: 'Montserrat-Bold',
                   }}>
                  Sorry
                 </Text>
@@ -72,7 +72,7 @@ class FailedModalView extends React.Component {
                   <Text
                     style={{
                       textAlign: 'center',
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     Get access to financia estimates
                   </Text>
@@ -85,7 +85,7 @@ class FailedModalView extends React.Component {
                       fontSize: 15,
                       color: 'white',
                       paddingLeft: 5,
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     OK
                   </Text>

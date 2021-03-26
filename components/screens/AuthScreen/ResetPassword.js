@@ -137,7 +137,7 @@ class ResetPassword extends React.Component {
             <Text
               style={{
                 fontSize: 20,
-                fontFamily: 'Montserrat-Bold_0',
+                fontFamily: 'Montserrat-Bold',
                 color: '#81b840',
               }}>
               Reset Your Password
@@ -146,12 +146,12 @@ class ResetPassword extends React.Component {
               style={{
                 marginTop: 5,
                 color: '#a1a1a1',
-                fontFamily: 'Montserrat-Regular_0',
+                fontFamily: 'Montserrat-Regular',
               }}>
               We have sent a four digit code on your
             </Text>
             <Text
-              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular_0'}}>
+              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular'}}>
               phone/email
             </Text>
           </View>
@@ -271,7 +271,7 @@ class ResetPassword extends React.Component {
                 <Text
                   style={{
                     color: '#81b840',
-                    fontFamily: 'Montserrat-Regular_0',
+                    fontFamily: 'Montserrat-Regular',
                   }}>
                   Password match
                 </Text>
@@ -282,7 +282,7 @@ class ResetPassword extends React.Component {
                 <Text
                   style={{
                     color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
+                    fontFamily: 'Montserrat-Regular',
                   }}>
                   Password does not match
                 </Text>
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   inputStyle: {
     flex: 1,
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     backgroundColor: '#d7e5c3',
   },
   errorTextStyle: {

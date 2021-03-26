@@ -75,7 +75,7 @@ class ForgotPassword extends React.Component {
               style={{
                 fontSize: 20,
                 color: '#81b840',
-                fontFamily: 'Montserrat-Bold_0',
+                fontFamily: 'Montserrat-Bold',
               }}>
               Forgot Your Password?
             </Text>
@@ -83,16 +83,16 @@ class ForgotPassword extends React.Component {
               style={{
                 marginTop: 5,
                 color: '#a1a1a1',
-                fontFamily: 'Montserrat-Regular_0',
+                fontFamily: 'Montserrat-Regular',
               }}>
               To recover your password, you need to enter
             </Text>
             <Text
-              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular_0'}}>
+              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular'}}>
               your registered email address, We will sent the
             </Text>
             <Text
-              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular_0'}}>
+              style={{color: '#a1a1a1', fontFamily: 'Montserrat-Regular'}}>
               recovery code to your email
             </Text>
           </View>
@@ -110,7 +110,7 @@ class ForgotPassword extends React.Component {
             </View>
 
             <View style={{width: '70%', alignSelf: 'center'}}>
-              <Text style={{color: 'red', fontFamily: 'Montserrat-Regular_0'}}>
+              <Text style={{color: 'red', fontFamily: 'Montserrat-Regular'}}>
                 {this.state.error}
               </Text>
             </View>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   inputStyle: {
     flex: 1,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: '#81b840',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     backgroundColor: '#d7e5c3',
   },
   errorTextStyle: {

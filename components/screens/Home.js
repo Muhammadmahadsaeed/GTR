@@ -155,7 +155,7 @@ class Home extends Component {
                 <Text
                   style={{
                     fontSize: 50,
-                    fontFamily: 'Montserrat-ExtraBold_0',
+                    fontFamily: 'Montserrat-ExtraBold',
                     color: 'white',
                   }}>
                   GTR
@@ -164,12 +164,12 @@ class Home extends Component {
               <View style={[styles.smallBox, {justifyContent: 'center'}]}>
                 <View style={{marginLeft: 15}}>
                   <Text
-                    style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                    style={{fontFamily: 'Montserrat-Bold', color: 'white'}}>
                     Date
                   </Text>
                   <Text
                     style={{
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                       color: 'white',
                     }}>
                     {setCurrentDate}
@@ -177,12 +177,12 @@ class Home extends Component {
                 </View>
                 <View style={{marginTop: 15, marginLeft: 15}}>
                   <Text
-                    style={{fontFamily: 'Montserrat-Bold_0', color: 'white'}}>
+                    style={{fontFamily: 'Montserrat-Bold', color: 'white'}}>
                     Time
                   </Text>
                   <Text
                     style={{
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                       color: 'white',
                     }}>
                     {strTime}
@@ -243,7 +243,7 @@ class Home extends Component {
                   <View style={{marginLeft: 5, justifyContent: 'center'}}>
                     <Text
                       style={{
-                        fontFamily: 'Montserrat-Bold_0',
+                        fontFamily: 'Montserrat-Bold',
                         color: 'white',
                       }}>
                       Ertugal Gazi
@@ -276,7 +276,7 @@ class Home extends Component {
                   <View style={{marginLeft: 5, justifyContent: 'center'}}>
                     <Text
                       style={{
-                        fontFamily: 'Montserrat-Bold_0',
+                        fontFamily: 'Montserrat-Bold',
                         color: 'white',
                       }}>
                       Ertugal Gazi
@@ -358,7 +358,7 @@ class Home extends Component {
           {this.state.flashMessage ? (
             <View style={styles.flashMessage}>
               <Text
-                style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+                style={{color: 'white', fontFamily: 'Montserrat-Regular'}}>
                 Phle paisa do
               </Text>
             </View>
@@ -391,17 +391,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   challengeViewHeading: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 20,
     color: '#81b840',
   },
   challengeViewPara: {
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: 'gray',
     fontSize: 12,
   },
   challengeViewTextView: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
   },
   boxes: {
@@ -453,16 +453,16 @@ const styles = StyleSheet.create({
   },
   month: {
     color: 'white',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   rupee: {
     color: 'white',
     fontSize: 30,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   description: {
     color: 'white',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   buttonView: {
     justifyContent: 'center',
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
   },
   monthYear: {
     alignSelf: 'flex-end',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: 'white',
   },
   seperator: {

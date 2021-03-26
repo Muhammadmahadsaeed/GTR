@@ -94,7 +94,7 @@ export default class Notification extends Component {
                 </TouchableOpacity>
                 <View style={styles.content}>
                   <View style={styles.comment}>
-                    <Text rkType="primary3 mediumLine" style={{ fontFamily: 'Montserrat-Regular_0',}}>
+                    <Text rkType="primary3 mediumLine" style={{ fontFamily: 'Montserrat-Regular',}}>
                       {Notification.comment}
                     </Text>
                   </View>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   NotificationText: {
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
     fontSize: 20,
   },
@@ -171,6 +171,6 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 11,
     color: '#81b840',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
 });

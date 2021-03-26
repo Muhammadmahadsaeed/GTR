@@ -122,7 +122,7 @@ class Premium extends Component {
               style={{
                 color: '#81b840',
                 fontSize: 20,
-                fontFamily: 'Montserrat-Bold_0',
+                fontFamily: 'Montserrat-Bold',
               }}>
               Become a premium
             </Text>
@@ -130,14 +130,14 @@ class Premium extends Component {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontFamily: 'Montserrat-Regular_0',
+                  fontFamily: 'Montserrat-Regular',
                 }}>
                 Get access to financia estimates
               </Text>
               <Text
                 style={{
                   textAlign: 'center',
-                  fontFamily: 'Montserrat-Regular_0',
+                  fontFamily: 'Montserrat-Regular',
                 }}>
                 and GTR platform with Premium Subscribtion
               </Text>
@@ -184,7 +184,7 @@ class Premium extends Component {
                           fontSize: 15,
                           color: 'white',
                           paddingLeft: 5,
-                          fontFamily: 'Montserrat-Regular_0',
+                          fontFamily: 'Montserrat-Regular',
                         }}>
                         Subscribe
                       </Text>
@@ -261,16 +261,16 @@ const styles = StyleSheet.create({
   },
   month: {
     color: 'gray',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   rupee: {
     color: '#81b840',
     fontSize: 30,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   description: {
     color: 'gray',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   buttonView: {
     justifyContent: 'center',
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   monthYear: {
     color: '#81b840',
     alignSelf: 'flex-end',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: 'gray',
   },
   footer: {
@@ -311,20 +311,20 @@ const styles = StyleSheet.create({
   },
   restore: {
     color: 'gray',
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     fontSize: 17,
   },
   termText: {
     paddingRight: 27,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   policyText: {
     paddingLeft: 27,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   para: {
     marginTop: 30,
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   ActivityIndicatorStyle: {
     flex: 1,

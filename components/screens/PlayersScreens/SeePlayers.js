@@ -72,7 +72,7 @@ class SeePlayers extends Component {
                 paddingRight: 30,
               }}>
               <Text
-                style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
+                style={{fontFamily: 'Montserrat-Regular', color: 'white'}}>
                 {item.answer}
               </Text>
             </View>
@@ -128,7 +128,7 @@ class SeePlayers extends Component {
           renderItem={this.renderItem}
         />
         <TouchableOpacity style={styles.bottomView} onPress={this.sendRewars}>
-          <Text style={{fontFamily: 'Montserrat-Regular_0', color: 'white'}}>
+          <Text style={{fontFamily: 'Montserrat-Regular', color: 'white'}}>
             Send Rewards
           </Text>
         </TouchableOpacity>
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 25,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
     color: '#81b840',
   },
   paymentContainer: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     fontWeight: '200',
     color: '#777',
     fontSize: 13,
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   activityIndicator: {
     flex: 1,

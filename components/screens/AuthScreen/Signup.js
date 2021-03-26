@@ -219,7 +219,7 @@ class SignupScreen extends React.Component {
                   <Text
                     style={{
                       color: 'red',
-                      fontFamily: 'Montserrat-Regular_0',
+                      fontFamily: 'Montserrat-Regular',
                     }}>
                     {this.state.showErorr}
                   </Text>
@@ -418,7 +418,7 @@ class SignupScreen extends React.Component {
                 <Text
                   style={{
                     color: 'white',
-                    fontFamily: 'Montserrat-Regular_0',
+                    fontFamily: 'Montserrat-Regular',
                   }}>
                   Password match
                 </Text>
@@ -429,7 +429,7 @@ class SignupScreen extends React.Component {
                 <Text
                   style={{
                     color: 'red',
-                    fontFamily: 'Montserrat-Regular_0',
+                    fontFamily: 'Montserrat-Regular',
                   }}>
                   Password does not match
                 </Text>
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
     color: '#81b840',
     paddingVertical: 10,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   buttonImage: {
     resizeMode: 'contain',
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'white',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     backgroundColor: '#a1ca70',
   },
   touchableButton: {

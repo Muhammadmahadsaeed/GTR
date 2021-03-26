@@ -22,7 +22,7 @@ export default class ErorrMessage extends Component {
       <>
         {this.state.flashMessage ? (
           <View style={styles.flashMessage}>
-            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular_0'}}>
+            <Text style={{color: 'white', fontFamily: 'Montserrat-Regular'}}>
               Please Fill it
             </Text>
           </View>

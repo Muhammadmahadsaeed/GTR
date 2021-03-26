@@ -99,7 +99,7 @@ class PayItForwardScreen extends Component {
               style={{
                 color: '#81b840',
                 fontSize: 20,
-                fontFamily: 'Montserrat-Bold_0',
+                fontFamily: 'Montserrat-Bold',
               }}>
               Pay it forward{' '}
             </Text>
@@ -107,14 +107,14 @@ class PayItForwardScreen extends Component {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontFamily: 'Montserrat-Regular_0',
+                  fontFamily: 'Montserrat-Regular',
                 }}>
                 Get access to financia estimates
               </Text>
               <Text
                 style={{
                   textAlign: 'center',
-                  fontFamily: 'Montserrat-Regular_0',
+                  fontFamily: 'Montserrat-Regular',
                 }}>
                 and GTR platform with Premium Subscribtion
               </Text>
@@ -161,7 +161,7 @@ class PayItForwardScreen extends Component {
                           fontSize: 15,
                           color: 'white',
                           paddingLeft: 5,
-                          fontFamily: 'Montserrat-Regular_0',
+                          fontFamily: 'Montserrat-Regular',
                         }}>
                         Subscribe
                       </Text>
@@ -236,17 +236,17 @@ const styles = StyleSheet.create({
   },
   month: {
     color: 'gray',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   rupee: {
     color: '#81b840',
     fontSize: 30,
     // fontWeight: 'bold',
-    fontFamily: 'Montserrat-Bold_0',
+    fontFamily: 'Montserrat-Bold',
   },
   description: {
     color: 'gray',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
   },
   buttonView: {
     justifyContent: 'center',
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   monthYear: {
     color: '#81b840',
     alignSelf: 'flex-end',
-    fontFamily: 'Montserrat-Regular_0',
+    fontFamily: 'Montserrat-Regular',
     color: 'gray',
   },
 
