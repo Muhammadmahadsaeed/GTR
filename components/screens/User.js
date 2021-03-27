@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ImagePicker from 'react-native-image-picker';
 //Import all required component
 import {
@@ -32,7 +32,7 @@ class SignupScreen extends React.Component {
     };
   }
   setPasswordVisibale() {
-    this.setState({hidePassword: !this.state.hidePassword});
+    this.setState({ hidePassword: !this.state.hidePassword });
   }
 
   launchImageLibrary = () => {
@@ -51,7 +51,7 @@ class SignupScreen extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const source = {uri: response.uri};
+        const source = { uri: response.uri };
 
         this.setState({
           filePath: response,
@@ -66,7 +66,7 @@ class SignupScreen extends React.Component {
     if (this.state.fileUri) {
       return (
         <Image
-          source={{uri: this.state.fileUri}}
+          source={{ uri: this.state.fileUri }}
           style={styles.imageIconStyle}
         />
       );
@@ -81,7 +81,7 @@ class SignupScreen extends React.Component {
   }
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Image
           style={styles.backgroundImage}
           source={require('../../assets/bg1.png')}
@@ -95,7 +95,7 @@ class SignupScreen extends React.Component {
             backgroundColor: 'white',
             width: '95%',
             alignSelf: 'center',
-            borderRadius:10
+            borderRadius: 10
           }}>
           <KeyboardAvoidingView enabled>
             <TouchableOpacity style={styles.editBtnSection1}>
@@ -123,7 +123,7 @@ class SignupScreen extends React.Component {
               </TouchableOpacity>
               {this.renderFileUri()}
             </View>
-            <View style={[styles.SectionStyle, {marginTop: 10}]}>
+            <View style={[styles.SectionStyle, { marginTop: 10 }]}>
               <Text style={styles.label}>Name</Text>
               <TextInput
                 style={styles.inputStyle}
@@ -133,7 +133,7 @@ class SignupScreen extends React.Component {
                 returnKeyType="next"
               />
             </View>
-            <View style={styles.SectionStyle}>
+            {/* <View style={styles.SectionStyle}>
               <Text style={styles.label}>Last Name</Text>
               <TextInput
                 style={styles.inputStyle}
@@ -142,18 +142,8 @@ class SignupScreen extends React.Component {
                 autoCapitalize="sentences"
                 returnKeyType="next"
               />
-            </View>
-            <View style={styles.SectionStyle}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Enter Email"
-                placeholderTextColor="#81b840"
-                keyboardType="email-address"
-                returnKeyType="next"
-              />
-            </View>
-            <View style={styles.SectionStyle}>
+            </View> */}
+            {/* <View style={styles.SectionStyle}>
               <Text style={styles.label}>Phone Number</Text>
               <TextInput
                 style={styles.inputStyle}
@@ -161,37 +151,43 @@ class SignupScreen extends React.Component {
                 placeholderTextColor="#81b840"
                 keyboardType="numeric"
               />
-            </View>
+            </View> */}
 
             <View style={styles.SectionStyle}>
               <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Password"
-                placeholderTextColor="#81b840"
-                secureTextEntry={this.state.hidePassword}
-                returnKeyType="next"
-                onChangeText={(e) => this.setState({password: e})}
-              />
-              <TouchableOpacity
-                style={styles.touchableButton}
-                activeOpacity={0.8}
-                onPress={() => {
-                  this.setPasswordVisibale();
-                }}>
-                <Image
-                  source={
-                    this.state.hidePassword
-                      ? require('../../assets/hide.png')
-                      : require('../../assets/view.png')
-                  }
-                  style={styles.buttonImage}
+              <View style={{flexDirection:'row'}}>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Password"
+                  placeholderTextColor="#81b840"
+                  secureTextEntry={this.state.hidePassword}
+                  returnKeyType="next"
+                  onChangeText={(e) => this.setState({ password: e })}
                 />
-              </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.touchableButton}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    this.setPasswordVisibale();
+                  }}>
+                  <Image
+                    source={
+                      this.state.hidePassword
+                        ? require('../../assets/hide.png')
+                        : require('../../assets/view.png')
+                    }
+                    style={styles.buttonImage}
+                  />
+                </TouchableOpacity>
+              </View>
+
+
+
             </View>
 
             <TouchableOpacity
-              style={[styles.buttonStyle, {marginTop: 10}]}
+              style={[styles.buttonStyle, { marginTop: 10 }]}
               activeOpacity={0.5}
               onPress={() => {
                 this.moveToChooseImage();
@@ -212,14 +208,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  heading:{
-    alignItems:'center',
-    margin:10
+  heading: {
+    alignItems: 'center',
+    margin: 10
   },
-  headingText:{
-    fontSize:25,
-    fontFamily:'Montserrat-Bold',
-    color:'#81b840'
+  headingText: {
+    fontSize: 25,
+    fontFamily: 'Montserrat-Bold',
+    color: '#81b840'
   },
   editBtnSection1: {
     backgroundColor: '#81b840',
@@ -232,7 +228,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   SectionStyle: {
-    height: 70,
+    backgroundColor:'red',
+    height: 60,
     width: '70%',
     marginTop: 10,
     marginLeft: 35,
@@ -303,6 +300,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   touchableButton: {
+    backgroundColor: 'red',
     position: 'absolute',
     right: 3,
     height: 45,
