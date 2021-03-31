@@ -15,6 +15,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import HeaderWithBackBtn from '../CommonComponents/HeaderWithBackBtn';
 
 class ForgotPassword extends React.Component {
   constructor() {
@@ -54,6 +55,7 @@ class ForgotPassword extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
+        <HeaderWithBackBtn navigationProps={this.props} />
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg1.png')}

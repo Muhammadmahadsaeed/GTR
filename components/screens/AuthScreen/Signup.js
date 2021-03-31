@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import {connect} from 'react-redux';
+import SignupHeader from './SignupHeader';
 
 class SignupScreen extends React.Component {
   constructor() {
@@ -197,11 +198,13 @@ class SignupScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+      <SafeAreaView style={{flex: 1}} >
+        
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg.png')}
         />
+        <SignupHeader />
         <ScrollView keyboardShouldPersistTaps="handled" style={{flex: 1}}>
           <KeyboardAvoidingView enabled>
             {this.state.isErorr && (

@@ -249,24 +249,25 @@ const Register_StackNavigator = createStackNavigator({
     screen: AuthScreens.SignupScreen,
 
     navigationOptions: {
-      safeAreaInsets: {top: 0},
-      title: 'SIGN UP YOUR ACCOUNT',
-      headerTitleStyle: {
-        textAlign: 'center',
-        // flex: 1,
-        fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color: 'white',
-      },
-      headerStyle: {
-        backgroundColor: '#3d900e',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
+      headerShown:false
+      // safeAreaInsets: {top: 0},
+      // title: 'SIGN UP YOUR ACCOUNT',
+      // headerTitleStyle: {
+      //   textAlign: 'center',
+      //   // flex: 1,
+      //   fontSize: 14,
+      //   fontFamily: 'Montserrat-Bold',
+      //   color: 'white',
+      // },
+      // headerStyle: {
+      //   backgroundColor: '#3d900e',
+      //   shadowOffset: {
+      //     height: 0,
+      //     width: 0,
+      //   },
+      //   shadowOpacity: 0,
+      //   elevation: 0,
+      // },
     },
   },
   Second: {
@@ -372,18 +373,18 @@ const AuthNavigator = createStackNavigator({
   },
   ForgotPassword: {
     screen: AuthScreens.ForgotPassword,
-    navigationOptions: {
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'none',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    navigationOptions: {headerShown: false,
+      // headerTitle: '',
+      // headerStyle: {
+      //   backgroundColor: 'none',
+      //   shadowOffset: {
+      //     height: 0,
+      //     width: 0,
+      //   },
+      //   shadowOpacity: 0,
+      //   elevation: 0,
+      // },
+      // headerBackImage: () => <CommonComponents.HeaderBackButton />,
     },
   },
 });
