@@ -70,11 +70,15 @@ class LiveStreamingScreen extends Component<Props, State> {
   }
 
   componentDidMount() {
+    
     this.getSchedule();
     if (Platform.OS === 'android') {
       requestCameraAndAudioPermission().then(() => {
         this.getToken();
       });
+    }
+    else{
+      this.getToken();
     }
   }
   getToken() {
@@ -117,6 +121,7 @@ class LiveStreamingScreen extends Component<Props, State> {
       });
   }
   init = async () => {
+    console.log("hellow")
     const {appId} = this.state;
     this._engine = await RtcEngine.create(appId);
     await this._engine.enableVideo();

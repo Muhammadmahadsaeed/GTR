@@ -15,11 +15,11 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import HeaderWithBackBtn from '../CommonComponents/HeaderWithBackBtn';
 
 class ForgotPassword extends React.Component {
   constructor() {
     super();
+    
     this.state = {
       email: '',
       error: '',
@@ -28,6 +28,7 @@ class ForgotPassword extends React.Component {
   }
 
   moveToResetPassword() {
+    
     this.setState({isloading: true});
     fetch(
       `https://app.guessthatreceipt.com/api/forgetPassword?email=${this.state.email}`,
@@ -38,7 +39,8 @@ class ForgotPassword extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         if (result.status) {
-          ToastAndroid.show('Please check your email', ToastAndroid.SHORT)
+          // Toast.show('This is a long toast.', Toast.LONG);
+          // Toast.show('Please check your email',Toast.SHORT);
           this.setState({isloading: false});
           this.props.navigation.navigate('Reset')
         } else {
@@ -55,7 +57,7 @@ class ForgotPassword extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <HeaderWithBackBtn navigationProps={this.props} />
+        {/* <HeaderWithBackBtn navigationProps={this.props} /> */}
         <Image
           style={styles.backgroundImage}
           source={require('../../../assets/bg1.png')}

@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -38,13 +38,22 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string/>
+	<string>"Guess that Receipt - GTR" this application is live game show where user will comes live and can participate so that camera permission is mandatory for this</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>"Guess that Receipt - GTR " this application is live game show where user can update location/address and we need their mailing address so that we could deliver the reward / bonus that
+Gamers who participated in the game show</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>"Guess that Receipt - GTR" this application is live game show where user can update their profile pictures so photo library permission is mandatory for this.</string>
 	<key>Privacy – Microphone Usage Description</key>
-	<string/>
-	<key>Privacy – Photo Library Additions Usage Description</key>
-	<string/>
+	<string>"Guess that Receipt - GTR" this application is live game show where user will comes live and can speak and audience can hear so that microphone permission is mandatory for this</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Bold.otf</string>
+		<string>Montserrat-ExtraBold.otf</string>
+		<string>Montserrat-Medium.otf</string>
+		<string>Montserrat-Regular.otf</string>
+		<string>Montserrat-SemiBold.otf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -59,13 +68,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Montserrat-Bold.otf</string>
-		<string>Montserrat-ExtraBold.otf</string>
-		<string>Montserrat-Medium.otf</string>
-		<string>Montserrat-Regular.otf</string>
-		<string>Montserrat-SemiBold.otf</string>
-	</array>
 </dict>
 </plist>

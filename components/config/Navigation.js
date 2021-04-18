@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image} from 'react-native';
+import {Dimensions, Image, Platform} from 'react-native';
 
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -117,7 +117,7 @@ const Home_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0}, //remove for ios
       headerTitle: '',
       headerStyle: {
         backgroundColor: '#81b840',
@@ -159,7 +159,7 @@ const Notification_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -182,7 +182,7 @@ const Winner_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -205,7 +205,7 @@ const Shop_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -228,7 +228,7 @@ const User_StackNavigator = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -249,25 +249,26 @@ const Register_StackNavigator = createStackNavigator({
     screen: AuthScreens.SignupScreen,
 
     navigationOptions: {
-      headerShown:false
+      // headerShown:false
+      
       // safeAreaInsets: {top: 0},
-      // title: 'SIGN UP YOUR ACCOUNT',
-      // headerTitleStyle: {
-      //   textAlign: 'center',
-      //   // flex: 1,
-      //   fontSize: 14,
-      //   fontFamily: 'Montserrat-Bold',
-      //   color: 'white',
-      // },
-      // headerStyle: {
-      //   backgroundColor: '#3d900e',
-      //   shadowOffset: {
-      //     height: 0,
-      //     width: 0,
-      //   },
-      //   shadowOpacity: 0,
-      //   elevation: 0,
-      // },
+      title: 'SIGN UP YOUR ACCOUNT',
+      headerTitleStyle: {
+        textAlign: 'center',
+        // flex: 1,
+        fontSize: 14,
+        fontFamily: 'Montserrat-Bold',
+        color: 'white',
+      },
+      headerStyle: {
+        backgroundColor: '#3d900e',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
     },
   },
   Second: {
@@ -373,18 +374,19 @@ const AuthNavigator = createStackNavigator({
   },
   ForgotPassword: {
     screen: AuthScreens.ForgotPassword,
-    navigationOptions: {headerShown: false,
-      // headerTitle: '',
-      // headerStyle: {
-      //   backgroundColor: 'none',
-      //   shadowOffset: {
-      //     height: 0,
-      //     width: 0,
-      //   },
-      //   shadowOpacity: 0,
-      //   elevation: 0,
-      // },
-      // headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    navigationOptions: {
+      // headerShown: false,
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'white',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
     },
   },
 });
@@ -399,7 +401,7 @@ const LiveStreaming = createStackNavigator({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',

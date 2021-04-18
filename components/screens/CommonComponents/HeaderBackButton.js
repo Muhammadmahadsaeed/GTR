@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginVertical: 12,
     resizeMode: 'contain',
-    borderLeftWidth:2
+    // borderLeftWidth:2
   },
 });

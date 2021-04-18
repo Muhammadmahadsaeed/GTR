@@ -204,7 +204,7 @@ class SignupScreen extends React.Component {
           style={styles.backgroundImage}
           source={require('../../../assets/bg.png')}
         />
-        <SignupHeader />
+        {/* <SignupHeader /> */}
         <ScrollView keyboardShouldPersistTaps="handled" style={{flex: 1}}>
           <KeyboardAvoidingView enabled>
             {this.state.isErorr && (
