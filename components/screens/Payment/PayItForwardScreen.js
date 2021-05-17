@@ -16,7 +16,7 @@ import {
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
 import ModalView from './Modal';
-
+import RBSheet from 'react-native-raw-bottom-sheet';
 class PayItForwardScreen extends Component {
   constructor() {
     super();
@@ -89,6 +89,23 @@ class PayItForwardScreen extends Component {
   setModalVisible() {
     this.modalRef.show();
   }
+  renderContent = () => (
+    <View style={{flex: 1}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginVertical: 10,
+        }}>
+       <TouchableOpacity onPress={() => this.props.navigation.navigate('ApplePayScreen')}>
+         <Text>Apple Pay</Text>
+       </TouchableOpacity>
+      </View>
+    </View>
+  );
+  openPaymentModal = () => {
+    this.RBSheet.open();
+  };
 
   render() {
     return (
@@ -151,7 +168,9 @@ class PayItForwardScreen extends Component {
                   <View style={styles.buttonView}>
                     <TouchableOpacity
                       style={styles.subscriberButton}
-                      onPress={() => this.moveToUserList(item)}>
+                      // onPress={() => this.moveToUserList(item)}
+                      onPress={() => this.openPaymentModal()}
+                      >
                       <Image
                         style={{height: 15, width: 18}}
                         source={require('../../../assets/heart.png')}
@@ -172,8 +191,29 @@ class PayItForwardScreen extends Component {
             />
           )}
         </View>
-
-        <ModalView ref={(target) => (this.modalRef = target)} />
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
+          height={300}
+          closeOnDragDown={true}
+          openDuration={300}
+          keyboardAvoidingViewEnabled={true}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+            container: {
+              borderTopRightRadius: 30,
+              borderTopLeftRadius: 30,
+            },
+          }}>
+          {this.renderContent()}
+        </RBSheet>
+        {/* <ModalView ref={(target) => (this.modalRef = target)} />
         <Modal
           animationType="slide"
           visible={this.state.showModal}
@@ -195,7 +235,7 @@ class PayItForwardScreen extends Component {
               </View>
             )}
           />
-        </Modal>
+        </Modal> */}
       </View>
     );
   }

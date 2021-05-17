@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {SafeAreaView} from 'react-navigation';
-import {connect} from 'react-redux';
-import {strTime, setCurrentDate} from './CommonComponents/DateTime';
+import { SafeAreaView } from 'react-navigation';
+import { connect } from 'react-redux';
+import { strTime, setCurrentDate } from './CommonComponents/DateTime';
 // import firebase from 'react-native-firebase';
 
 class Home extends Component {
@@ -38,13 +38,13 @@ class Home extends Component {
     })
       .then((response) => response.json())
       .then((result) => {
-        this.setState({package: result.data});
+        this.setState({ package: result.data });
       })
       .catch((error) => console.log('error', error));
   }
   // async getToken() {
   //   const firebaseToken = await firebase.messaging().getToken();
-  
+
   //   if (firebaseToken) {
   //     firebase.messaging().subscribeToTopic('topic');
   //   }
@@ -80,7 +80,7 @@ class Home extends Component {
   //       .setSubtitle(notification.subtitle)
   //       .setBody(notification.body)
   //       .setData(notification.data)
-        
+
   //       .android.setChannelId('channelId')
   //       .android.setPriority(firebase.notifications.Android.Priority.High);
 
@@ -92,28 +92,26 @@ class Home extends Component {
   //   });
   // };
   checkPackage() {
-    // fetch('https://app.guessthatreceipt.com/api/getUserCurrentPackage', {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `Bearer ${this.props.user.user.user.access_token}`,
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     console.log(result.data)
-    //     if(result.data === "Unauthenticated."){
-    //       console.log("bhkari h sala")
-
-    //        this.setState({flashMessage: true}, () => {
-    //         setTimeout(() => this.closeFlashMessage(), 3000);
-    //       });
-    //     }
-    //     else{
-    this.props.navigation.navigate('DailyChallenges');
-    //   }
-    // })
-    // .catch((error) => console.log('error', error));
+    fetch('https://app.guessthatreceipt.com/api/getUserCurrentPackage', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.props.user.user.user.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.data)
+        if (result.data === "Unauthenticated.") {
+          this.setState({ flashMessage: true }, () => {
+            setTimeout(() => this.closeFlashMessage(), 3000);
+          });
+        }
+        else {
+          this.props.navigation.navigate('DailyChallenges');
+        }
+      })
+      .catch((error) => console.log('error', error));
   }
   closeFlashMessage() {
     this.setState({
@@ -121,16 +119,16 @@ class Home extends Component {
     });
   }
   render() {
-    
+
     return (
-      <SafeAreaView style={styles.MainContainer} forceInset={{top: 'always'}}>
-        <View style={{flex: 1}}>
-          <ScrollView style={[styles.body, {flex: 1}]}>
+      <SafeAreaView style={styles.MainContainer} forceInset={{ top: 'always' }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView style={[styles.body, { flex: 1 }]}>
             <View style={styles.challengeView}>
-              <View>
-                <Text style={styles.challengeViewHeading}>DAILY CHALLENGE</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.challengeViewHeading}>LIVE GAME SHOW</Text>
                 <Text style={styles.challengeViewPara}>
-                  Lorum ipsum about react
+                  Anyone can particapte in this game show and can earn reward.
                 </Text>
               </View>
               <View
@@ -147,10 +145,12 @@ class Home extends Component {
               </View>
             </View>
             <View style={styles.boxes}>
-              <View
+              <TouchableOpacity activeOpacity={0.8} onPress={() => {
+                this.checkPackage();
+              }}
                 style={[
                   styles.bigBox,
-                  {justifyContent: 'center', alignItems: 'center'},
+                  { justifyContent: 'center', alignItems: 'center' },
                 ]}>
                 <Text
                   style={{
@@ -160,11 +160,11 @@ class Home extends Component {
                   }}>
                   GTR
                 </Text>
-              </View>
-              <View style={[styles.smallBox, {justifyContent: 'center'}]}>
-                <View style={{marginLeft: 15}}>
+              </TouchableOpacity>
+              <View style={[styles.smallBox, { justifyContent: 'center' }]}>
+                <View style={{ marginLeft: 15 }}>
                   <Text
-                    style={{fontFamily: 'Montserrat-Bold', color: 'white'}}>
+                    style={{ fontFamily: 'Montserrat-Bold', color: 'white' }}>
                     Date
                   </Text>
                   <Text
@@ -175,9 +175,9 @@ class Home extends Component {
                     {setCurrentDate}
                   </Text>
                 </View>
-                <View style={{marginTop: 15, marginLeft: 15}}>
+                <View style={{ marginTop: 15, marginLeft: 15 }}>
                   <Text
-                    style={{fontFamily: 'Montserrat-Bold', color: 'white'}}>
+                    style={{ fontFamily: 'Montserrat-Bold', color: 'white' }}>
                     Time
                   </Text>
                   <Text
@@ -196,7 +196,7 @@ class Home extends Component {
                   WINNERS OF THE DAY
                 </Text>
                 <Text style={styles.challengeViewPara}>
-                  Lorum ipsum about react
+                  Daily winner list availble with past record
                 </Text>
               </View>
               <View
@@ -213,15 +213,15 @@ class Home extends Component {
               <View
                 style={[
                   styles.smallBox,
-                  {justifyContent: 'center', alignItems: 'center'},
+                  { justifyContent: 'center', alignItems: 'center' },
                 ]}>
                 <Image
                   source={require('../../assets/cupIcon.png')}
                   style={styles.userIcon}
                 />
               </View>
-              <View style={[styles.bigBox, {padding: 10}]}>
-                <View style={{flexDirection: 'row'}}>
+              <View style={[styles.bigBox, { padding: 10 }]}>
+                <View style={{ flexDirection: 'row' }}>
                   <View
                     style={{
                       height: 40,
@@ -240,7 +240,7 @@ class Home extends Component {
                     />
                   </View>
 
-                  <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                  <View style={{ marginLeft: 5, justifyContent: 'center' }}>
                     <Text
                       style={{
                         fontFamily: 'Montserrat-Bold',
@@ -248,13 +248,13 @@ class Home extends Component {
                       }}>
                       Ertugal Gazi
                     </Text>
-                    <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                    <Text style={[styles.challengeViewPara, { color: 'white' }]}>
                       lorum about react
                     </Text>
                   </View>
                 </View>
                 <View style={styles.seperator}></View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View
                     style={{
                       height: 40,
@@ -273,7 +273,7 @@ class Home extends Component {
                     />
                   </View>
 
-                  <View style={{marginLeft: 5, justifyContent: 'center'}}>
+                  <View style={{ marginLeft: 5, justifyContent: 'center' }}>
                     <Text
                       style={{
                         fontFamily: 'Montserrat-Bold',
@@ -281,7 +281,7 @@ class Home extends Component {
                       }}>
                       Ertugal Gazi
                     </Text>
-                    <Text style={[styles.challengeViewPara, {color: 'white'}]}>
+                    <Text style={[styles.challengeViewPara, { color: 'white' }]}>
                       lorum about react
                     </Text>
                   </View>
@@ -289,10 +289,10 @@ class Home extends Component {
               </View>
             </View>
             <View style={styles.challengeView}>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.challengeViewHeading}>PAY IT FORWORD</Text>
                 <Text style={styles.challengeViewPara}>
-                  Lorum ipsum about react
+                  PIF here you can pay for others this way many people can play this game
                 </Text>
               </View>
               <View
@@ -309,18 +309,18 @@ class Home extends Component {
               <View
                 style={[
                   styles.payItSmallBox,
-                  {justifyContent: 'center', alignItems: 'center'},
+                  { justifyContent: 'center', alignItems: 'center' },
                 ]}>
                 <Image
                   source={require('../../assets/shopIcon.png')}
                   style={styles.shopIcon}
                 />
               </View>
-              <View style={[styles.payItBigBox, {padding: 10}]}>
+              <View style={[styles.payItBigBox, { padding: 10 }]}>
                 <View style={styles.notificationBox}>
-                  <View style={{flex: 1, justifyContent: 'center'}}>
+                  <View style={{ flex: 1, justifyContent: 'center' }}>
                     <Text style={styles.month}>Active</Text>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       {this.state.package ? (
                         <Text style={styles.rupee}>
                           {this.state.package.amount}
@@ -346,7 +346,7 @@ class Home extends Component {
                         this.moveToUserList();
                       }}>
                       <Image
-                        style={{height: 15, width: 18}}
+                        style={{ height: 15, width: 18 }}
                         source={require('../../assets/heart.png')}
                       />
                     </TouchableOpacity>
@@ -358,8 +358,8 @@ class Home extends Component {
           {this.state.flashMessage ? (
             <View style={styles.flashMessage}>
               <Text
-                style={{color: 'white', fontFamily: 'Montserrat-Regular'}}>
-                Phle paisa do
+                style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>
+               Your package has been expired
               </Text>
             </View>
           ) : null}
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
   },
   flashMessage: {
     position: 'absolute',
-    backgroundColor: '#81b840',
+    backgroundColor: 'red',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

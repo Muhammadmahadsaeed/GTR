@@ -149,7 +149,25 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
-
+  ApplePayScreen:{
+    screen: PaymentScreens.ApplePay,
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  }
 });
 //Stack Navigation for Notification Screen
 const Notification_StackNavigator = createStackNavigator({
@@ -201,22 +219,23 @@ const Winner_StackNavigator = createStackNavigator({
 const Shop_StackNavigator = createStackNavigator({
   First: {
     screen: Payment_StackNavigator,
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      // safeAreaInsets: {top: 0},
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'transparent',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    navigationOptions: ({ navigation }) => ({
+      headerShown: false
+      // headerRight: () => (
+      //   <CommonComponents.HamBurger navigationProps={navigation} />
+      // ),
+      // safeAreaInsets: { top: 0 },
+      // headerTitle: '',
+      // headerStyle: {
+      //   backgroundColor: 'transparent',
+      //   shadowOffset: {
+      //     height: 0,
+      //     width: 0,
+      //   },
+      //   shadowOpacity: 0,
+      //   elevation: 0,
+      // },
+      // headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
 });

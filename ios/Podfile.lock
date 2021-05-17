@@ -1,6 +1,28 @@
 PODS:
   - AgoraRtcEngine_iOS_Crypto (3.1.2)
   - boost-for-react-native (1.63.0)
+  - Braintree (4.37.1):
+    - Braintree/Card (= 4.37.1)
+    - Braintree/Core (= 4.37.1)
+    - Braintree/PayPal (= 4.37.1)
+    - Braintree/UI (= 4.37.1)
+  - Braintree/Card (4.37.1):
+    - Braintree/Core
+  - Braintree/Core (4.37.1)
+  - Braintree/PayPal (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPalDataCollector (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalUtils
+  - Braintree/PayPalOneTouch (4.37.1):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
+    - Braintree/PayPalUtils
+  - Braintree/PayPalUtils (4.37.1)
+  - Braintree/UI (4.37.1):
+    - Braintree/Card
+    - Braintree/Core
   - CocoaAsyncSocket (7.6.5)
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
@@ -306,8 +328,15 @@ PODS:
     - React
   - react-native-image-picker (2.3.3):
     - React
+  - react-native-payments (0.8.3):
+    - Braintree
+    - React
+    - Stripe
   - react-native-safe-area-context (3.1.4):
     - React
+  - react-native-simple-toast (1.1.3):
+    - React-Core
+    - Toast (~> 4.0.0)
   - react-native-webview (10.9.0):
     - React
   - React-RCTActionSheet (0.63.2):
@@ -391,6 +420,8 @@ PODS:
     - React
   - RNSVG (12.1.0):
     - React
+  - Stripe (19.4.1)
+  - Toast (4.0.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -434,7 +465,9 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-agora (from `../node_modules/react-native-agora`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-payments (from `../node_modules/react-native-payments`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -459,6 +492,7 @@ SPEC REPOS:
   trunk:
     - AgoraRtcEngine_iOS_Crypto
     - boost-for-react-native
+    - Braintree
     - CocoaAsyncSocket
     - Crashlytics
     - Fabric
@@ -481,6 +515,8 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - Stripe
+    - Toast
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -518,8 +554,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-agora"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-payments:
+    :path: "../node_modules/react-native-payments"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-toast:
+    :path: "../node_modules/react-native-simple-toast"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -562,6 +602,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS_Crypto: 42a7a2142317c588f1b5c2e74b98fd01d73f8f60
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  Braintree: 94a20907b70aeffb29c40380eec583d783a347b6
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -601,7 +642,9 @@ SPEC CHECKSUMS:
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
   react-native-agora: 2effa0e55db74c2ec9a1aca9a369ba35ce400917
   react-native-image-picker: a6c3d644751a388b0fc8b56822ff7cbd398a3008
+  react-native-payments: b5645a0d43e557604ba48d2bf0a44dd8a5db4ad6
   react-native-safe-area-context: 0ed9288ed4409beabb0817b54efc047286fc84da
+  react-native-simple-toast: b986e6c1befdc211af3df1bae293278a44e32990
   react-native-webview: 6ee7868ca8eba635dbf7963986d1ab7959da0391
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
@@ -620,6 +663,8 @@ SPEC CHECKSUMS:
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  Stripe: 5914399ac5878056b985d56b409cb4bb1e7fc7e8
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
