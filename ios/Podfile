@@ -8,6 +8,8 @@ target 'gtr' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-payments', :path => '../node_modules/react-native-payments'
+
   target 'gtrTests' do
     inherit! :complete
     # Pods for testing

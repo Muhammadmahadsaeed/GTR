@@ -27,6 +27,7 @@ class PayItForwardScreen extends Component {
       loading: false,
       getPremium: '',
       amount: 0,
+      appleAmount: ''
     };
   }
 
@@ -89,6 +90,10 @@ class PayItForwardScreen extends Component {
   setModalVisible() {
     this.modalRef.show();
   }
+  moveToApplePay = () =>{
+    this.RBSheet.close();
+    this.props.navigation.navigate('ApplePayScreen',{amount: this.state.appleAmount})
+  }
   renderContent = () => (
     <View style={{flex: 1}}>
       <View
@@ -97,13 +102,14 @@ class PayItForwardScreen extends Component {
           justifyContent: 'space-evenly',
           marginVertical: 10,
         }}>
-       <TouchableOpacity onPress={() => this.props.navigation.navigate('ApplePayScreen')}>
+       <TouchableOpacity onPress={() => this.moveToApplePay() }>
          <Text>Apple Pay</Text>
        </TouchableOpacity>
       </View>
     </View>
   );
-  openPaymentModal = () => {
+  openPaymentModal = (item) => {
+    this.setState({appleAmount: item})
     this.RBSheet.open();
   };
 
@@ -169,7 +175,7 @@ class PayItForwardScreen extends Component {
                     <TouchableOpacity
                       style={styles.subscriberButton}
                       // onPress={() => this.moveToUserList(item)}
-                      onPress={() => this.openPaymentModal()}
+                      onPress={() => this.openPaymentModal(item)}
                       >
                       <Image
                         style={{height: 15, width: 18}}

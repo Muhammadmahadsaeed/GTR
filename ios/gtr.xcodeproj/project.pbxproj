@@ -66,6 +66,7 @@
 		6684795DCF444FF0A2722489 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.otf"; path = "../assets/fonts/Montserrat-Medium.otf"; sourceTree = "<group>"; };
 		7AF453F8985C634F7083C960 /* libPods-gtr-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gtr-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = gtr/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		823D3C132656FEA0007BD313 /* gtr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = gtr.entitlements; path = gtr/gtr.entitlements; sourceTree = "<group>"; };
 		8243EAF42652FF7000BFCE60 /* gtrRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = gtrRelease.entitlements; path = gtr/gtrRelease.entitlements; sourceTree = "<group>"; };
 		82CD4BE6260D3D77002B0ADE /* gtr-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gtr-Bridging-Header.h"; sourceTree = "<group>"; };
 		82CD4BE7260D3D77002B0ADE /* Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift.swift; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		13B07FAE1A68108700A75B9A /* gtr */ = {
 			isa = PBXGroup;
 			children = (
+				823D3C132656FEA0007BD313 /* gtr.entitlements */,
 				8243EAF42652FF7000BFCE60 /* gtrRelease.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -756,21 +758,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = gtr/gtr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8C9JSYPG8D;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = gtr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.esolution.gtr;
+				PRODUCT_BUNDLE_IDENTIFIER = com.guessthatreceipt.gtr;
 				PRODUCT_NAME = gtr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "gtr-Bridging-Header.h";
@@ -790,19 +793,19 @@
 				CODE_SIGN_ENTITLEMENTS = gtr/gtrRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8C9JSYPG8D;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = gtr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.esolution.gtr;
+				PRODUCT_BUNDLE_IDENTIFIER = com.guessthatreceipt.gtr;
 				PRODUCT_NAME = gtr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "gtr-Bridging-Header.h";
