@@ -18,6 +18,7 @@ import * as PaymentScreens from '../screens/Payment/index';
 import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 import * as PlayerScreens from '../screens/PlayersScreens/index';
+import Privacy from '../screens/PrivacyPolicy';
 
 // Tab Navigation for userlist and giver
 const TabScreen = createMaterialTopTabNavigator(
@@ -486,6 +487,28 @@ const AudienceStack = createStackNavigator({
   },
  
 });
+const PrivacyStack = createStackNavigator({
+  privacy:{
+    screen: Privacy,
+    navigationOptions: ({navigation}) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      safeAreaInsets: {top: 0},
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  }
+})
 //Drawer Navigator Which will provide the structure of our App
 const DrawerNavigator = createDrawerNavigator(
   {
@@ -501,6 +524,10 @@ const DrawerNavigator = createDrawerNavigator(
     },
     Audience:{
       screen: AudienceStack
+    },
+    privacyScreen:{
+      screen: PrivacyStack,
+      
     }
   },
   {

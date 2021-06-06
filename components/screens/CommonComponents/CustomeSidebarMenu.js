@@ -27,6 +27,10 @@ class CustomSidebarMenu extends Component {
           navOptionName: 'Contact us',
           screenToNavigate: 'Contact us',
         },
+        {
+          navOptionName: 'Privacy Policy',
+          screenToNavigate: 'privacyScreen',
+        },
       ],
     };
   }

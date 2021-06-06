@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   SectionStyle: {
-    backgroundColor:'red',
+   
     height: 60,
     width: '70%',
     marginTop: 10,
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   touchableButton: {
-    backgroundColor: 'red',
+   
     position: 'absolute',
     right: 3,
     height: 45,

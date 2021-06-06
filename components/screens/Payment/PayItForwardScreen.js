@@ -16,7 +16,7 @@ import {
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
 import ModalView from './Modal';
-
+import RBSheet from 'react-native-raw-bottom-sheet';
 class PayItForwardScreen extends Component {
   constructor() {
     super();
@@ -31,20 +31,35 @@ class PayItForwardScreen extends Component {
   }
 
   async componentDidMount() {
-    await fetch('https://app.guessthatreceipt.com/api/subscriptions?type=forward',{
+    await fetch(
+      'https://app.guessthatreceipt.com/api/subscriptions?type=forward',
+      {
         method: 'GET',
-        headers:{
+        headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${this.props.user.user.access_token}`,
-        }
-      })
+        },
+      },
+    )
       .then((response) => response.json())
       .then((result) => {
         this.setState({getPremium: result.data});
       })
       .catch((error) => console.log('error', error));
   }
-
+  renderContent = () => (
+    <View style={{flex: 1}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginVertical: 10,
+        }}></View>
+    </View>
+  );
+  showBottomSheet = () => {
+    this.RBSheet.open();
+  };
   handleResponse = (data) => {
     let url = data.url;
     let fields = url.split('?');
@@ -65,7 +80,6 @@ class PayItForwardScreen extends Component {
         .then((response) => response.json())
 
         .then((data) => {
-         
           this.setState({showModal: false, status: 'Complete'});
           this.setModalVisible();
         })
@@ -83,8 +97,7 @@ class PayItForwardScreen extends Component {
       showModal: true,
       amount: item.price,
       package: item,
-    })
-   
+    });
   }
   setModalVisible() {
     this.modalRef.show();
@@ -151,7 +164,7 @@ class PayItForwardScreen extends Component {
                   <View style={styles.buttonView}>
                     <TouchableOpacity
                       style={styles.subscriberButton}
-                      onPress={() => this.moveToUserList(item)}>
+                      onPress={() => this.showBottomSheet(item)}>
                       <Image
                         style={{height: 15, width: 18}}
                         source={require('../../../assets/heart.png')}
@@ -172,8 +185,29 @@ class PayItForwardScreen extends Component {
             />
           )}
         </View>
-
-        <ModalView ref={(target) => (this.modalRef = target)} />
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
+          height={300}
+          closeOnDragDown={true}
+          openDuration={300}
+          keyboardAvoidingViewEnabled={true}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+            container: {
+              borderTopRightRadius: 30,
+              borderTopLeftRadius: 30,
+            },
+          }}>
+          {this.renderContent()}
+        </RBSheet>
+        {/* <ModalView ref={(target) => (this.modalRef = target)} />
         <Modal
           animationType="slide"
           visible={this.state.showModal}
@@ -196,6 +230,7 @@ class PayItForwardScreen extends Component {
             )}
           />
         </Modal>
+      */}
       </View>
     );
   }
