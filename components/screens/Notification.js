@@ -50,10 +50,11 @@ export default class Notification extends Component {
           keyExtractor={(item) => {
             return item.id;
           }}
-          renderItem={(item,index) => {
+          renderItem={(item) => {
             const Notification = item.item;
+            console.log(Notification.image)
             return (
-              <View style={styles.container} key={item.id}>
+              <View style={styles.container}>
                 <TouchableOpacity onPress={() => {}}>
                   <Image
                     style={styles.image}

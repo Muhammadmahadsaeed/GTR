@@ -1,7 +1,7 @@
-import React, {Fragment, Component} from 'react';
+import React, { Fragment, Component } from 'react';
 import ImagePicker from 'react-native-image-picker';
-import {connect} from 'react-redux';
-import {userObject} from '../../Redux/Action/action';
+import { connect } from 'react-redux';
+import { userObject } from '../../Redux/Action/action';
 import {
   SafeAreaView,
   StyleSheet,
@@ -29,6 +29,7 @@ class ChooseImage extends Component {
       isLoading: false,
       showErorr: '',
       isErorr: false,
+      fileType: '',
       filepath: {
         data: '',
         uri: '',
@@ -39,7 +40,7 @@ class ChooseImage extends Component {
     };
   }
   componentDidMount() {
-    console.log(this.props.user.user.access_token);
+
   }
   launchCamera = () => {
     let options = {
@@ -57,12 +58,13 @@ class ChooseImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const source = {uri: response};
+        const source = { uri: response };
         this.setState({
           imgUri: source,
           filePath: response,
           fileData: response.data,
           fileUri: response.uri,
+          fileType: response.type
         });
       }
     });
@@ -84,13 +86,13 @@ class ChooseImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const source = {uri: response};
-        console.log(response)
+        const source = { uri: response };
         this.setState({
           imgUri: source,
           filePath: response,
           fileData: response.data,
           fileUri: response.uri,
+          fileType: response.type
         });
       }
     });
@@ -98,7 +100,7 @@ class ChooseImage extends Component {
 
   renderFileUri() {
     if (this.state.fileUri) {
-      return <Image source={{uri: this.state.fileUri}} style={styles.images} />;
+      return <Image source={{ uri: this.state.fileUri }} style={styles.images} />;
     } else {
       return (
         <Image
@@ -109,13 +111,13 @@ class ChooseImage extends Component {
     }
   }
   resetImage() {
-    this.setState({fileUri: ''});
+    this.setState({ fileUri: '' });
   }
   moveToPaymentScreen() {
     let pwd = this.props.navigation.getParam('pwd');
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     const params = new URLSearchParams();
-    params.append('avatar',`data:image/jpg;base64,${this.state.fileData}`);
+    params.append('avatar', `data:${this.state.fileType};base64,${this.state.fileData}`);
 
     fetch('https://app.guessthatreceipt.com/api/users/update', {
       method: 'PUT',
@@ -143,13 +145,13 @@ class ChooseImage extends Component {
         })
           .then((response) => response.json())
           .then((data) => {
-            this.setState({isloading: false});
-             
-             this.props.store_user(data.data);
-            // this.props.navigation.navigate('payitforward');
+            this.setState({ isloading: false });
+
+            this.props.store_user(data.data);
+            this.props.navigation.navigate('payitforward');
           })
           .catch((error) => {
-            this.setState({isloading: false, showInvalidErorr: true});
+            this.setState({ isloading: false, showInvalidErorr: true });
           });
         // this.props.store_user(raw);
         // this.props.navigation.navigate('payitforward');
@@ -157,7 +159,7 @@ class ChooseImage extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({isErorr: true});
+        this.setState({ isloading: false,isErorr: true });
       });
   }
   render() {
@@ -295,7 +297,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    store_user: (user) => dispatch({type: 'SET_USER', payload: user}),
+    store_user: (user) => dispatch({ type: 'SET_USER', payload: user }),
   };
 };
 

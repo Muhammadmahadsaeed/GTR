@@ -28,8 +28,8 @@ class CustomSidebarMenu extends Component {
           screenToNavigate: 'Contact us',
         },
         {
-          navOptionName: 'Privacy Policy',
-          screenToNavigate: 'privacyScreen',
+          navOptionName: 'Term And Conditions',
+          screenToNavigate: 'term',
         },
       ],
     };

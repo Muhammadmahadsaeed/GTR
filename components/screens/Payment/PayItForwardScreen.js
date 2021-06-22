@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,8 +13,8 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import {WebView} from 'react-native-webview';
-import {connect} from 'react-redux';
+import { WebView } from 'react-native-webview';
+import { connect } from 'react-redux';
 import ModalView from './Modal';
 import RBSheet from 'react-native-raw-bottom-sheet';
 class PayItForwardScreen extends Component {
@@ -27,39 +27,25 @@ class PayItForwardScreen extends Component {
       loading: false,
       getPremium: '',
       amount: 0,
+      appleAmount: ''
     };
   }
 
   async componentDidMount() {
-    await fetch(
-      'https://app.guessthatreceipt.com/api/subscriptions?type=forward',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${this.props.user.user.access_token}`,
-        },
-      },
-    )
+    await fetch('https://app.guessthatreceipt.com/api/subscriptions?type=forward', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${this.props.user.user.access_token}`,
+      }
+    })
       .then((response) => response.json())
       .then((result) => {
-        this.setState({getPremium: result.data});
+        this.setState({ getPremium: result.data });
       })
       .catch((error) => console.log('error', error));
   }
-  renderContent = () => (
-    <View style={{flex: 1}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginVertical: 10,
-        }}></View>
-    </View>
-  );
-  showBottomSheet = () => {
-    this.RBSheet.open();
-  };
+
   handleResponse = (data) => {
     let url = data.url;
     let fields = url.split('?');
@@ -80,28 +66,52 @@ class PayItForwardScreen extends Component {
         .then((response) => response.json())
 
         .then((data) => {
-          this.setState({showModal: false, status: 'Complete'});
+
+          this.setState({ showModal: false, status: 'Complete' });
           this.setModalVisible();
         })
         .catch((error) => {
           console.log('====', error);
         });
     } else if (data.title === 'cancel') {
-      this.setState({showModal: false, status: 'Cancelled'});
+      this.setState({ showModal: false, status: 'Cancelled' });
     } else {
       return;
     }
   };
   moveToUserList(item) {
+    this.RBSheet.close();
     this.setState({
       showModal: true,
-      amount: item.price,
-      package: item,
-    });
+      amount: this.state.appleAmount.price,
+      package: this.state.appleAmount,
+    })
+
   }
   setModalVisible() {
     this.modalRef.show();
   }
+  moveToApplePay = () => {
+    this.RBSheet.close();
+    // this.props.navigation.navigate('ApplePayScreen', { amount: this.state.appleAmount })
+  }
+  renderContent = () => (
+    <View style={{ flex: 1 }}>
+
+      <TouchableOpacity style={{ paddingHorizontal: 10, marginHorizontal: 20, paddingVertical: 20 }} onPress={() => this.moveToUserList()}>
+        <Text style={{
+          color: '#81b840',
+          fontSize: 20,
+          fontFamily: 'Montserrat-Bold',
+        }}>Paypal</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+  openPaymentModal = (item) => {
+    this.setState({ appleAmount: item })
+    this.RBSheet.open();
+  };
 
   render() {
     return (
@@ -114,9 +124,9 @@ class PayItForwardScreen extends Component {
                 fontSize: 20,
                 fontFamily: 'Montserrat-Bold',
               }}>
-              Pay it forward{' '}
+              Pay it forward
             </Text>
-            <View style={{marginTop: 10}}>
+            <View style={{ marginTop: 10 }}>
               <Text
                 style={{
                   textAlign: 'center',
@@ -135,7 +145,7 @@ class PayItForwardScreen extends Component {
           </View>
         </View>
 
-        <View style={{width: '95%', alignSelf: 'center', flex: 1}}>
+        <View style={{ width: '95%', alignSelf: 'center', flex: 1 }}>
           {!this.state.getPremium ? (
             <View style={styles.ActivityIndicatorStyle}>
               <ActivityIndicator color="#009688" size="large" />
@@ -145,14 +155,14 @@ class PayItForwardScreen extends Component {
               showsVerticalScrollIndicator={false}
               data={this.state.getPremium}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <View style={styles.notificationBox}>
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     <Text style={styles.month}>
                       {item.period_type.charAt(0).toUpperCase() +
                         item.period_type.slice(1)}
                     </Text>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <Text style={styles.rupee}>${item.price}</Text>
                       <Text style={styles.monthYear}> Free</Text>
                     </View>
@@ -164,9 +174,11 @@ class PayItForwardScreen extends Component {
                   <View style={styles.buttonView}>
                     <TouchableOpacity
                       style={styles.subscriberButton}
-                      onPress={() => this.showBottomSheet(item)}>
+                      // onPress={() => this.moveToUserList(item)}
+                      onPress={() => this.openPaymentModal(item)}
+                    >
                       <Image
-                        style={{height: 15, width: 18}}
+                        style={{ height: 15, width: 18 }}
                         source={require('../../../assets/heart.png')}
                       />
                       <Text
@@ -207,7 +219,7 @@ class PayItForwardScreen extends Component {
           }}>
           {this.renderContent()}
         </RBSheet>
-        {/* <ModalView ref={(target) => (this.modalRef = target)} />
+        <ModalView ref={(target) => (this.modalRef = target)} />
         <Modal
           animationType="slide"
           visible={this.state.showModal}
@@ -230,7 +242,6 @@ class PayItForwardScreen extends Component {
             )}
           />
         </Modal>
-      */}
       </View>
     );
   }
@@ -298,7 +309,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   monthYear: {
-    color: '#81b840',
     alignSelf: 'flex-end',
     fontFamily: 'Montserrat-Regular',
     color: 'gray',

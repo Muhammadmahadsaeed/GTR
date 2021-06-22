@@ -16,6 +16,7 @@ import {
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
 import ModalView from './Modal';
+import RBSheet from 'react-native-raw-bottom-sheet';
 class Premium extends Component {
   constructor(props) {
     super();
@@ -26,6 +27,7 @@ class Premium extends Component {
       showModal: false,
       package: '',
       modalText: '',
+      appleAmount: ''
     };
   }
   async componentDidMount() {
@@ -78,41 +80,34 @@ class Premium extends Component {
     }
   };
   moveToUserList(item) {
-    let formdata = new FormData();
-    this.setState({package: item});
-    if (item.price === '0.00') {
-      formdata.append('pack_id', this.state.package.id);
-      formdata.append('transaction_id', item.description);
-      fetch('https://app.guessthatreceipt.com/api/saveOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${this.props.user.user.access_token}`,
-        },
-        body: formdata,
-      })
-        .then((response) => response.json())
+    this.RBSheet.close();
+    this.setState({
+      showModal: true,
+      amount: this.state.appleAmount.price,
+      package: this.state.appleAmount,
+    })
 
-        .then((data) => {
-          console.log(data)
-          this.setModalVisible();
-        })
-        .catch((error) => {
-          console.log('====', error);
-        });
-    } else {
-      this.setState({
-        showModal: true,
-        modalText: item.description,
-        amount: item.price,
-        package: item,
-      });
-    }
   }
+  openPaymentModal = (item) => {
+    this.setState({ appleAmount: item })
+    this.RBSheet.open();
+  };
   setModalVisible() {
     this.modalRef.show();
   }
+  renderContent = () => (
+    <View style={{ flex: 1 }}>
 
+      <TouchableOpacity style={{ paddingHorizontal: 10, marginHorizontal: 20, paddingVertical: 20 }} onPress={() => this.moveToUserList()}>
+        <Text style={{
+          color: '#81b840',
+          fontSize: 20,
+          fontFamily: 'Montserrat-Bold',
+        }}>Paypal</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
   render() {
     return (
       <View style={styles.container}>
@@ -174,7 +169,7 @@ class Premium extends Component {
                   <View style={styles.buttonView}>
                     <TouchableOpacity
                       style={styles.subscriberButton}
-                      onPress={() => this.moveToUserList(item)}>
+                      onPress={() => this.openPaymentModal(item)}>
                       <Image
                         style={{height: 15, width: 18}}
                         source={require('../../../assets/heart.png')}
@@ -195,7 +190,28 @@ class Premium extends Component {
             />
           )}
         </View>
-        
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
+          height={300}
+          closeOnDragDown={true}
+          openDuration={300}
+          keyboardAvoidingViewEnabled={true}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+            container: {
+              borderTopRightRadius: 30,
+              borderTopLeftRadius: 30,
+            },
+          }}>
+          {this.renderContent()}
+        </RBSheet>
         <ModalView
           ref={(target) => (this.modalRef = target)}
           text={this.state.modalText}

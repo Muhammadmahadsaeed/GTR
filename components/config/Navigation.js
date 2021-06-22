@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
-import {Dimensions, Image} from 'react-native';
+import React, { Component } from 'react';
+import { Dimensions, Image, Platform } from 'react-native';
 
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import {
   createMaterialTopTabNavigator,
   createBottomTabNavigator,
 } from 'react-navigation-tabs';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 //import Auth screens
 import * as AuthScreens from '../screens/AuthScreen/index';
@@ -19,6 +19,7 @@ import * as CommonComponents from '../screens/CommonComponents/index';
 import * as MainScreen from '../screens/index';
 import * as PlayerScreens from '../screens/PlayersScreens/index';
 import Privacy from '../screens/PrivacyPolicy';
+import TermAndCondition from '../screens/TermScreen';
 
 // Tab Navigation for userlist and giver
 const TabScreen = createMaterialTopTabNavigator(
@@ -70,11 +71,11 @@ const PaymentTabScreen = createMaterialTopTabNavigator(
 const Payment_StackNavigator = createStackNavigator({
   First: {
     screen: PaymentTabScreen,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      safeAreaInsets: { top: 0 },
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -91,7 +92,7 @@ const Payment_StackNavigator = createStackNavigator({
   Second: {
     screen: TabScreen,
     title: 'none',
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
@@ -114,11 +115,11 @@ const Payment_StackNavigator = createStackNavigator({
 const Home_StackNavigator = createStackNavigator({
   Home: {
     screen: MainScreen.Home,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0}, //remove for ios
       headerTitle: '',
       headerStyle: {
         backgroundColor: '#81b840',
@@ -133,7 +134,7 @@ const Home_StackNavigator = createStackNavigator({
   },
   DailyChallenges: {
     screen: MainScreen.DailyChallengesScreen,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
@@ -150,17 +151,35 @@ const Home_StackNavigator = createStackNavigator({
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
-
+  ApplePayScreen: {
+    screen: PaymentScreens.ApplePay,
+    navigationOptions: ({ navigation }) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  }
 });
 //Stack Navigation for Notification Screen
 const Notification_StackNavigator = createStackNavigator({
   First: {
     screen: MainScreen.Notification,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -179,11 +198,11 @@ const Notification_StackNavigator = createStackNavigator({
 const Winner_StackNavigator = createStackNavigator({
   First: {
     screen: MainScreen.Winner,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -202,22 +221,23 @@ const Winner_StackNavigator = createStackNavigator({
 const Shop_StackNavigator = createStackNavigator({
   First: {
     screen: Payment_StackNavigator,
-    navigationOptions: ({navigation}) => ({
-      headerRight: () => (
-        <CommonComponents.HamBurger navigationProps={navigation} />
-      ),
-      safeAreaInsets: {top: 0},
-      headerTitle: '',
-      headerStyle: {
-        backgroundColor: 'transparent',
-        shadowOffset: {
-          height: 0,
-          width: 0,
-        },
-        shadowOpacity: 0,
-        elevation: 0,
-      },
-      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    navigationOptions: ({ navigation }) => ({
+      headerShown: false
+      // headerRight: () => (
+      //   <CommonComponents.HamBurger navigationProps={navigation} />
+      // ),
+      // safeAreaInsets: { top: 0 },
+      // headerTitle: '',
+      // headerStyle: {
+      //   backgroundColor: 'transparent',
+      //   shadowOffset: {
+      //     height: 0,
+      //     width: 0,
+      //   },
+      //   shadowOpacity: 0,
+      //   elevation: 0,
+      // },
+      // headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
   },
 });
@@ -225,11 +245,11 @@ const Shop_StackNavigator = createStackNavigator({
 const User_StackNavigator = createStackNavigator({
   First: {
     screen: MainScreen.User,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -250,25 +270,26 @@ const Register_StackNavigator = createStackNavigator({
     screen: AuthScreens.SignupScreen,
 
     navigationOptions: {
-      headerShown:false
+      // headerShown:false
+
       // safeAreaInsets: {top: 0},
-      // title: 'SIGN UP YOUR ACCOUNT',
-      // headerTitleStyle: {
-      //   textAlign: 'center',
-      //   // flex: 1,
-      //   fontSize: 14,
-      //   fontFamily: 'Montserrat-Bold',
-      //   color: 'white',
-      // },
-      // headerStyle: {
-      //   backgroundColor: '#3d900e',
-      //   shadowOffset: {
-      //     height: 0,
-      //     width: 0,
-      //   },
-      //   shadowOpacity: 0,
-      //   elevation: 0,
-      // },
+      title: 'SIGN UP YOUR ACCOUNT',
+      headerTitleStyle: {
+        textAlign: 'center',
+        // flex: 1,
+        fontSize: 14,
+        fontFamily: 'Montserrat-Bold',
+        color: 'white',
+      },
+      headerStyle: {
+        backgroundColor: '#3d900e',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
     },
   },
   Second: {
@@ -302,43 +323,43 @@ const BottomTabScreen = createBottomTabNavigator(
     },
   },
   {
-    defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: ({focused, horizontal, tintColor}) => {
-        const {routeName} = navigation.state;
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
 
         if (routeName == 'Home') {
           return (
             <Image
               source={require('../../assets/homeIcon.png')}
-              style={{height: 45, width: 45}}
+              style={{ height: 45, width: 45 }}
             />
           );
         } else if (routeName == 'User') {
           return (
             <Image
               source={require('../../assets/userIcon.png')}
-              style={{height: 35, width: 30}}
+              style={{ height: 35, width: 30 }}
             />
           );
         } else if (routeName == 'Winner') {
           return (
             <Image
               source={require('../../assets/cupIcon.png')}
-              style={{height: 35, width: 31}}
+              style={{ height: 35, width: 31 }}
             />
           );
         } else if (routeName == 'Shop') {
           return (
             <Image
               source={require('../../assets/shopIcon.png')}
-              style={{height: 35, width: 35}}
+              style={{ height: 35, width: 35 }}
             />
           );
         } else if (routeName == 'Notification') {
           return (
             <Image
               source={require('../../assets/bellIcon.png')}
-              style={{height: 35, width: 30}}
+              style={{ height: 35, width: 30 }}
             />
           );
         }
@@ -356,7 +377,7 @@ const BottomTabScreen = createBottomTabNavigator(
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 20,
-        shadowOffset: {width: 0, height: 0},
+        shadowOffset: { width: 0, height: 0 },
       },
     },
 
@@ -374,33 +395,34 @@ const AuthNavigator = createStackNavigator({
   },
   ForgotPassword: {
     screen: AuthScreens.ForgotPassword,
-    navigationOptions: {headerShown: false,
-      // headerTitle: '',
-      // headerStyle: {
-      //   backgroundColor: 'none',
-      //   shadowOffset: {
-      //     height: 0,
-      //     width: 0,
-      //   },
-      //   shadowOpacity: 0,
-      //   elevation: 0,
-      // },
-      // headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    navigationOptions: {
+      // headerShown: false,
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'white',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
     },
   },
 });
 //Live Streaming
 const LiveStreaming = createStackNavigator({
-  
+
   LiveScreen: {
     screen: PlayerScreens.LiveStreamingScreen,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       animationEnabled: true,
       gestureEnabled: true,
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      // safeAreaInsets: {top: 0},
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -414,11 +436,11 @@ const LiveStreaming = createStackNavigator({
 
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
-   
+
   },
   PlayerScreen: {
     screen: PlayerScreens.SeePlayers,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       animationEnabled: true,
       gestureEnabled: true,
       headerRight: () => (
@@ -439,7 +461,7 @@ const LiveStreaming = createStackNavigator({
   },
   UserAnswerScreen: {
     screen: PlayerScreens.AnswerScreen,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       animationEnabled: true,
       gestureEnabled: true,
       headerRight: () => (
@@ -460,16 +482,16 @@ const LiveStreaming = createStackNavigator({
   },
 });
 const AudienceStack = createStackNavigator({
- 
+
   Audience: {
     screen: PlayerScreens.AudienceScreen,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       animationEnabled: true,
       gestureEnabled: true,
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      safeAreaInsets: { top: 0 },
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'transparent',
@@ -483,18 +505,44 @@ const AudienceStack = createStackNavigator({
 
       headerBackImage: () => <CommonComponents.HeaderBackButton />,
     }),
-   
+
   },
- 
+
 });
+
+
 const PrivacyStack = createStackNavigator({
-  privacy:{
+  privacy: {
     screen: Privacy,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerRight: () => (
         <CommonComponents.HamBurger navigationProps={navigation} />
       ),
-      safeAreaInsets: {top: 0},
+      safeAreaInsets: { top: 0 },
+      headerTitle: '',
+      headerStyle: {
+        backgroundColor: 'none',
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
+        shadowOpacity: 0,
+        elevation: 0,
+      },
+      headerBackImage: () => <CommonComponents.HeaderBackButton />,
+    }),
+  }
+})
+
+
+const TermStack = createStackNavigator({
+  Term: {
+    screen: TermAndCondition,
+    navigationOptions: ({ navigation }) => ({
+      headerRight: () => (
+        <CommonComponents.HamBurger navigationProps={navigation} />
+      ),
+      safeAreaInsets: { top: 0 },
       headerTitle: '',
       headerStyle: {
         backgroundColor: 'none',
@@ -522,12 +570,16 @@ const DrawerNavigator = createDrawerNavigator(
     LiveScreen: {
       screen: LiveStreaming,
     },
-    Audience:{
+    Audience: {
       screen: AudienceStack
     },
-    privacyScreen:{
+    privacyScreen: {
       screen: PrivacyStack,
-      
+
+    },
+    term: {
+      screen: TermStack,
+
     }
   },
   {
@@ -538,7 +590,6 @@ const DrawerNavigator = createDrawerNavigator(
     drawerPosition: 'right',
   },
 );
-
 const RootNavigator = createSwitchNavigator({
   SplashScreen: AuthScreens.SplashScreen,
   AuthScreen: AuthNavigator,

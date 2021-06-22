@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 export default class HeaderWithBackBtn extends Component {
-    pop(){
+    pop() {
         // this.props.navigationProps.navigation.pop()
         console.log("===")
     }
     render() {
         return (
-            <View style={{height: 65,justifyContent: 'center', alignItems: 'flex-start' }}>
-                <TouchableOpacity style={{justifyContent: 'center',backgroundColor:'red', alignItems: 'center'}} onPress={()=> {this.pop()}}>
-                    <Image
+            <View style={{backgroundColor:'green', height: 65, justifyContent: 'center', alignItems: 'flex-start' }}>
+                <TouchableOpacity style={{ justifyContent: 'center', backgroundColor: 'red', alignItems: 'center' ,zIndex: 1}} onPress={() => console.log("press===")}>
+                    {/* <Image
                         source={require('../../../assets/back.png')}
                         style={styles.backImage}
-                    />
+                    /> */}
+                    <Text>back</Text>
                 </TouchableOpacity>
             </View>
 
